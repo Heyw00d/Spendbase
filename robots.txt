@@ -1,0 +1,11 @@
+# Robots.txt for Spendbase
+# https://spendbase.cards
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://spendbase.cards/sitemap.xml
+
+# Crawl-delay (optional, be nice to servers)
+Crawl-delay: 1
