@@ -546,8 +546,23 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
     </div>
   );};
 
+  // Detect if touch device
+  const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
+  const handleInteraction = () => {
+    if (isTouchDevice) {
+      setFlipped(!flipped);
+    }
+  };
+
   return (
-    <div className="cursor-pointer w-full max-w-sm mx-auto" style={{ perspective: '1000px', height: flipped ? '380px' : '252px', transition: 'height 0.5s ease-in-out' }} onMouseEnter={() => setFlipped(true)} onMouseLeave={() => setFlipped(false)}>
+    <div
+      className="cursor-pointer w-full max-w-sm mx-auto"
+      style={{ perspective: '1000px', height: flipped ? (isTouchDevice ? '450px' : '380px') : '252px', transition: 'height 0.5s ease-in-out' }}
+      onMouseEnter={() => !isTouchDevice && setFlipped(true)}
+      onMouseLeave={() => !isTouchDevice && setFlipped(false)}
+      onClick={handleInteraction}
+    >
       <div style={{ position: 'relative', width: '100%', height: '100%', transformStyle: 'preserve-3d', transition: 'transform 0.6s', transform: flipped ? 'rotateY(180deg)' : 'none' }}>
         {/* FRONT */}
         <div style={{ position: 'absolute', width: '100%', height: '252px', backfaceVisibility: 'hidden' }}>
@@ -570,7 +585,8 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
                 {card.brandLogo && !card.showBrandName && <span className="font-bold text-base" style={{ display: 'none' }}>{card.name}</span>}
                 {card.tier && <span className={`text-[10px] px-2 py-0.5 rounded font-medium ${card.tier === 'Elite' ? 'bg-yellow-500/30 text-yellow-300' : card.tier === 'Premium' ? 'bg-pink-500/30 text-pink-300' : 'bg-gray-500/30 text-gray-300'}`}>{card.tier}</span>}
               </div>
-              <span className="text-white/30 text-[10px]">Hover for details</span>
+              <span className="text-white/30 text-[10px] hidden md:inline">Hover for details</span>
+              <span className="text-white/30 text-[10px] md:hidden">Tap for details</span>
             </div>
             <div className="flex items-center justify-between mb-3 relative z-10">
               <ChipSVG />
@@ -615,7 +631,7 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
         </div>
         {/* BACK */}
         <div style={{ position: 'absolute', width: '100%', height: '100%', backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
-          <div className="h-full bg-gray-900 rounded-2xl p-4 text-white border border-gray-700 flex flex-col">
+          <div className="h-full bg-gray-900 rounded-2xl p-3 md:p-4 text-white border border-gray-700 flex flex-col overflow-y-auto">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 {card.logo ? (
