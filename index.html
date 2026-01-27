@@ -636,7 +636,7 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
               <div className="flex items-center gap-2">
                 {card.logo ? (
                   card.xHandle ? (
-                    <a href={`https://x.com/${card.xHandle}`} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="hover:scale-125 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all duration-200 cursor-pointer" title={`Follow @${card.xHandle} on X`}>
+                    <a href={`https://x.com/${card.xHandle}`} target="_blank" rel="noopener noreferrer" onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.open(e.currentTarget.href, '_blank'); }} className="hover:scale-125 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all duration-200 cursor-pointer" title={`Follow @${card.xHandle} on X`}>
                       <img src={card.logo} alt={card.name} className="h-6 object-contain" style={card.invertLogo ? { filter: 'invert(1) brightness(2)' } : {}} onError={(e) => e.target.style.display='none'} />
                     </a>
                   ) : (
@@ -652,13 +652,13 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
               <div className="flex items-center gap-2">
                 {card.token && (
                   card.token.live ? (
-                    <a href={`https://coinmarketcap.com/currencies/${card.token.cmc}/`} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/50 hover:scale-125 hover:shadow-lg hover:shadow-amber-500/40 hover:text-amber-200 hover:border-amber-400 transition-all duration-200 cursor-pointer" title={`View $${card.token.ticker} on CoinMarketCap`}>${card.token.ticker}</a>
+                    <a href={`https://coinmarketcap.com/currencies/${card.token.cmc}/`} target="_blank" rel="noopener noreferrer" onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.open(e.currentTarget.href, '_blank'); }} className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/50 hover:scale-125 hover:shadow-lg hover:shadow-amber-500/40 hover:text-amber-200 hover:border-amber-400 transition-all duration-200 cursor-pointer" title={`View $${card.token.ticker} on CoinMarketCap`}>${card.token.ticker}</a>
                   ) : (
                     <span className="text-[10px] px-2 py-0.5 rounded bg-gray-600/20 text-gray-400 border border-gray-600/30 flex items-center gap-1">🔜 ${card.token.ticker}</span>
                   )
                 )}
                 {card.xHandle && (
-                  <a href={`https://x.com/${card.xHandle}`} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="relative z-50 flex items-center gap-1 px-2 py-1 rounded bg-gray-700/80 hover:bg-white hover:text-black text-white transition-all duration-200 cursor-pointer" title={`@${card.xHandle}`}>
+                  <a href={`https://x.com/${card.xHandle}`} target="_blank" rel="noopener noreferrer" onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.open(e.currentTarget.href, '_blank'); }} className="relative z-50 flex items-center gap-1 px-2 py-1 rounded bg-gray-700/80 hover:bg-white hover:text-black text-white transition-all duration-200 cursor-pointer" title={`@${card.xHandle}`}>
                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                     <span className="text-[10px] font-medium">Follow</span>
                   </a>
@@ -706,7 +706,7 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
                 href={card.website || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.open(e.currentTarget.href, '_blank'); }}
                 className="flex-1 py-2 bg-gradient-to-r from-lime-400 to-emerald-500 hover:from-lime-300 hover:to-emerald-400 text-gray-900 rounded-lg text-xs font-bold text-center block transition-all hover:scale-105 hover:shadow-lg hover:shadow-lime-400/25"
               >Apply Now</a>
             </div>
