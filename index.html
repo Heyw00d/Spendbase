@@ -714,6 +714,14 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
                 className="flex-1 py-2 bg-gradient-to-r from-lime-400 to-emerald-500 hover:from-lime-300 hover:to-emerald-400 text-gray-900 rounded-lg text-xs font-bold text-center block transition-all hover:scale-105 hover:shadow-lg hover:shadow-lime-400/25"
               >Apply Now</a>
             </div>
+            {/* Learn More Button */}
+            <button
+              onClick={(e) => { e.stopPropagation(); window.location.hash = `card/${card.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`; }}
+              className="w-full mt-2 py-2 rounded-lg text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition flex items-center justify-center gap-2"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              Learn More · Reviews · Ratings
+            </button>
             {/* Ask AI Widget */}
             <div className="mt-2">
               <AskAIWidget cardName={card.name} darkMode={darkMode} />
@@ -2526,6 +2534,382 @@ function RatingsPage({ darkMode, ratings, userRatedCards, onRate }) {
   );
 }
 
+// ============================================
+// CARD DETAIL PAGE - SEO-optimized individual card pages
+// ============================================
+function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBack }) {
+  const [activeTab, setActiveTab] = useState('overview');
+  const ratingsData = cardRatingsData[card.name] || {};
+  const cardRating = ratings?.[card.id] || { average: 0, count: 0 };
+  const userRating = userRatedCards?.[card.id] || 0;
+  
+  // Get reviews for this card
+  const cardReviews = cardReviewsData[card.name] || { trustpilot: [], appStore: [] };
+
+  const categoryLabels = { cryptoNative: 'Crypto-Native', onchain: 'Onchain', neobank: 'Neobank' };
+  const archetypeLabels = { exchange: 'Exchange', wallet: 'Wallet', defi: 'DeFi', stablecoin: 'Stablecoin', bank: 'Bank' };
+  
+  const regionLabels = {
+    global: '🌍 Global', americas: '🌎 Americas', europe: '🇪🇺 Europe', apac: '🌏 Asia-Pacific',
+    latam: '🌎 Latin America', argentina: '🇦🇷 Argentina', india: '🇮🇳 India', africa: '🌍 Africa'
+  };
+
+  const ScoreBadge = ({ value, label, type }) => {
+    if (value === null || value === undefined) return (
+      <div className={`p-3 rounded-lg text-center ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+        <p className="text-gray-500 text-xs mb-1">{label}</p>
+        <p className="text-gray-400 text-lg">—</p>
+      </div>
+    );
+    let color = 'text-gray-400';
+    if (type === 'rank') {
+      if (value <= 10) color = 'text-lime-400';
+      else if (value <= 25) color = 'text-green-400';
+      else color = 'text-yellow-400';
+      return (
+        <div className={`p-3 rounded-lg text-center ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+          <p className={`text-xs mb-1 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>{label}</p>
+          <p className={`text-xl font-bold ${color}`}>#{value}</p>
+        </div>
+      );
+    }
+    if (value >= 4.5) color = 'text-lime-400';
+    else if (value >= 4.0) color = 'text-green-400';
+    else if (value >= 3.0) color = 'text-yellow-400';
+    else color = 'text-orange-400';
+    return (
+      <div className={`p-3 rounded-lg text-center ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+        <p className={`text-xs mb-1 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>{label}</p>
+        <p className={`text-xl font-bold ${color}`}>{value.toFixed(1)}</p>
+      </div>
+    );
+  };
+
+  const ReviewCard = ({ review, source }) => (
+    <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <span className={`text-xs px-2 py-0.5 rounded ${source === 'trustpilot' ? 'bg-green-500/20 text-green-400' : 'bg-blue-500/20 text-blue-400'}`}>
+            {source === 'trustpilot' ? '⭐ Trustpilot' : '📱 App Store'}
+          </span>
+          <div className="flex">
+            {[1,2,3,4,5].map(i => (
+              <svg key={i} className="w-3 h-3" viewBox="0 0 24 24" fill={i <= review.rating ? '#FBBF24' : '#374151'}>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            ))}
+          </div>
+        </div>
+        <span className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>{review.date}</span>
+      </div>
+      <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>"{review.text}"</p>
+      <p className={`text-xs mt-2 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>— {review.author}</p>
+    </div>
+  );
+
+  return (
+    <div className={`min-h-screen ${darkMode ? 'bg-gray-950' : 'bg-gray-50'}`}>
+      {/* SEO: This would be server-rendered with proper meta tags */}
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Back Button */}
+        <button
+          onClick={onBack}
+          className={`flex items-center gap-2 mb-6 text-sm ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'} transition`}
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Cards
+        </button>
+
+        {/* Hero Section */}
+        <div className={`rounded-2xl overflow-hidden mb-8 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+          <div className={`p-6 bg-gradient-to-r ${card.bg || 'from-gray-700 to-gray-800'}`}>
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-4">
+                <img src={card.logo} alt={card.name} className="w-16 h-16 rounded-xl bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
+                <div>
+                  <h1 className="text-2xl font-bold text-white">{card.name}</h1>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-white/80 text-sm">{categoryLabels[card.category]}</span>
+                    <span className="text-white/50">•</span>
+                    <span className="text-white/80 text-sm">{card.network}</span>
+                    {card.chain && card.chain !== 'N/A' && (
+                      <>
+                        <span className="text-white/50">•</span>
+                        <span className="text-white/80 text-sm">{card.chain}</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="flex items-center gap-1">
+                  {[1,2,3,4,5].map(i => (
+                    <svg key={i} className="w-5 h-5" viewBox="0 0 24 24" fill={i <= Math.round(ratingsData.composite || 3.5) ? '#FBBF24' : '#374151'}>
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-white/80 text-sm mt-1">{(ratingsData.composite || 3.5).toFixed(1)} Composite Score</p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Quick Stats */}
+          <div className="grid grid-cols-4 divide-x divide-gray-800">
+            <div className="p-4 text-center">
+              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Cashback</p>
+              <p className={`text-lg font-bold text-lime-400`}>{card.cashback}</p>
+            </div>
+            <div className="p-4 text-center">
+              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>FX Fee</p>
+              <p className={`text-lg font-bold ${card.fxFee === '0%' ? 'text-lime-400' : 'text-white'}`}>{card.fxFee}</p>
+            </div>
+            <div className="p-4 text-center">
+              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Annual Fee</p>
+              <p className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{card.annualFee || '$0'}</p>
+            </div>
+            <div className="p-4 text-center">
+              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Custody</p>
+              <p className={`text-lg font-bold ${card.custody === 'Non-Custodial' ? 'text-lime-400' : 'text-cyan-400'}`}>{card.custody}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+          {['overview', 'ratings', 'reviews', 'availability'].map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition ${
+                activeTab === tab
+                  ? 'bg-lime-400 text-gray-900'
+                  : (darkMode ? 'bg-gray-800 text-gray-400 hover:text-white' : 'bg-gray-200 text-gray-600 hover:text-gray-900')
+              }`}
+            >
+              {tab === 'overview' ? '📋 Overview' : tab === 'ratings' ? '📊 Ratings' : tab === 'reviews' ? '💬 Reviews' : '🌍 Availability'}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'overview' && (
+          <div className="space-y-6">
+            {/* Features */}
+            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>✨ Features</h2>
+              <div className="flex flex-wrap gap-2">
+                {card.features?.map((f, i) => (
+                  <span key={i} className={`px-3 py-1.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>{f}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* Perks */}
+            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>🎁 Perks & Benefits</h2>
+              <div className="flex flex-wrap gap-2">
+                {card.perks?.map((p, i) => (
+                  <span key={i} className="px-3 py-1.5 rounded-lg text-sm bg-lime-400/10 text-lime-400 border border-lime-400/20">{p}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* Rewards */}
+            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>💰 Rewards</h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                  <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Cashback Rate</p>
+                  <p className={`text-xl font-bold text-lime-400`}>{card.cashback}</p>
+                  <p className={`text-xs mt-1 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Paid in {card.cashbackToken}</p>
+                </div>
+                {card.token && (
+                  <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                    <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Native Token</p>
+                    <p className={`text-xl font-bold ${card.token.live ? 'text-amber-400' : 'text-gray-400'}`}>${card.token.ticker}</p>
+                    <p className={`text-xs mt-1 ${card.token.live ? 'text-green-400' : 'text-gray-500'}`}>{card.token.live ? '✓ Live on markets' : '🔜 Coming soon'}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="flex gap-4">
+              <a
+                href={card.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 py-4 rounded-xl bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 font-bold text-center hover:opacity-90 transition"
+              >
+                Apply Now →
+              </a>
+              {card.xHandle && (
+                <a
+                  href={`https://x.com/${card.xHandle}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`px-6 py-4 rounded-xl font-medium flex items-center gap-2 ${darkMode ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-gray-200 text-gray-900 hover:bg-gray-300'} transition`}
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                  Follow
+                </a>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'ratings' && (
+          <div className="space-y-6">
+            {/* Score Breakdown */}
+            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>📊 Score Breakdown</h2>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <ScoreBadge value={ratingsData.ios} label="iOS App Store" />
+                <ScoreBadge value={ratingsData.android} label="Google Play" />
+                <ScoreBadge value={ratingsData.trustpilot} label="Trustpilot" />
+                <ScoreBadge value={ratingsData.cryptonoshi} label="Cryptonoshi" type="rank" />
+                <ScoreBadge value={cardRating.average || null} label={`Spendbase (${cardRating.count})`} />
+              </div>
+            </div>
+
+            {/* Rate This Card */}
+            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>⭐ Rate This Card</h2>
+              {userRating > 0 ? (
+                <div className="flex items-center gap-3">
+                  <span className="text-lime-400">✓ You rated this card</span>
+                  <div className="flex">
+                    {[1,2,3,4,5].map(i => (
+                      <svg key={i} className="w-5 h-5" viewBox="0 0 24 24" fill={i <= userRating ? '#FBBF24' : '#374151'}>
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <p className={`text-sm mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Have you used this card? Share your experience!</p>
+                  <StarRating rating={0} onRate={(r) => onRate && onRate(card.id, r)} size="lg" interactive={true} darkMode={darkMode} />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'reviews' && (
+          <div className="space-y-6">
+            {/* Trustpilot Reviews */}
+            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>⭐ Trustpilot Reviews</h2>
+                {ratingsData.trustpilot && (
+                  <span className={`text-sm ${ratingsData.trustpilot >= 4 ? 'text-green-400' : ratingsData.trustpilot >= 3 ? 'text-yellow-400' : 'text-orange-400'}`}>
+                    {ratingsData.trustpilot.toFixed(1)} / 5
+                  </span>
+                )}
+              </div>
+              {cardReviews.trustpilot.length > 0 ? (
+                <div className="space-y-4">
+                  {cardReviews.trustpilot.map((review, i) => (
+                    <ReviewCard key={i} review={review} source="trustpilot" />
+                  ))}
+                </div>
+              ) : (
+                <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>No Trustpilot reviews available yet.</p>
+              )}
+            </div>
+
+            {/* App Store Reviews */}
+            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>📱 App Store Reviews</h2>
+                {ratingsData.ios && (
+                  <span className={`text-sm ${ratingsData.ios >= 4.5 ? 'text-green-400' : ratingsData.ios >= 4 ? 'text-yellow-400' : 'text-orange-400'}`}>
+                    {ratingsData.ios.toFixed(1)} / 5 (iOS)
+                  </span>
+                )}
+              </div>
+              {cardReviews.appStore.length > 0 ? (
+                <div className="space-y-4">
+                  {cardReviews.appStore.map((review, i) => (
+                    <ReviewCard key={i} review={review} source="appStore" />
+                  ))}
+                </div>
+              ) : (
+                <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>No App Store reviews available yet.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'availability' && (
+          <div className="space-y-6">
+            {/* Regions */}
+            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>🌍 Available Regions</h2>
+              <div className="flex flex-wrap gap-2">
+                {card.regions?.map((r, i) => (
+                  <span key={i} className={`px-3 py-1.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
+                    {regionLabels[r] || r}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Platforms */}
+            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>📱 Platforms</h2>
+              <div className="flex gap-4">
+                <div className={`flex-1 p-4 rounded-lg text-center ${card.platforms === 'ios' || card.platforms === 'both' ? 'bg-blue-500/10 border border-blue-500/30' : 'bg-gray-800 opacity-50'}`}>
+                  <span className="text-2xl">🍎</span>
+                  <p className={`text-sm mt-1 ${card.platforms === 'ios' || card.platforms === 'both' ? 'text-blue-400' : 'text-gray-500'}`}>iOS</p>
+                </div>
+                <div className={`flex-1 p-4 rounded-lg text-center ${card.platforms === 'android' || card.platforms === 'both' ? 'bg-green-500/10 border border-green-500/30' : 'bg-gray-800 opacity-50'}`}>
+                  <span className="text-2xl">🤖</span>
+                  <p className={`text-sm mt-1 ${card.platforms === 'android' || card.platforms === 'both' ? 'text-green-400' : 'text-gray-500'}`}>Android</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Card Details */}
+            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>💳 Card Details</h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                  <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Card Network</p>
+                  <p className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{card.network}</p>
+                </div>
+                <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                  <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Archetype</p>
+                  <p className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{archetypeLabels[card.archetype] || card.archetype}</p>
+                </div>
+                {card.tier && (
+                  <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                    <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Tier</p>
+                    <p className={`text-lg font-bold ${card.tier === 'Elite' ? 'text-amber-400' : card.tier === 'Premium' ? 'text-pink-400' : 'text-gray-400'}`}>{card.tier}</p>
+                  </div>
+                )}
+                <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                  <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Settlement</p>
+                  <p className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{card.settlement || 'Crypto'}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Card reviews data - scraped from Trustpilot and App Store
+const cardReviewsData = {
+  // Reviews will be populated below
+};
+
 // Composite ratings from iOS App Store, Google Play, Trustpilot, and Cryptonoshi rankings
 // Formula: (iOS × 0.25) + (Android × 0.25) + (Trustpilot × 0.25) + (Cryptonoshi × 0.25)
 // Trustpilot data last updated: 2026-01-27
@@ -2784,12 +3168,42 @@ function Spendbase() {
   const [compareList, setCompareList] = useState([]); // Cards to compare
   const [showCompareModal, setShowCompareModal] = useState(false);
 
+  // Selected card for detail view
+  const [selectedCard, setSelectedCard] = useState(null);
+
   // Listen for navigation events (from wizard promo banner)
   React.useEffect(() => {
     const handleNavigate = (e) => setActiveView(e.detail);
     window.addEventListener('navigateTo', handleNavigate);
     return () => window.removeEventListener('navigateTo', handleNavigate);
   }, []);
+
+  // Handle hash-based routing for card detail pages
+  React.useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash.startsWith('#card/')) {
+        const slug = hash.replace('#card/', '');
+        const card = allCards.find(c => 
+          c.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === slug
+        );
+        if (card) {
+          setSelectedCard(card);
+          setActiveView('cardDetail');
+        }
+      } else if (hash === '' || hash === '#') {
+        setSelectedCard(null);
+        if (activeView === 'cardDetail') setActiveView('cards');
+      }
+    };
+    
+    // Check on mount
+    handleHashChange();
+    
+    // Listen for changes
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [activeView]);
 
   // Handle card rating with localStorage persistence
   const handleRate = (cardId, rating) => {
@@ -2846,7 +3260,8 @@ function Spendbase() {
         setSearchTerm={setSearchTerm}
       />
       <main className={compareList.length > 0 ? 'pb-32' : ''}>
-        {activeView === 'cards' ? <CardsView darkMode={darkMode} searchTerm={searchTerm} ratings={ratings} onRate={handleRate} userRatedCards={userRatedCards} compareList={compareList} onCompareToggle={handleCompareToggle} /> :
+        {activeView === 'cardDetail' && selectedCard ? <CardDetailPage card={selectedCard} darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} onBack={() => { window.location.hash = ''; setSelectedCard(null); setActiveView('cards'); }} /> :
+         activeView === 'cards' ? <CardsView darkMode={darkMode} searchTerm={searchTerm} ratings={ratings} onRate={handleRate} userRatedCards={userRatedCards} compareList={compareList} onCompareToggle={handleCompareToggle} /> :
          activeView === 'wizard' ? <CardWizard darkMode={darkMode} /> :
          activeView === 'ratings' ? <RatingsPage darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} /> :
          activeView === 'learn' ? <LearnSection darkMode={darkMode} /> :
