@@ -2697,6 +2697,74 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
         {/* Tab Content */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
+            {/* SEO Overview Paragraph */}
+            {cardSEOContent[card.name]?.overview && (
+              <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+                <h2 className={`text-xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  {card.name} Card Review 2026
+                </h2>
+                <div className={`prose prose-sm max-w-none ${darkMode ? 'prose-invert' : ''}`}>
+                  {cardSEOContent[card.name].overview.split('\n\n').map((paragraph, i) => (
+                    <p key={i} className={`mb-4 leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>{paragraph}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Pros and Cons */}
+            {cardSEOContent[card.name]?.pros && (
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+                  <h3 className={`text-lg font-bold mb-4 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                    <span className="text-green-400">✓</span> Pros
+                  </h3>
+                  <ul className="space-y-3">
+                    {cardSEOContent[card.name].pros.map((pro, i) => (
+                      <li key={i} className={`flex items-start gap-2 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                        <span className="text-green-400 mt-0.5">✓</span>
+                        {pro}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+                  <h3 className={`text-lg font-bold mb-4 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                    <span className="text-red-400">✗</span> Cons
+                  </h3>
+                  <ul className="space-y-3">
+                    {cardSEOContent[card.name].cons.map((con, i) => (
+                      <li key={i} className={`flex items-start gap-2 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                        <span className="text-red-400 mt-0.5">✗</span>
+                        {con}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {/* FAQ Section */}
+            {cardSEOContent[card.name]?.faq && (
+              <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+                <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>❓ Frequently Asked Questions</h2>
+                <div className="space-y-4">
+                  {cardSEOContent[card.name].faq.map((item, i) => (
+                    <details key={i} className={`group rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                      <summary className={`flex items-center justify-between p-4 cursor-pointer font-medium ${darkMode ? 'text-white hover:text-lime-400' : 'text-gray-900 hover:text-lime-600'} transition`}>
+                        {item.q}
+                        <svg className="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </summary>
+                      <div className={`px-4 pb-4 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {item.a}
+                      </div>
+                    </details>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Features */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
               <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>✨ Features</h2>
@@ -3001,6 +3069,290 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
     </div>
   );
 }
+
+// SEO Content for card detail pages (2026-01-27)
+const cardSEOContent = {
+  'Coinbase': {
+    seoTitle: "Coinbase Card Review 2026: Up to 4% Crypto Cashback | Spendbase",
+    metaDescription: "Coinbase Card offers up to 4% crypto cashback with no annual fee. Compare rates, fees, and real user reviews. See if it's right for you →",
+    overview: `The Coinbase Card is a Visa debit card that lets you spend cryptocurrency directly from your Coinbase account at millions of merchants worldwide. Launched by the publicly-traded exchange (NASDAQ: COIN), it's one of the most trusted crypto cards available in 2026.
+
+You'll earn between 1% and 4% back in crypto rewards on every purchase, with the rate depending on which cryptocurrency you choose for rewards. There's no annual fee, and the card works anywhere Visa is accepted — both online and in-store.
+
+The Coinbase Card is best for existing Coinbase users who want to spend their crypto without first converting to fiat. It's fully custodial, meaning Coinbase holds your funds, which some users prefer for simplicity while others may see as a drawback. With a 4.0 Trustpilot rating and over 21,000 reviews, it's battle-tested by millions of users.`,
+    pros: [
+      "Up to 4% crypto cashback on all purchases",
+      "No annual fee or signup costs",
+      "Backed by publicly-traded, regulated company",
+      "Instant spending from Coinbase balance",
+      "Works at 40M+ merchants worldwide"
+    ],
+    cons: [
+      "Only available in the US currently",
+      "Custodial — Coinbase holds your crypto",
+      "Cashback rates vary by reward crypto chosen",
+      "Requires active Coinbase account"
+    ],
+    faq: [
+      { q: "What is the Coinbase Card cashback rate?", a: "The Coinbase Card offers 1% to 4% cashback depending on which cryptocurrency you choose to receive rewards in. Higher rates are typically available for the native Coinbase assets." },
+      { q: "Is the Coinbase Card available in my country?", a: "Currently, the Coinbase Card is only available in the United States. Coinbase has plans to expand to additional markets, but no timeline has been announced for 2026." },
+      { q: "Does the Coinbase Card have an annual fee?", a: "No, the Coinbase Card has no annual fee, no monthly fee, and no signup costs. You only pay standard network fees when spending." },
+      { q: "Is the Coinbase Card self-custody?", a: "No, the Coinbase Card is custodial. Your funds are held by Coinbase, not in a wallet you control. This makes it simpler to use but means you don't have full control of your private keys." }
+    ]
+  },
+  'Crypto.com': {
+    seoTitle: "Crypto.com Card Review 2026: Up to 5% CRO Cashback | Spendbase",
+    metaDescription: "Crypto.com Visa Card offers up to 5% cashback in CRO with premium perks. Read our honest review with real Trustpilot ratings and alternatives →",
+    overview: `The Crypto.com Visa Card is a metal debit card that rewards you with CRO tokens on every purchase. It's one of the most feature-rich crypto cards available, offering tiered benefits based on how much CRO you stake — from the free Midnight Blue to the exclusive Obsidian tier.
+
+Depending on your tier, you'll earn 1% to 5% cashback in CRO, plus perks like free Spotify, Netflix, and airport lounge access. The card is available in 40+ countries across Europe, Asia-Pacific, and the Americas.
+
+However, the Crypto.com Card has faced criticism for support issues, reflected in its 1.3 Trustpilot rating. The staking requirements for higher tiers can also be substantial. It's best for users who are bullish on CRO and want to maximize rewards through staking. If you prefer simplicity or are concerned about customer support, consider alternatives like Coinbase or Nexo.`,
+    pros: [
+      "Up to 5% cashback in CRO tokens",
+      "Free Spotify, Netflix, Prime at higher tiers",
+      "Premium metal card designs",
+      "Airport lounge access included",
+      "Available in 40+ countries"
+    ],
+    cons: [
+      "Requires CRO staking for best rates",
+      "1.3/5 Trustpilot rating — support issues reported",
+      "Cashback paid in CRO only",
+      "Tier benefits reduced in recent years"
+    ],
+    faq: [
+      { q: "What cashback does the Crypto.com Card offer?", a: "The Crypto.com Card offers 1% to 5% cashback depending on your tier. Higher tiers require staking more CRO tokens but unlock better rewards and perks like streaming subscriptions." },
+      { q: "Is the Crypto.com Card available in the US?", a: "Yes, the Crypto.com Card is available in the United States, most of Europe, Singapore, Australia, and many other countries. Check the Crypto.com app for availability in your region." },
+      { q: "Why does Crypto.com have low Trustpilot reviews?", a: "Crypto.com has a 1.3/5 Trustpilot rating primarily due to customer support complaints, account restrictions, and withdrawal delays reported by some users. Your experience may vary." },
+      { q: "Do I need to stake CRO for the Crypto.com Card?", a: "The basic Midnight Blue tier requires no staking, but you'll only earn 1% cashback. Higher tiers with better rewards require staking $400 to $400,000 worth of CRO." }
+    ]
+  },
+  'Nexo': {
+    seoTitle: "Nexo Card Review 2026: 2% Cashback + Crypto Credit | Spendbase",
+    metaDescription: "Nexo Card offers 2% crypto cashback with no FX fees and instant credit lines. 4.4/5 Trustpilot. Compare features and see if it fits your needs →",
+    overview: `The Nexo Card is a crypto-backed Mastercard that lets you spend against your crypto holdings without selling them. Instead of liquidating your Bitcoin or Ethereum, you can borrow against it and spend via the card — keeping your long-term positions intact.
+
+With the Nexo Card, you'll earn up to 2% cashback in NEXO tokens or Bitcoin, with no foreign exchange fees. It's accepted worldwide and integrates seamlessly with the Nexo platform's lending and earning features.
+
+What sets Nexo apart is its excellent reputation: a 4.4/5 Trustpilot rating makes it one of the highest-rated crypto card providers. The card is best for HODLers who want liquidity without triggering taxable events. It's available in 200+ countries, though US availability is limited. If you're looking for a card with strong customer support and a proven track record, Nexo is a top contender.`,
+    pros: [
+      "2% cashback in NEXO or BTC",
+      "Spend without selling your crypto",
+      "4.4/5 Trustpilot — excellent support",
+      "0% FX fees worldwide",
+      "Instant credit lines up to $2M"
+    ],
+    cons: [
+      "Limited availability in the US",
+      "Requires Nexo account and KYC",
+      "Best rates require NEXO token holdings",
+      "Credit line interest rates apply"
+    ],
+    faq: [
+      { q: "How does the Nexo Card work?", a: "The Nexo Card lets you spend against your crypto as collateral. Instead of selling your Bitcoin, you borrow against it and repay over time. This avoids triggering capital gains taxes." },
+      { q: "What cashback does the Nexo Card offer?", a: "The Nexo Card offers up to 2% cashback, paid in NEXO tokens or Bitcoin depending on your preference and loyalty tier." },
+      { q: "Is the Nexo Card available in the US?", a: "Nexo Card availability in the US is limited due to regulatory restrictions. Check the Nexo app for current availability in your state." },
+      { q: "Why is Nexo's Trustpilot rating so high?", a: "Nexo has a 4.4/5 Trustpilot rating because of responsive customer support, reliable withdrawals, and transparent communication — areas where many competitors struggle." }
+    ]
+  },
+  'Revolut': {
+    seoTitle: "Revolut Crypto Card Review 2026: Multi-Currency + Crypto | Spendbase",
+    metaDescription: "Revolut offers crypto trading and spending in one app. 4.6/5 Trustpilot with 500K+ reviews. See fees, limits, and how it compares →",
+    overview: `Revolut is a digital banking app that combines traditional banking with cryptocurrency features. While not a crypto-native card, it lets you buy, hold, and spend crypto alongside 30+ fiat currencies — all from one account.
+
+With Revolut, you get a Visa or Mastercard that works worldwide with excellent exchange rates and no FX fees on weekends (Standard plan) or ever (Premium/Metal). You can convert between crypto and fiat instantly in the app, though crypto withdrawals to external wallets have limitations.
+
+Revolut shines with its 4.6/5 Trustpilot rating from over 500,000 reviews — making it one of the most trusted fintech apps globally. It's best for users who want a complete financial app rather than a pure crypto card. The crypto features are a bonus, not the core product. If you need self-custody or advanced DeFi features, look elsewhere. But for everyday spending with optional crypto exposure, Revolut is hard to beat.`,
+    pros: [
+      "4.6/5 Trustpilot with 500K+ reviews",
+      "30+ fiat currencies + crypto",
+      "Excellent exchange rates",
+      "Full banking features included",
+      "Premium metal cards available"
+    ],
+    cons: [
+      "Custodial — no external crypto withdrawals on basic plan",
+      "Crypto features are limited vs pure crypto apps",
+      "Weekend exchange rate markup on free tier",
+      "Not designed for serious crypto traders"
+    ],
+    faq: [
+      { q: "Can I spend crypto with Revolut?", a: "Yes, you can spend crypto with Revolut by converting it to fiat in the app. The conversion happens automatically when you pay with your card, but you can't spend crypto directly." },
+      { q: "What are Revolut's crypto fees?", a: "Revolut charges 1.49% to 2.49% for crypto transactions depending on your plan tier. Premium and Metal plans get reduced fees." },
+      { q: "Is Revolut a real bank?", a: "Revolut holds banking licenses in several countries including the UK and EU. In other regions, it operates as an e-money institution with similar protections." },
+      { q: "Can I withdraw crypto from Revolut?", a: "External crypto withdrawals are limited on Revolut. You can send crypto to other Revolut users instantly, but transferring to external wallets may have restrictions depending on your plan and region." }
+    ]
+  },
+  'Cash App': {
+    seoTitle: "Cash App Card Review 2026: Bitcoin Rewards + Boosts | Spendbase",
+    metaDescription: "Cash App offers Bitcoin buying and the Cash Card with Boost rewards. 4.6/5 Trustpilot. See how it works and if it's right for you →",
+    overview: `Cash App is a peer-to-peer payment app from Block (formerly Square) that includes Bitcoin buying and the Cash Card — a customizable Visa debit card with instant discounts called "Boosts" at popular retailers.
+
+While primarily a payments app, Cash App has become a gateway to Bitcoin for millions of users. You can buy BTC with as little as $1, send it to friends, or spend it via the Lightning Network. The Cash Card earns Boosts (instant cashback) at places like Starbucks, Chipotle, and DoorDash.
+
+Cash App has a 4.6/5 Trustpilot rating with over 400,000 reviews — exceptional for a financial app. It's best for casual Bitcoin users who want an easy on-ramp without the complexity of a full exchange. The card's Boost rewards change weekly and can offer 10-15% off at select merchants. For serious crypto features, you'll want a dedicated crypto card, but Cash App excels at simplicity.`,
+    pros: [
+      "4.6/5 Trustpilot — trusted by millions",
+      "Buy Bitcoin with as little as $1",
+      "Boost rewards: 10-15% off at select stores",
+      "Lightning Network support",
+      "Free customizable card designs"
+    ],
+    cons: [
+      "Bitcoin only — no other cryptocurrencies",
+      "Limited crypto features vs dedicated exchanges",
+      "US and UK only",
+      "Boosts change weekly and require activation"
+    ],
+    faq: [
+      { q: "Can I buy Bitcoin on Cash App?", a: "Yes, Cash App lets you buy Bitcoin starting from $1. You can also sell BTC, send it to other Cash App users, or withdraw to an external wallet." },
+      { q: "What are Cash App Boosts?", a: "Boosts are instant discounts you can activate on your Cash Card. They offer 5-15% off at specific merchants like coffee shops, restaurants, and stores. Boosts change weekly." },
+      { q: "Does Cash App support other cryptocurrencies?", a: "No, Cash App only supports Bitcoin. If you want to buy other cryptocurrencies, you'll need a different exchange or app." },
+      { q: "Is Cash App available outside the US?", a: "Cash App is available in the US and UK. It's not available in other countries at this time, though expansion plans may be in development." }
+    ]
+  },
+  'Phantom': {
+    seoTitle: "Phantom Card Review 2026: Solana Self-Custody Spending | Spendbase",
+    metaDescription: "Phantom Card lets you spend directly from your Solana wallet. True self-custody with $CASH stablecoin. See features and availability →",
+    overview: `The Phantom Card is a Visa debit card integrated directly into the popular Phantom wallet for Solana. It represents a new wave of "onchain cards" that let you spend from a self-custody wallet without giving up control of your private keys.
+
+What makes Phantom unique is the $CASH stablecoin — a native dollar-pegged token that lets you spend instantly without traditional banking rails. You earn 2% cashback in $CASH on every purchase, and your funds remain in your wallet until the moment you spend.
+
+The Phantom Card launched in 2025 with over 40,000 users on the waitlist. It's best for Solana enthusiasts who want true self-custody while still being able to spend at any Visa merchant. The Trustpilot score (1.5) reflects general wallet complaints rather than card-specific issues, as the card is still new. If you're deep in the Solana ecosystem, this is the card to watch.`,
+    pros: [
+      "True self-custody — you control your keys",
+      "2% cashback in $CASH stablecoin",
+      "Native Phantom wallet integration",
+      "No middleman holding your funds",
+      "Spend at any Visa merchant"
+    ],
+    cons: [
+      "Solana-only ecosystem",
+      "New product — still maturing",
+      "Limited track record vs established cards",
+      "Requires understanding of self-custody"
+    ],
+    faq: [
+      { q: "Is the Phantom Card self-custody?", a: "Yes, the Phantom Card is truly self-custodial. Your funds stay in your Phantom wallet under your control until the moment of purchase. You hold your own private keys." },
+      { q: "What is $CASH on Phantom?", a: "$CASH is Phantom's native stablecoin pegged to the US dollar. It's used for card spending and cashback rewards, with over $100M in circulation." },
+      { q: "What blockchain does Phantom Card use?", a: "The Phantom Card operates on Solana, one of the fastest and lowest-cost blockchains. All transactions settle on-chain." },
+      { q: "Where is the Phantom Card available?", a: "The Phantom Card is currently rolling out in the Americas with plans for global expansion. Check the Phantom app for availability in your region." }
+    ]
+  },
+  'Gnosis Pay': {
+    seoTitle: "Gnosis Pay Review 2026: DeFi Self-Custody Visa Card | Spendbase",
+    metaDescription: "Gnosis Pay is a self-custody Visa card connected to your Safe wallet. Spend from DeFi directly. See how it works and who it's for →",
+    overview: `Gnosis Pay is a self-custody Visa debit card that connects directly to your Safe (formerly Gnosis Safe) smart wallet. It's designed for DeFi power users who want to spend their on-chain assets at real-world merchants without sacrificing custody.
+
+Unlike traditional crypto cards, Gnosis Pay doesn't require you to deposit funds with a third party. Your money stays in your Safe wallet — a battle-tested smart contract wallet used by DAOs and institutions — until you spend it. The card works anywhere Visa is accepted in Europe.
+
+Gnosis Pay represents the future of "invisible infrastructure" — where blockchain payments happen seamlessly without the user needing to think about it. It's best for Ethereum-native users, especially those already using Safe wallets. With the GNO token having a $377M market cap, the project has serious backing. Currently EU-focused, but a model that will likely expand globally.`,
+    pros: [
+      "True self-custody via Safe smart wallets",
+      "No third-party holds your funds",
+      "Spend directly from DeFi positions",
+      "Backed by Gnosis — established project",
+      "Works at any Visa merchant"
+    ],
+    cons: [
+      "Currently EU-only availability",
+      "Requires Safe wallet knowledge",
+      "New product with limited reviews",
+      "More complex setup than custodial cards"
+    ],
+    faq: [
+      { q: "How does Gnosis Pay custody work?", a: "Gnosis Pay is fully self-custodial. Your funds stay in your Safe smart wallet on Ethereum/Gnosis Chain. The card triggers transactions from your wallet when you spend." },
+      { q: "What wallets work with Gnosis Pay?", a: "Gnosis Pay works with Safe (formerly Gnosis Safe) smart wallets. Safe is one of the most secure and widely-used smart contract wallets in DeFi." },
+      { q: "Where is Gnosis Pay available?", a: "Gnosis Pay is currently available in the European Union. Expansion to other regions is planned but not yet announced." },
+      { q: "What is the GNO token?", a: "GNO is the native token of the Gnosis ecosystem with a ~$377M market cap. It's used for governance and staking within the Gnosis protocol." }
+    ]
+  },
+  'Binance': {
+    seoTitle: "Binance Card Review 2026: Up to 8% BNB Cashback | Spendbase",
+    metaDescription: "Binance Card offers up to 8% cashback based on BNB holdings. World's largest exchange. See fees, limits, and honest Trustpilot reviews →",
+    overview: `The Binance Card is a Visa debit card from the world's largest cryptocurrency exchange by trading volume. It lets you spend crypto from your Binance account at 60+ million merchants worldwide, with cashback rates up to 8% depending on your BNB holdings.
+
+The card automatically converts your chosen cryptocurrency to fiat at the point of sale, supporting 15+ cryptocurrencies including BTC, ETH, and BNB. Higher cashback tiers require holding more BNB — from 1% at the base level to 8% for significant holders.
+
+However, Binance's Trustpilot rating (1.5/5) reflects ongoing challenges with customer support and account restrictions. The exchange has also faced regulatory scrutiny in multiple countries, which may affect card availability in your region. The Binance Card is best for active Binance traders who already hold BNB and can benefit from the tiered rewards. For users prioritizing reliability and support, consider alternatives with higher trust scores.`,
+    pros: [
+      "Up to 8% cashback with BNB holdings",
+      "15+ supported cryptocurrencies",
+      "World's largest exchange backing",
+      "Works at 60M+ Visa merchants",
+      "No monthly or annual fees"
+    ],
+    cons: [
+      "1.5/5 Trustpilot — support issues",
+      "Regulatory concerns in some regions",
+      "Best rates require large BNB holdings",
+      "Custodial — Binance holds your funds"
+    ],
+    faq: [
+      { q: "What cashback does the Binance Card offer?", a: "The Binance Card offers 1% to 8% cashback depending on your BNB holdings. You need to hold significant BNB to access the highest tiers." },
+      { q: "Is the Binance Card available in the US?", a: "Binance Card availability varies by region due to regulatory restrictions. The US has a separate Binance.US platform with different features. Check your local Binance app for availability." },
+      { q: "Why does Binance have poor Trustpilot reviews?", a: "Binance has a 1.5/5 Trustpilot rating due to customer support complaints, account restrictions, and withdrawal issues reported by some users. The exchange's massive scale may contribute to support challenges." },
+      { q: "What cryptocurrencies can I spend with Binance Card?", a: "The Binance Card supports 15+ cryptocurrencies including Bitcoin, Ethereum, BNB, BUSD, and many others. The card converts your chosen crypto to fiat automatically when you pay." }
+    ]
+  },
+  'Bybit': {
+    seoTitle: "Bybit Card Review 2026: Trading Exchange Visa Card | Spendbase",
+    metaDescription: "Bybit Card lets you spend from your trading account. Up to 10% cashback for VIPs. See features, fees, and 3.2/5 Trustpilot rating →",
+    overview: `The Bybit Card is a Visa debit card from one of the largest crypto derivatives exchanges. It lets you spend directly from your Bybit trading account, bridging the gap between active trading and real-world purchases.
+
+Bybit offers up to 10% cashback for VIP traders, with standard users earning lower rates. The card supports multiple cryptocurrencies and works at any Visa merchant worldwide. It's designed for active traders who want to access their profits without withdrawing to a bank.
+
+With a 3.2/5 Trustpilot rating, Bybit sits in the middle of the pack for customer satisfaction — better than Binance but below Nexo and Revolut. The card is best for existing Bybit traders who want seamless spending integration. If you're not already trading on Bybit, there may be better standalone card options. The exchange is particularly strong in Asia-Pacific markets.`,
+    pros: [
+      "Up to 10% cashback for VIP traders",
+      "Direct spending from trading account",
+      "Multiple crypto supported",
+      "Strong in APAC markets",
+      "3.2/5 Trustpilot — decent support"
+    ],
+    cons: [
+      "Best rewards require high trading volume",
+      "Not available in all regions",
+      "Custodial exchange wallet",
+      "Less beginner-friendly than alternatives"
+    ],
+    faq: [
+      { q: "What is the Bybit Card cashback rate?", a: "Bybit Card cashback ranges from 2% to 10% depending on your VIP level, which is determined by trading volume and asset holdings on the platform." },
+      { q: "Is the Bybit Card available in the US?", a: "Bybit is not available in the United States due to regulatory restrictions. The card is primarily available in Europe, Asia, and other supported regions." },
+      { q: "How does the Bybit Card compare to Binance Card?", a: "Bybit has a higher Trustpilot rating (3.2 vs 1.5) but smaller market presence. Both offer tiered cashback based on token holdings. Choose based on which exchange you already use." },
+      { q: "What cryptocurrencies does Bybit Card support?", a: "The Bybit Card supports major cryptocurrencies including BTC, ETH, USDT, and the exchange's native tokens. Check the Bybit app for the full list of supported assets." }
+    ]
+  },
+  'Bitpanda': {
+    seoTitle: "Bitpanda Card Review 2026: EU-Regulated Crypto Visa | Spendbase",
+    metaDescription: "Bitpanda Card is fully EU-regulated with 3.9/5 Trustpilot. Trade stocks, crypto, and metals. See cashback rates and how it compares →",
+    overview: `The Bitpanda Card is a Visa debit card from Austria's largest crypto broker, offering a regulated European alternative to offshore exchanges. What sets Bitpanda apart is its multi-asset approach — you can trade crypto, stocks, ETFs, and precious metals all in one app.
+
+The card lets you spend any asset in your portfolio at Visa merchants. Selling happens automatically at the point of sale. You'll earn cashback in BEST (Bitpanda Ecosystem Token), with rates improving based on your BEST holdings and loyalty tier.
+
+With a 3.9/5 Trustpilot rating from 25,000+ reviews, Bitpanda has earned trust through regulatory compliance and responsive support — a rarity in crypto. The card is best for European users who want peace of mind from a fully-licensed, EU-based provider. If you're outside Europe or want pure self-custody, look elsewhere. But for regulated, reliable crypto spending in the EU, Bitpanda is a top choice.`,
+    pros: [
+      "3.9/5 Trustpilot — great support",
+      "Fully EU-regulated and licensed",
+      "Stocks, crypto, and metals in one app",
+      "Spend any asset type via card",
+      "Austrian company — strong privacy laws"
+    ],
+    cons: [
+      "EU-focused — limited outside Europe",
+      "Cashback in BEST token only",
+      "Requires BEST holdings for best rates",
+      "Custodial platform"
+    ],
+    faq: [
+      { q: "Is Bitpanda regulated?", a: "Yes, Bitpanda is fully regulated in the EU and holds multiple licenses including PSD2 for payment services. It's headquartered in Vienna, Austria." },
+      { q: "What can I spend with the Bitpanda Card?", a: "You can spend any asset in your Bitpanda portfolio — crypto, stocks, ETFs, or precious metals. The card automatically sells your chosen asset at the point of sale." },
+      { q: "What is the BEST token?", a: "BEST (Bitpanda Ecosystem Token) is Bitpanda's native token used for rewards, fee discounts, and loyalty tiers. Holding BEST increases your cashback rates." },
+      { q: "Where is the Bitpanda Card available?", a: "The Bitpanda Card is available throughout the European Economic Area (EEA). It's not currently available in the US, UK, or other regions outside Europe." }
+    ]
+  }
+};
 
 // Token market data - from CoinGecko (2026-01-27)
 // Updates: Can be refreshed via API or manually
