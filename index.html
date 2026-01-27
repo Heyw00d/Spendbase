@@ -1178,7 +1178,7 @@ function CardWizard({ darkMode, onViewCard }) {
             onClick={calculateResults}
             className="px-8 py-4 bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 rounded-xl font-bold text-lg hover:from-lime-300 hover:to-emerald-400 transition-all hover:scale-105 shadow-lg shadow-lime-400/25"
           >
-            🔍 Find My Perfect Cards
+            Find My Perfect Cards
           </button>
         </div>
       )}
@@ -1413,7 +1413,7 @@ function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode,
                     : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')
                 }`}
             >
-              {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? '✨ Find My Card' : v === 'ratings' ? '📊 Scores' : v.charAt(0).toUpperCase()+v.slice(1)}
+              {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'ratings' ? 'Scores' : v.charAt(0).toUpperCase()+v.slice(1)}
             </button>
           ))}
           </nav>
@@ -1534,7 +1534,7 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
             onClick={() => window.dispatchEvent(new CustomEvent('navigateTo', { detail: 'wizard' }))}
             className="px-5 py-2.5 bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 rounded-lg font-semibold text-sm hover:from-lime-300 hover:to-emerald-400 transition-all hover:scale-105 shadow-lg shadow-lime-400/20"
           >
-            🔍 Find My Card
+            Find My Card
           </button>
         </div>
       </div>
@@ -2378,35 +2378,30 @@ function RatingsPage({ darkMode, ratings, userRatedCards, onRate }) {
           <div className="grid md:grid-cols-5 gap-4 text-sm">
             <div className={`p-3 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
               <div className="flex items-center gap-2 mb-1">
-                <span>📱</span>
                 <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>iOS App Store</span>
               </div>
               <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Apple App Store rating (1-5 stars)</p>
             </div>
             <div className={`p-3 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
               <div className="flex items-center gap-2 mb-1">
-                <span>🤖</span>
                 <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>Google Play</span>
               </div>
               <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Play Store rating (1-5 stars)</p>
             </div>
             <div className={`p-3 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
               <div className="flex items-center gap-2 mb-1">
-                <span>⭐</span>
                 <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>Trustpilot</span>
               </div>
               <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Trustpilot rating (1-5 stars)</p>
             </div>
             <div className={`p-3 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
               <div className="flex items-center gap-2 mb-1">
-                <span>🏆</span>
                 <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>Cryptonoshi</span>
               </div>
               <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Industry ranking (#1-63, lower = better)</p>
             </div>
             <div className={`p-3 rounded-lg ${darkMode ? 'bg-lime-400/10 border border-lime-400/30' : 'bg-lime-50 border border-lime-200'}`}>
               <div className="flex items-center gap-2 mb-1">
-                <span>💚</span>
                 <span className={`font-medium text-lime-600`}>Spendbase</span>
               </div>
               <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Community votes from you!</p>
@@ -2590,7 +2585,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <span className={`text-xs px-2 py-0.5 rounded ${source === 'trustpilot' ? 'bg-green-500/20 text-green-400' : 'bg-blue-500/20 text-blue-400'}`}>
-            {source === 'trustpilot' ? '⭐ Trustpilot' : '📱 App Store'}
+            {source === 'trustpilot' ? 'Trustpilot' : 'App Store'}
           </span>
           <div className="flex">
             {[1,2,3,4,5].map(i => (
@@ -2850,9 +2845,9 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
                       tokenMarketData[card.token.ticker].marketCap >= 100e6 ? 'text-green-400' :
                       tokenMarketData[card.token.ticker].marketCap >= 10e6 ? 'text-yellow-400' : 'text-orange-400'
                     }`}>
-                      {tokenMarketData[card.token.ticker].marketCap >= 1e9 ? '🟢 High' :
-                       tokenMarketData[card.token.ticker].marketCap >= 100e6 ? '🟡 Medium' :
-                       tokenMarketData[card.token.ticker].marketCap >= 10e6 ? '🟠 Low' : '🔴 Very Low'}
+                      {tokenMarketData[card.token.ticker].marketCap >= 1e9 ? 'High' :
+                       tokenMarketData[card.token.ticker].marketCap >= 100e6 ? 'Medium' :
+                       tokenMarketData[card.token.ticker].marketCap >= 10e6 ? 'Low' : 'Very Low'}
                     </p>
                   </div>
                 </div>
@@ -2942,7 +2937,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
 
             {/* Rate This Card */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>⭐ Rate This Card</h2>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Rate This Card</h2>
               {userRating > 0 ? (
                 <div className="flex items-center gap-3">
                   <span className="text-lime-400">✓ You rated this card</span>
@@ -2969,7 +2964,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
             {/* Trustpilot Reviews */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
               <div className="flex items-center justify-between mb-4">
-                <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>⭐ Trustpilot Reviews</h2>
+                <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Trustpilot Reviews</h2>
                 {ratingsData.trustpilot && (
                   <span className={`text-sm ${ratingsData.trustpilot >= 4 ? 'text-green-400' : ratingsData.trustpilot >= 3 ? 'text-yellow-400' : 'text-orange-400'}`}>
                     {ratingsData.trustpilot.toFixed(1)} / 5
@@ -2990,7 +2985,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
             {/* App Store Reviews */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
               <div className="flex items-center justify-between mb-4">
-                <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>📱 App Store Reviews</h2>
+                <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>App Store Reviews</h2>
                 {ratingsData.ios && (
                   <span className={`text-sm ${ratingsData.ios >= 4.5 ? 'text-green-400' : ratingsData.ios >= 4 ? 'text-yellow-400' : 'text-orange-400'}`}>
                     {ratingsData.ios.toFixed(1)} / 5 (iOS)
@@ -3026,7 +3021,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
 
             {/* Platforms */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>📱 Platforms</h2>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Platforms</h2>
               <div className="flex gap-4">
                 <div className={`flex-1 p-4 rounded-lg text-center ${card.platforms === 'ios' || card.platforms === 'both' ? 'bg-blue-500/10 border border-blue-500/30' : 'bg-gray-800 opacity-50'}`}>
                   <span className="text-2xl">🍎</span>
