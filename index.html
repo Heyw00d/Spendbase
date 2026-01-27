@@ -2736,6 +2736,64 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
               </div>
             </div>
 
+            {/* Token Market Data */}
+            {card.token?.live && tokenMarketData[card.token.ticker] && (
+              <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>📈 Token Market Data</h2>
+                  <a 
+                    href={`https://coinmarketcap.com/currencies/${card.token.cmc}/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-lime-400 hover:underline"
+                  >
+                    View on CMC →
+                  </a>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                    <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Price</p>
+                    <p className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      ${tokenMarketData[card.token.ticker].price < 1 
+                        ? tokenMarketData[card.token.ticker].price.toFixed(4) 
+                        : tokenMarketData[card.token.ticker].price.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                    <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Market Cap</p>
+                    <p className={`text-xl font-bold ${
+                      tokenMarketData[card.token.ticker].marketCap >= 1e9 ? 'text-lime-400' :
+                      tokenMarketData[card.token.ticker].marketCap >= 100e6 ? 'text-green-400' :
+                      tokenMarketData[card.token.ticker].marketCap >= 10e6 ? 'text-yellow-400' : 'text-orange-400'
+                    }`}>
+                      {formatMarketCap(tokenMarketData[card.token.ticker].marketCap)}
+                    </p>
+                  </div>
+                  <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                    <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>24h Change</p>
+                    <p className={`text-xl font-bold ${tokenMarketData[card.token.ticker].change24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {tokenMarketData[card.token.ticker].change24h >= 0 ? '+' : ''}{tokenMarketData[card.token.ticker].change24h.toFixed(1)}%
+                    </p>
+                  </div>
+                  <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                    <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Trust Score</p>
+                    <p className={`text-xl font-bold ${
+                      tokenMarketData[card.token.ticker].marketCap >= 1e9 ? 'text-lime-400' :
+                      tokenMarketData[card.token.ticker].marketCap >= 100e6 ? 'text-green-400' :
+                      tokenMarketData[card.token.ticker].marketCap >= 10e6 ? 'text-yellow-400' : 'text-orange-400'
+                    }`}>
+                      {tokenMarketData[card.token.ticker].marketCap >= 1e9 ? '🟢 High' :
+                       tokenMarketData[card.token.ticker].marketCap >= 100e6 ? '🟡 Medium' :
+                       tokenMarketData[card.token.ticker].marketCap >= 10e6 ? '🟠 Low' : '🔴 Very Low'}
+                    </p>
+                  </div>
+                </div>
+                <p className={`mt-4 text-xs ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>
+                  Market cap is a proxy for project size and liquidity. Higher = more established. Data from CoinGecko.
+                </p>
+              </div>
+            )}
+
             {/* CTA */}
             <div className="flex gap-4">
               <a
@@ -2904,6 +2962,39 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
     </div>
   );
 }
+
+// Token market data - from CoinGecko (2026-01-27)
+// Updates: Can be refreshed via API or manually
+const tokenMarketData = {
+  'CRO': { price: 0.095, marketCap: 2500000000, change24h: 2.5, coingeckoId: 'crypto-com-chain' },
+  'BNB': { price: 690, marketCap: 99000000000, change24h: 1.2, coingeckoId: 'binancecoin' },
+  'BGB': { price: 3.57, marketCap: 2502000000, change24h: 3.1, coingeckoId: 'bitget-token' },
+  'NEXO': { price: 0.96, marketCap: 959000000, change24h: -0.5, coingeckoId: 'nexo' },
+  'ETHFI': { price: 0.63, marketCap: 440000000, change24h: 4.2, coingeckoId: 'ether-fi' },
+  'GNO': { price: 143, marketCap: 377000000, change24h: 1.8, coingeckoId: 'gnosis' },
+  'STRK': { price: 0.07, marketCap: 362000000, change24h: -2.1, coingeckoId: 'starknet' },
+  'AVAX': { price: 12.09, marketCap: 5213000000, change24h: 0.8, coingeckoId: 'avalanche-2' },
+  'SFP': { price: 0.37, marketCap: 183000000, change24h: 1.5, coingeckoId: 'safepal' },
+  'WXT': { price: 0.008, marketCap: 45000000, change24h: -1.2, coingeckoId: 'wirex-token' },
+  'LAYER': { price: 0.14, marketCap: 30000000, change24h: 5.5, coingeckoId: 'solayer' },
+  'B2M': { price: 0.012, marketCap: 34000000, change24h: 0.3, coingeckoId: 'bit2me' },
+  'PLU': { price: 0.15, marketCap: 2300000, change24h: -0.8, coingeckoId: 'pluton' },
+  'BEST': { price: 0.42, marketCap: 85000000, change24h: 2.1, coingeckoId: 'bitpanda-ecosystem-token' },
+  'AVICI': { price: 0.002, marketCap: 1500000, change24h: 12.5, coingeckoId: 'avici' },
+  'TPT': { price: 0.008, marketCap: 8000000, change24h: 0.5, coingeckoId: 'tokenpocket' },
+  'OBT': { price: 0.05, marketCap: 25000000, change24h: 3.2, coingeckoId: 'oobit' },
+  'ZYPTO': { price: 0.003, marketCap: 3000000, change24h: -4.5, coingeckoId: 'zypto-token' },
+  'VERSE': { price: 0.0001, marketCap: 12000000, change24h: 1.1, coingeckoId: 'verse-bitcoin' },
+};
+
+// Format market cap for display
+const formatMarketCap = (value) => {
+  if (value >= 1e12) return `$${(value / 1e12).toFixed(1)}T`;
+  if (value >= 1e9) return `$${(value / 1e9).toFixed(1)}B`;
+  if (value >= 1e6) return `$${(value / 1e6).toFixed(0)}M`;
+  if (value >= 1e3) return `$${(value / 1e3).toFixed(0)}K`;
+  return `$${value.toFixed(0)}`;
+};
 
 // Card reviews data - scraped from Trustpilot and App Store (2026-01-27)
 const cardReviewsData = {
