@@ -2387,7 +2387,7 @@ function RatingsPage({ darkMode, ratings, userRatedCards, onRate }) {
                 <span>⭐</span>
                 <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>Trustpilot</span>
               </div>
-              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Trustpilot rating (coming soon)</p>
+              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Trustpilot rating (1-5 stars)</p>
             </div>
             <div className={`p-3 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
               <div className="flex items-center gap-2 mb-1">
@@ -2405,7 +2405,7 @@ function RatingsPage({ darkMode, ratings, userRatedCards, onRate }) {
             </div>
           </div>
           <p className={`mt-4 text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-            <strong>Current formula:</strong> (iOS × 0.30) + (Android × 0.30) + (Cryptonoshi × 0.40). 
+            <strong>Current formula:</strong> (iOS × 0.25) + (Android × 0.25) + (Trustpilot × 0.25) + (Cryptonoshi × 0.25). 
             <span className="text-lime-400 ml-1">Spendbase community scores will be weighted at 15% once we reach 1,000 votes.</span>
           </p>
         </div>
@@ -2526,63 +2526,64 @@ function RatingsPage({ darkMode, ratings, userRatedCards, onRate }) {
   );
 }
 
-// Composite ratings from iOS App Store, Google Play, and Cryptonoshi rankings
-// Formula: (iOS × 0.30) + (Android × 0.30) + (Cryptonoshi × 0.40)
-// Cryptonoshi rank converted to score: 5 - ((rank/63) × 1.5)
+// Composite ratings from iOS App Store, Google Play, Trustpilot, and Cryptonoshi rankings
+// Formula: (iOS × 0.25) + (Android × 0.25) + (Trustpilot × 0.25) + (Cryptonoshi × 0.25)
+// Trustpilot data last updated: 2026-01-27
 const cardRatingsData = {
   // === TOP TIER (4.5+) - Excellent across all metrics ===
-  'Binance': { ios: 4.8, android: 4.8, cryptonoshi: null, composite: 4.8, reviews: 150000 },
-  'Bybit': { ios: 4.7, android: 4.5, cryptonoshi: null, composite: 4.6, reviews: 41500 },
-  'Gemini': { ios: 4.8, android: 4.3, cryptonoshi: null, composite: 4.55, reviews: 150000 },
-  'Coinbase': { ios: 4.7, android: 4.5, cryptonoshi: null, composite: 4.6, reviews: 185000 },
-  'Crypto.com': { ios: 4.7, android: 4.6, cryptonoshi: null, composite: 4.65, reviews: 140000 },
-  'Trust Wallet': { ios: 4.7, android: 4.6, cryptonoshi: null, composite: 4.65, reviews: 190000 },
-  'Ledger': { ios: 4.7, android: 4.7, cryptonoshi: null, composite: 4.7, reviews: 50000 },
+  'Binance': { ios: 4.8, android: 4.8, trustpilot: 1.5, cryptonoshi: null, composite: 4.0, reviews: 150000 }, // Trustpilot low due to support complaints
+  'Bybit': { ios: 4.7, android: 4.5, trustpilot: 3.2, cryptonoshi: null, composite: 4.1, reviews: 41500 },
+  'Gemini': { ios: 4.8, android: 4.3, trustpilot: 1.4, cryptonoshi: null, composite: 3.5, reviews: 150000 }, // Trustpilot 1.4 (Bad)
+  'Coinbase': { ios: 4.7, android: 4.5, trustpilot: 4.0, cryptonoshi: null, composite: 4.4, reviews: 185000 }, // Trustpilot 4.0 (Great)
+  'Crypto.com': { ios: 4.7, android: 4.6, trustpilot: 1.3, cryptonoshi: null, composite: 3.5, reviews: 140000 }, // Trustpilot 1.3 (Bad)
+  'Trust Wallet': { ios: 4.7, android: 4.6, trustpilot: 1.3, cryptonoshi: null, composite: 3.5, reviews: 190000 }, // Trustpilot 1.3 (Bad)
+  'Ledger': { ios: 4.7, android: 4.7, trustpilot: 3.4, cryptonoshi: null, composite: 4.3, reviews: 50000 },
 
   // === HIGH TIER (4.0-4.5) - Strong performers ===
-  'Nexo': { ios: 4.0, android: 4.1, cryptonoshi: 1, composite: 4.5, reviews: 30000 }, // #1 on Cryptonoshi boosts score
-  'Holyheld': { ios: null, android: null, cryptonoshi: 6, composite: 4.4, reviews: 1500 }, // #6 on Cryptonoshi
-  'KAST': { ios: null, android: null, cryptonoshi: 8, composite: 4.3, reviews: 2000 }, // #8 on Cryptonoshi
-  'Kolo': { ios: null, android: null, cryptonoshi: 11, composite: 4.2, reviews: 1000 }, // #11 on Cryptonoshi
-  'Bitpanda': { ios: 4.4, android: 4.4, cryptonoshi: null, composite: 4.4, reviews: 25000 },
-  'OKX': { ios: 4.6, android: 4.5, cryptonoshi: null, composite: 4.55, reviews: 80000 },
-  'Kraken': { ios: 4.5, android: 4.4, cryptonoshi: null, composite: 4.45, reviews: 35000 },
-  'MetaMask': { ios: 4.5, android: 4.4, cryptonoshi: null, composite: 4.45, reviews: 100000 },
-  'Phantom': { ios: 4.8, android: 4.7, cryptonoshi: null, composite: 4.75, reviews: 45000 },
-    'Revolut': { ios: 4.6, android: 4.5, cryptonoshi: null, composite: 4.55, reviews: 500000 },
-  'Cash App': { ios: 4.7, android: 4.6, cryptonoshi: null, composite: 4.65, reviews: 400000 },
-  'Wirex': { ios: 3.7, android: 3.5, cryptonoshi: 53, composite: 3.6, reviews: 10000 },
-  'Nubank': { ios: 4.7, android: 4.6, cryptonoshi: null, composite: 4.65, reviews: 350000 },
+  'Nexo': { ios: 4.0, android: 4.1, trustpilot: 4.4, cryptonoshi: 1, composite: 4.5, reviews: 30000 }, // Trustpilot 4.4 (Excellent)
+  'Holyheld': { ios: null, android: null, trustpilot: null, cryptonoshi: 6, composite: 4.4, reviews: 1500 },
+  'KAST': { ios: null, android: null, trustpilot: null, cryptonoshi: 8, composite: 4.3, reviews: 2000 },
+  'Kolo': { ios: null, android: null, trustpilot: null, cryptonoshi: 11, composite: 4.2, reviews: 1000 },
+  'Bitpanda': { ios: 4.4, android: 4.4, trustpilot: 3.9, cryptonoshi: null, composite: 4.2, reviews: 25000 }, // Trustpilot 3.9 (Great)
+  'OKX': { ios: 4.6, android: 4.5, trustpilot: 1.9, cryptonoshi: null, composite: 3.7, reviews: 80000 }, // Trustpilot 1.9 (Poor)
+  'Kraken': { ios: 4.5, android: 4.4, trustpilot: 3.3, cryptonoshi: null, composite: 4.1, reviews: 35000 }, // Trustpilot 3.3 (Average)
+  'MetaMask': { ios: 4.5, android: 4.4, trustpilot: 1.5, cryptonoshi: null, composite: 3.5, reviews: 100000 }, // Trustpilot 1.5 (Bad)
+  'Phantom': { ios: 4.8, android: 4.7, trustpilot: 1.5, cryptonoshi: null, composite: 3.7, reviews: 45000 }, // Trustpilot 1.5 (Bad) - low sample
+  'Revolut': { ios: 4.6, android: 4.5, trustpilot: 4.6, cryptonoshi: null, composite: 4.6, reviews: 500000 }, // Trustpilot 4.6 (Excellent)
+  'Cash App': { ios: 4.7, android: 4.6, trustpilot: 4.6, cryptonoshi: null, composite: 4.6, reviews: 400000 }, // Trustpilot 4.6 (Excellent)
+  'Wirex': { ios: 3.7, android: 3.5, trustpilot: 1.3, cryptonoshi: 53, composite: 2.6, reviews: 10000 }, // Trustpilot 1.3 (Bad)
+  'Nubank': { ios: 4.7, android: 4.6, trustpilot: 2.9, cryptonoshi: null, composite: 4.1, reviews: 350000 }, // Trustpilot 2.9 (Average)
+  'N26': { ios: 4.5, android: 4.4, trustpilot: 4.0, cryptonoshi: null, composite: 4.3, reviews: 200000 }, // Trustpilot 4.0 (Great)
 
   // === MID TIER (3.5-4.0) - Average performers ===
-  'Binance US': { ios: 4.2, android: 4.0, cryptonoshi: null, composite: 4.1, reviews: 110000 },
-  'WhiteBIT': { ios: 4.0, android: 3.9, cryptonoshi: 32, composite: 3.8, reviews: 15000 },
-  'Bit2Me': { ios: 4.0, android: 3.8, cryptonoshi: 52, composite: 3.7, reviews: 8000 },
+  'Binance US': { ios: 4.2, android: 4.0, trustpilot: 1.5, cryptonoshi: null, composite: 3.2, reviews: 110000 },
+  'WhiteBIT': { ios: 4.0, android: 3.9, trustpilot: 2.4, cryptonoshi: 32, composite: 3.4, reviews: 15000 }, // Trustpilot 2.4 (Poor)
+  'Bit2Me': { ios: 4.0, android: 3.8, trustpilot: null, cryptonoshi: 52, composite: 3.7, reviews: 8000 },
   
   // === NEWER/NICHE CARDS - Limited data, use feature-based estimates ===
-  'Solayer Emerald': { ios: null, android: null, cryptonoshi: null, composite: 4.3, reviews: 40000 }, // 40K+ users, new launch
-  'Gnosis Pay': { ios: null, android: null, cryptonoshi: null, composite: 4.0, reviews: 500 }, // Non-custodial leader
-  'Bleap': { ios: null, android: null, cryptonoshi: null, composite: 3.9, reviews: 300 },
-  'Redotpay': { ios: 4.2, android: 4.0, cryptonoshi: null, composite: 4.1, reviews: 5000 },
-  'Solflare': { ios: 4.6, android: 4.5, cryptonoshi: null, composite: 4.55, reviews: 8000 },
-  'Backpack': { ios: 4.5, android: 4.3, cryptonoshi: null, composite: 4.4, reviews: 3000 },
-  'Rain': { ios: null, android: null, cryptonoshi: null, composite: 4.0, reviews: 200 }, // B2B focused
-  'Tria': { ios: null, android: null, cryptonoshi: null, composite: 3.8, reviews: 150 },
-  'Moto': { ios: null, android: null, cryptonoshi: null, composite: 4.2, reviews: 20 }, // HNW focused, pre-launch
-  'COCA': { ios: null, android: null, cryptonoshi: null, composite: 3.8, reviews: 200 },
-  'Kontigo': { ios: null, android: null, cryptonoshi: null, composite: 3.7, reviews: 100 },
-  'Cypher': { ios: null, android: null, cryptonoshi: null, composite: 3.9, reviews: 250 },
-  'Fold': { ios: 4.2, android: 4.0, cryptonoshi: null, composite: 4.0, reviews: 12000 }, // Good app, bad Trustpilot
-  'SafePal': { ios: 4.4, android: 4.3, cryptonoshi: null, composite: 4.35, reviews: 20000 },
-  'imToken': { ios: 4.3, android: 4.2, cryptonoshi: null, composite: 4.25, reviews: 15000 },
-  'TokenPocket': { ios: 4.2, android: 4.1, cryptonoshi: null, composite: 4.15, reviews: 10000 },
-  'Xapo': { ios: 4.0, android: 3.9, cryptonoshi: null, composite: 3.95, reviews: 5000 },
-  'Verse V-Card': { ios: 4.3, android: 4.2, cryptonoshi: null, composite: 4.25, reviews: 25000 },
-  'Brighty': { ios: null, android: null, cryptonoshi: null, composite: 3.8, reviews: 400 },
-  'Bitget Card': { ios: 4.5, android: 4.4, cryptonoshi: null, composite: 4.45, reviews: 50000 },
-  'Bitget Premier': { ios: 4.5, android: 4.4, cryptonoshi: null, composite: 4.5, reviews: 50000 },
-  'OrbitX Neo': { ios: null, android: null, cryptonoshi: null, composite: 3.7, reviews: 150 },
-  'OrbitX Lux': { ios: null, android: null, cryptonoshi: null, composite: 3.8, reviews: 150 },
+  'Solayer Emerald': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 4.3, reviews: 40000 },
+  'Gnosis Pay': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 4.0, reviews: 500 },
+  'Bleap': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 3.9, reviews: 300 },
+  'Redotpay': { ios: 4.2, android: 4.0, trustpilot: 3.6, cryptonoshi: null, composite: 3.9, reviews: 5000 }, // Trustpilot 3.6 (Average)
+  'Solflare': { ios: 4.6, android: 4.5, trustpilot: null, cryptonoshi: null, composite: 4.55, reviews: 8000 },
+  'Backpack': { ios: 4.5, android: 4.3, trustpilot: null, cryptonoshi: null, composite: 4.4, reviews: 3000 },
+  'Rain': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 4.0, reviews: 200 },
+  'Tria': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 3.8, reviews: 150 },
+  'Moto': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 4.2, reviews: 20 },
+  'COCA': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 3.8, reviews: 200 },
+  'Kontigo': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 3.7, reviews: 100 },
+  'Cypher': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 3.9, reviews: 250 },
+  'Fold': { ios: 4.2, android: 4.0, trustpilot: null, cryptonoshi: null, composite: 4.0, reviews: 12000 },
+  'SafePal': { ios: 4.4, android: 4.3, trustpilot: 3.4, cryptonoshi: null, composite: 4.0, reviews: 20000 }, // Trustpilot 3.4 (Average)
+  'imToken': { ios: 4.3, android: 4.2, trustpilot: null, cryptonoshi: null, composite: 4.25, reviews: 15000 },
+  'TokenPocket': { ios: 4.2, android: 4.1, trustpilot: null, cryptonoshi: null, composite: 4.15, reviews: 10000 },
+  'Xapo': { ios: 4.0, android: 3.9, trustpilot: null, cryptonoshi: null, composite: 3.95, reviews: 5000 },
+  'Verse V-Card': { ios: 4.3, android: 4.2, trustpilot: null, cryptonoshi: null, composite: 4.25, reviews: 25000 },
+  'Brighty': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 3.8, reviews: 400 },
+  'Bitget Card': { ios: 4.5, android: 4.4, trustpilot: 2.1, cryptonoshi: null, composite: 3.7, reviews: 50000 }, // Trustpilot 2.1 (Poor)
+  'Bitget Premier': { ios: 4.5, android: 4.4, trustpilot: 2.1, cryptonoshi: null, composite: 3.7, reviews: 50000 },
+  'OrbitX Neo': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 3.7, reviews: 150 },
+  'OrbitX Lux': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 3.8, reviews: 150 },
 };
 
 // Generate ratings using composite data where available, with smart fallbacks
