@@ -1,0 +1,2512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-P69XKG9S');</script>
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spendbase - Crypto Card Comparison</title>
+  <link rel="icon" type="image/png" href="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/cc680d90-ee94-499a-2074-50ec819a2000/public">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 400; letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    @keyframes ratingSuccess {
+      0% { transform: scale(0.5); opacity: 0; }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes checkmark {
+      0% { stroke-dashoffset: 50; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes chipShimmer {
+      0% { opacity: 0; transform: translateX(-100%) rotate(25deg); }
+      50% { opacity: 1; }
+      100% { opacity: 0; transform: translateX(200%) rotate(25deg); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P69XKG9S"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <div id="root"></div>
+  <script type="text/babel">
+const { useState, createContext, useContext } = React;
+
+// Theme Context for Light/Dark Mode
+const ThemeContext = createContext();
+
+function useTheme() {
+  return useContext(ThemeContext);
+}
+
+// Spendbase Logo SVG Component - Teal with shark fin S swoosh
+function SpendbaseLogo({ className = "" }) {
+  return (
+    <svg viewBox="0 0 40 40" className={className}>
+      <defs>
+        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#0F766E"/>
+          <stop offset="100%" stopColor="#14B8A6"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="40" height="40" rx="8" fill="url(#logoGradient)"/>
+      {/* Shark fin S swoosh */}
+      <path d="M11 27 C13 22 17 18 23 16 C18 19 19 23 20 25 C22 21 26 18 29 17 C25 21 24 25 23 28 C20 26 16 28 13 30 C12 29 11 28 11 27 Z" fill="white" opacity="0.95"/>
+    </svg>
+  );
+}
+
+// ============================================
+// COMPLETE CARD DATA - 30 Cards
+// Categories: cryptoNative, onchain, neobank
+// ============================================
+
+const allCards = [
+  // ============================================
+  // CATEGORY 1: CRYPTO-NATIVE
+  // Wallet-first, crypto-first, USDC/stablecoin led
+  // Primary comparison set for "Best crypto card" rankings
+  // ============================================
+  { id: 107, name: 'Crypto.com', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/5d211cf2-dce0-4d18-7530-4138739a5a00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/fa583429-3106-4762-639f-91dd7b61e000/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/5d211cf2-dce0-4d18-7530-4138739a5a00/public', xHandle: 'cryptocom', showFrontTags: true, bg: 'from-slate-950 to-blue-950', network: 'Visa', category: 'cryptoNative', archetype: 'exchange', custody: 'Custodial', chain: 'Cronos', regions: ['global'], cashback: '1-8%', cashbackToken: 'CRO', fxFee: '0%', annualFee: '$0-$4.99/mo', features: ['Level Up program', 'DeFi wallet', 'NFTs', 'Exchange'], perks: ['100M+ users', '400+ cryptos', 'Up to 8% CRO'], token: { ticker: 'CRO', live: true, cmc: 'cronos' }, website: 'https://crypto.com/cards', platforms: 'both', signupBonus: '$25 CRO', shippingCost: 'Free' },
+  { id: 108, name: 'Coinbase', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/6b89dd70-b6a8-42d7-a3d2-1f0946412000/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/58f6db63-e3f3-4dff-881b-a5d183d0b500/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/6b89dd70-b6a8-42d7-a3d2-1f0946412000/public', xHandle: 'coinbase', showFrontTags: true, bg: 'from-blue-500 to-blue-800', network: 'Visa', category: 'cryptoNative', archetype: 'exchange', custody: 'Custodial', chain: 'Base', regions: ['americas'], cashback: '1-4%', cashbackToken: 'BTC/ETH/DOGE', fxFee: '2.49%', annualFee: '$0', features: ['Choose reward crypto', 'Coinbase One Amex', 'Base L2', 'Staking'], perks: ['Largest US exchange', 'Public company', '4% in GRT/XLM'], website: 'https://www.coinbase.com/card', platforms: 'both', shippingCost: 'Free' },
+  { id: 105, name: 'MetaMask Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/f22d3d68-5700-4504-8c05-24356a4e3800/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/1f9eef0b-f390-4181-154e-4d8e5f44e200/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/f22d3d68-5700-4504-8c05-24356a4e3800/public', xHandle: 'MetaMask', showFrontTags: true, bg: 'from-orange-500 to-amber-700', network: 'Mastercard', category: 'cryptoNative', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Linea', regions: ['global', 'americas', 'europe'], cashback: '1%', cashbackToken: 'USDC', fxFee: '0%', annualFee: '$0 / $199', features: ['Direct wallet spend', 'Smart contracts', 'Linea L2', 'Metal card'], perks: ['Largest wallet base', '<5 sec transactions', '$0.01 fees'], website: 'https://portfolio.metamask.io/card', platforms: 'both', shippingCost: '$199 metal' },
+  { id: 106, name: 'Ether.fi Cash', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/e36eebc2-d301-41ca-1caa-1bd95ec9b200/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/c0a1aadf-eb8b-48a1-f5b2-26ad5c819f00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/e36eebc2-d301-41ca-1caa-1bd95ec9b200/public', brandLogoSize: 'h-10', xHandle: 'ether_fi', showFrontTags: true, bg: 'from-indigo-950 to-purple-950', network: 'Visa', category: 'cryptoNative', archetype: 'defi', custody: 'Non-Custodial', chain: 'Scroll', regions: ['global', 'americas', 'europe'], cashback: '4.08%', cashbackToken: 'ETHFI', fxFee: '0%', annualFee: '$0', features: ['Borrow vs stake', 'DeFi credit', 'Liquid vaults', 'No selling'], perks: ['#1 ranked 2025', '$9.7B TVL backing', 'Buy now pay never'], token: { ticker: 'ETHFI', live: true, cmc: 'ether-fi' }, website: 'https://app.ether.fi/cash', platforms: 'both' },
+  { id: 104, name: 'Gnosis Pay', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/b1d59672-a8b5-44f6-f9b9-859bcc27d100/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/8434b949-5767-41e1-857b-2ddbf2efdb00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/b1d59672-a8b5-44f6-f9b9-859bcc27d100/public', xHandle: 'gnosispay', showFrontTags: true, bg: 'from-lime-400 to-lime-500', network: 'Visa', category: 'cryptoNative', archetype: 'defi', custody: 'Non-Custodial', chain: 'Gnosis', regions: ['europe'], cashback: '1-5%', cashbackToken: 'GNO', fxFee: '~1.5%', annualFee: '€30 issuance', features: ['Safe wallet', 'SEPA/IBAN', 'Multi-sig', 'Tiered cashback'], perks: ['First self-custody Visa', 'Need 10+ GNO for profit', 'Weekly airdrop'], token: { ticker: 'GNO', live: true, cmc: 'gnosis-gno' }, website: 'https://gnosispay.com', platforms: 'both' },
+  { id: 109, name: 'Nexo', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/c44a2186-7c64-455b-318d-e9c3bb38a200/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/bd795e0c-0988-4b85-d316-ce5065027a00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/c44a2186-7c64-455b-318d-e9c3bb38a200/public', xHandle: 'Nexo', showFrontTags: true, bg: 'from-gray-900 to-black', network: 'Mastercard', category: 'cryptoNative', archetype: 'defi', custody: 'Custodial', chain: 'Multi-chain', regions: ['global', 'europe'], cashback: '0.5-2%', cashbackToken: 'NEXO', fxFee: '0-0.5%', annualFee: '$0', features: ['Credit + Debit mode', 'Crypto loans', 'Up to 14% APY', 'Futures'], perks: ['Dual card modes', 'Borrow @ 2.9%', '$11B+ AUM'], token: { ticker: 'NEXO', live: true, cmc: 'nexo' }, website: 'https://platform.nexo.com/register', infoUrl: 'https://nexo.com/', platforms: 'both' },
+  { id: 110, name: 'Plutus', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/9bde82b3-06ec-4578-41b9-29563c016f00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/65904cd4-fa86-45ec-4520-e95306a4b000/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/9bde82b3-06ec-4578-41b9-29563c016f00/public', xHandle: 'plutus', showFrontTags: true, bg: 'from-blue-600 to-indigo-700', network: 'Visa', category: 'cryptoNative', archetype: 'defi', custody: 'Non-Custodial', chain: 'Base', regions: ['europe'], cashback: '3-9%', cashbackToken: 'PLU', fxFee: '0%', annualFee: '$0-€14.99/mo', features: ['DeFi card', 'PLU staking', '50+ perks', 'On-chain rewards'], perks: ['True DeFi card', 'Up to 9% PLU', 'Netflix/Spotify perks'], token: { ticker: 'PLU', live: true, cmc: 'pluton' }, website: 'https://www.plutus.it/money', platforms: 'both' },
+  { id: 113, name: 'Bybit', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/195074af-48b7-4629-0e18-a67acb39dc00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/195074af-48b7-4629-0e18-a67acb39dc00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/195074af-48b7-4629-0e18-a67acb39dc00/public', xHandle: 'Bybit_Official', showFrontTags: true, bg: 'from-yellow-500 to-amber-700', network: 'Mastercard', category: 'cryptoNative', archetype: 'exchange', custody: 'Custodial', chain: 'Exchange', regions: ['europe', 'apac'], cashback: '2-10%', cashbackToken: 'USDT', fxFee: '0.9%', annualFee: '€10', features: ['VIP rebates', 'Up to 8% APY', 'Netflix/Spotify', '100% sub rebates'], perks: ['Up to 10% cashback', 'Full sub rebates', '2M+ cards'], website: 'https://www.bybit.com/en/bybit-card', platforms: 'both' },
+  { id: 178, name: 'Krak Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/01e22b78-355a-47d2-ba93-a31d27bdd600/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/22b4d892-c086-44fc-09a4-cc77d7f1ba00/public', xHandle: 'kraken', showFrontTags: true, bg: 'from-gray-900 to-black', network: 'Mastercard', category: 'cryptoNative', archetype: 'exchange', custody: 'Custodial', chain: 'Multi-chain', regions: ['europe'], cashback: '1%', cashbackToken: 'BTC/Fiat', fxFee: '0%', annualFee: '$0', features: ['400+ crypto & fiat', 'No FX fees', 'Salary deposits', 'Apple Pay'], perks: ['Kraken exchange', 'Instant cashback', 'Metal card option'], website: 'https://www.kraken.com/krak/card', platforms: 'both' },
+  { id: 114, name: 'Fold', logo: 'https://cdn.brandfetch.io/id8zpwD0TT/w/230/h/82/theme/light/logo.png?c=1bxid64Mup7aczewSAYMX&t=1699911047235', brandLogo: 'https://cdn.brandfetch.io/id8zpwD0TT/w/230/h/82/theme/light/logo.png?c=1bxid64Mup7aczewSAYMX&t=1699911047235', brandLogoBack: 'https://cdn.brandfetch.io/id8zpwD0TT/w/230/h/82/theme/light/logo.png?c=1bxid64Mup7aczewSAYMX&t=1699911047235', xHandle: 'fold_app', showFrontTags: true, bg: 'from-orange-600 to-red-700', network: 'Visa', category: 'cryptoNative', archetype: 'wallet', custody: 'Custodial', chain: 'Bitcoin', regions: ['americas'], cashback: 'Up to 15%', cashbackToken: 'BTC/Sats', fxFee: '0%', annualFee: '$0 / $100', features: ['Bitcoin rewards', 'Spin wheel', 'Boosts', 'Round-ups'], perks: ['First BTC on NASDAQ', 'Win up to 1 BTC', 'Bitcoin only'], website: 'https://foldapp.com', platforms: 'both' },
+  { id: 118, name: 'WhiteBIT Nova', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/e486f1cc-1112-4264-a108-f6de71a6f800/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/e486f1cc-1112-4264-a108-f6de71a6f800/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/e486f1cc-1112-4264-a108-f6de71a6f800/public', xHandle: 'WhiteBit', showFrontTags: true, bg: 'from-green-500 to-teal-700', network: 'Visa', category: 'cryptoNative', archetype: 'exchange', custody: 'Custodial', chain: 'Exchange', regions: ['europe', 'global'], cashback: 'Up to 10%', cashbackToken: 'WBT', fxFee: 'Varies', annualFee: '$0', features: ['Choose cashback category', 'Instant BTC rewards', '11 cryptos', 'Apple/Google Pay'], perks: ['Up to 10% cashback', 'Max €25/purchase', 'Free virtual card'], token: { ticker: 'WBT', live: true, cmc: 'whitebit' }, website: 'https://whitebit.com/nova', platforms: 'both' },
+  { id: 119, name: 'Uphold', logo: 'https://cdn.brandfetch.io/idtqeCHW1H/theme/light/symbol.svg?c=1bxid64Mup7aczewSAYMX&t=1700844646203', brandLogo: 'https://cdn.brandfetch.io/idtqeCHW1H/theme/light/idn8R-Qz-D.svg?c=1bxid64Mup7aczewSAYMX&t=1700844643809', brandLogoBack: 'https://cdn.brandfetch.io/idtqeCHW1H/theme/light/symbol.svg?c=1bxid64Mup7aczewSAYMX&t=1700844646203', xHandle: 'UpholdInc', showFrontTags: true, bg: 'from-[#49CC68] to-[#3BA855]', network: 'Visa', category: 'cryptoNative', archetype: 'exchange', custody: 'Custodial', chain: 'Multi-chain', regions: ['americas'], cashback: '2-4%', cashbackToken: 'XRP', fxFee: 'Varies', annualFee: '$0', features: ['Spend from balances', 'XRP rewards', '250+ assets', 'Staking'], perks: ['4% first 90 days', '2% after', 'US only'], website: 'https://uphold.com/en-us/debit-card', platforms: 'both' },
+  { id: 120, name: 'BitPay', logo: 'https://cdn.brandfetch.io/idtubVO_dA/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1669643445343', brandLogo: 'https://cdn.brandfetch.io/idtubVO_dA/theme/light/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1669643447172', brandLogoBack: 'https://cdn.brandfetch.io/idtubVO_dA/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1669643445343', xHandle: 'BitPay', showFrontTags: true, bg: 'from-[#2240C4] to-[#1a3399]', network: 'Mastercard', category: 'cryptoNative', archetype: 'wallet', custody: 'Custodial', chain: 'Multi-chain', regions: ['americas'], cashback: '0%', cashbackToken: 'N/A', fxFee: '2%', annualFee: '$0', features: ['Instant reload', 'Apple Pay', 'Google Pay', 'Samsung Pay'], perks: ['OG crypto card', 'Wide crypto support', 'US only'], website: 'https://bitpay.com/card', platforms: 'both' },
+  { id: 121, name: 'Binance Card', logo: 'https://cdn.brandfetch.io/idXI-zkGu8/w/334/h/334/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1760641089923', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/a0c4bab9-0307-4be3-e8ff-20b31d1be000/public', brandLogoBack: 'https://cdn.brandfetch.io/idXI-zkGu8/w/334/h/334/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1760641089923', xHandle: 'binance', showFrontTags: true, bg: 'from-[#F0B90B] to-[#c99a09]', network: 'Visa', category: 'cryptoNative', archetype: 'exchange', custody: 'Custodial', chain: 'BNB Chain', regions: ['europe', 'apac', 'latam'], cashback: 'Up to 8%', cashbackToken: 'BNB', fxFee: '0.9%', annualFee: '$0', features: ['Auto-convert', 'Real-time conversion', 'BNB staking rewards', 'Global'], perks: ['8% with 600 BNB', 'No issuance fee', 'Largest exchange'], token: { ticker: 'BNB', live: true, cmc: 'bnb' }, website: 'https://www.binance.com/en/cards', platforms: 'both' },
+
+  // ============================================
+  // CATEGORY 2: ONCHAIN
+  // Stablecoin balances as primary account, non-custodial
+  // "Next-gen stablecoin spending" - the trend we're naming
+  // ============================================
+  { id: 201, name: 'Solayer Emerald', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/25f81335-2e88-40f2-a5b6-02ffc34a6100/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/3d87d3f2-08e2-4126-18d5-62ab9da57e00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/25f81335-2e88-40f2-a5b6-02ffc34a6100/public', brandLogoSize: 'h-10', xHandle: 'solayer_labs', showFrontTags: true, bg: 'from-[#0a3d3d] to-[#1a5f5f]', network: 'Visa', category: 'onchain', archetype: 'defi', custody: 'Non-Custodial', chain: 'Solana', regions: ['global'], cashback: '2-4%', cashbackToken: 'LAYER', fxFee: '0%', annualFee: '$75', features: ['InfiniSVM L1', 'sUSD 4-5% yield', 'Apple/Google Pay', 'ATM withdrawals'], perks: ['40K+ users', '100 countries', 'On-chain rewards'], token: { ticker: 'LAYER', live: true, cmc: 'solayer' }, website: 'https://solayer.org/product/card', platforms: 'both' },
+  { id: 102, name: 'KAST K Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/71022706-a9ef-47ea-d5ab-04132e69ea00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/71022706-a9ef-47ea-d5ab-04132e69ea00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-purple-600 to-pink-600', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global', 'latam', 'argentina'], tier: 'Standard', cashback: '2-6%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: '$20/year', features: ['Virtual card free', 'Stablecoin native', 'No conversion fee', 'ACH/Wire'], perks: ['160+ countries', 'Season 5 rewards', 'Token Q2 2026'], token: { ticker: 'KAST', live: false }, website: 'https://kast.money', platforms: 'both' },
+  { id: 1021, name: 'KAST X Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/71022706-a9ef-47ea-d5ab-04132e69ea00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/71022706-a9ef-47ea-d5ab-04132e69ea00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-pink-600 to-rose-700', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global', 'latam', 'argentina'], tier: 'Premium', cashback: '5-12%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: '$1,000/year', features: ['Premium metal card', 'Higher limits', 'Priority support', 'Exclusive perks'], perks: ['Up to 12% rewards', 'Unlimited transactions', 'VIP access'], token: { ticker: 'KAST', live: false }, website: 'https://kast.money', platforms: 'both' },
+  { id: 1022, name: 'KAST Founders', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/71022706-a9ef-47ea-d5ab-04132e69ea00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/71022706-a9ef-47ea-d5ab-04132e69ea00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-amber-500 to-yellow-600', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global', 'latam', 'argentina'], tier: 'Elite', cashback: 'Up to 15%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: '$10,000 one-time', features: ['Exclusive founders edition', 'Lifetime benefits', 'Max rewards', 'Concierge'], perks: ['Up to 15% rewards', 'Free replacements', 'Max SOL staking'], token: { ticker: 'KAST', live: false }, website: 'https://kast.money', platforms: 'both' },
+  { id: 101, name: 'Ready', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/04d75186-a574-4a06-c8de-2b1428b63600/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/a7aa5395-2ba3-4391-ebe0-12c023986e00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/04d75186-a574-4a06-c8de-2b1428b63600/public', xHandle: 'ready_co', showFrontTags: true, bg: 'from-violet-600 to-purple-900', network: 'Mastercard', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Starknet', regions: ['global', 'latam', 'india'], cashback: '0.5-3%', cashbackToken: 'STRK', fxFee: '0%', annualFee: '$0 / $120', features: ['Account Abstraction', 'Zero FX', 'ZK proofs', 'DeFi native'], perks: ['True self-custody', 'Best conversion rate', '$56M funding'], token: { ticker: 'STRK', live: true, cmc: 'starknet-token' }, website: 'https://www.ready.app', platforms: 'both' },
+  { id: 103, name: 'Avici', logo: 'https://cdn.brandfetch.io/idML--dEKL/w/64/h/64/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1763582584861', brandLogo: 'https://cdn.brandfetch.io/idML--dEKL/w/64/h/64/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1763582584861', brandLogoBack: 'https://cdn.brandfetch.io/idML--dEKL/w/64/h/64/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1763582584861', showBrandName: true, xHandle: 'AviciMoney', showFrontTags: true, bg: 'from-[#888888] to-[#666666]', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Solana', regions: ['global'], cashback: '1.5-2%', cashbackToken: 'AVICI', fxFee: '0-3%', annualFee: '$0', features: ['Smart wallet', 'Passkey login', 'USD/EUR accounts', '0% APR'], perks: ['Self-custody Solana', 'AVICI token live', 'Gas sponsored'], token: { ticker: 'AVICI', live: true, cmc: 'avici' }, website: 'https://avici.money', platforms: 'both' },
+  { id: 115, name: 'Phantom Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/f25169b7-26a2-40f7-3227-50c5dcb49e00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/c86440c7-dbdc-4025-d22f-178f370ba900/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/f25169b7-26a2-40f7-3227-50c5dcb49e00/public', showBrandName: true, brandNameText: 'Phantom Cash', brandNameColor: '#79789F', xHandle: 'phantom', showFrontTags: true, bg: 'holographic', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Solana', regions: ['americas', 'global'], cashback: '2%', cashbackToken: 'CASH', fxFee: '0%', annualFee: '$0', features: ['$CASH stablecoin', 'Self-custody', 'Solana native', 'Wallet integrated'], perks: ['$100M CASH supply', 'Growing steadily', 'Native stablecoin'], website: 'https://phantom.app', platforms: 'both' },
+  { id: 112, name: 'Solflare', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/7186322c-0375-4f01-07f5-ba5102732d00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/bd0f1989-a8f1-46da-a901-f77ac00da900/public', brandLogoSize: 'h-8', xHandle: 'solflare_wallet', showFrontTags: true, bg: 'from-gray-800 to-gray-950', network: 'Mastercard', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Solana', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['First Solana self-custody', '3FA security', 'No top-ups', 'Google Pay'], perks: ['True self-custody', 'Solana native', '115K+ waitlist'], website: 'https://solflare.com/card', platforms: 'both' },
+  { id: 111, name: 'Holyheld', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/13fd0abc-e740-41a2-c8df-ab65c668a100/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/476c2073-881a-4bbb-1f8c-23d0c4c68700/public', invertLogo: true, xHandle: 'holyheld', showFrontTags: true, bg: 'from-gray-900 to-black', network: 'Mastercard', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: '14 chains', regions: ['europe'], cashback: '0.5-1%', cashbackToken: 'USDC', fxFee: '2.5%', annualFee: '€29-€199', features: ['Zero gas fees', 'Personal IBAN', 'SEPA', 'Multi-chain'], perks: ['Gas subsidized', '14 chains supported', 'Metal €199'], website: 'https://holyheld.com', platforms: 'both' },
+  { id: 151, name: 'Kosh', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/cb4c816f-8801-45be-0800-d692892fc700/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/cb4c816f-8801-45be-0800-d692892fc700/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/cb4c816f-8801-45be-0800-d692892fc700/public', xHandle: 'koshmoney', showFrontTags: true, bg: 'kosh-gradient', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Stablecoin spending', 'Self-custody', 'Multi-chain', 'Rebranded from CopperX'], perks: ['Formerly CopperX', 'Global coverage', 'Non-custodial'], website: 'https://kosh.money', infoUrl: 'https://kosh.money', platforms: 'both' },
+  { id: 117, name: 'Bleap', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/67c52ffe-3960-4de9-3395-9a6a168ad200/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/9b804239-c83a-4bf4-0222-b60328de7f00/public', xHandle: 'BleapApp', showFrontTags: true, bg: 'bleap-gradient', silverChip: true, network: 'Mastercard', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['europe', 'global'], cashback: '2%', cashbackToken: 'USDC', fxFee: '0%', annualFee: '$0', features: ['Non-custodial MPC', 'Apple Pay', 'Zero fees', 'Metal card'], perks: ['2% real cashback', 'No FX fees', '100% non-custodial'], website: 'https://bleap.finance', platforms: 'both' },
+  { id: 116, name: 'Redotpay', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/b922153a-1820-4b73-d743-e9f730d38900/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/b922153a-1820-4b73-d743-e9f730d38900/public', showBrandName: true, brandNameText: 'RedotPay', xHandle: 'RedotPay', showFrontTags: true, bg: 'redotpay-gradient', silverChip: true, network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Custodial', chain: 'Multi-chain', regions: ['apac', 'global', 'latam'], cashback: '1%', cashbackToken: 'USD', fxFee: '1.2%', annualFee: '$0', features: ['Credit lines', '1M+ users', 'Global reach', 'USDT focus'], perks: ['Emerging market leader', 'USDT-friendly', 'Low barriers'], website: 'https://www.redotpay.com', platforms: 'both' },
+  { id: 122, name: 'Tria', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/391632b3-3d8f-4c34-73cc-c5dfed541a00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/6b009bf7-f9ad-414e-dd25-1173bccb3f00/public', xHandle: 'useTria', showFrontTags: true, bg: 'from-gray-900 to-black', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Smart wallet', 'Gasless transactions', 'Multi-chain support', 'Social login'], perks: ['Seamless UX', 'Chain abstraction', 'Web3 native'], website: 'https://app.tria.so/', platforms: 'both' },
+  { id: 123, name: 'Kontigo', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/67194a7b-3019-4689-ca4a-33e604f90600/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/67194a7b-3019-4689-ca4a-33e604f90600/public', brandLogoSize: 'h-10', xHandle: 'kontigo_io', showFrontTags: true, bg: 'from-[#FF6B00] to-[#FF8C00]', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['europe', 'global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Stablecoin spending', 'Non-custodial', 'Multi-chain', 'IBAN support'], perks: ['EU compliant', 'Self-custody', 'Crypto native'], website: 'https://kontigo.io', platforms: 'both' },
+  { id: 124, name: 'OrbitX Neo', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/f5d4447c-9f28-475d-0df0-dc931b5cda00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/9dd951bc-8f0c-428a-df11-7efbbc827100/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/f5d4447c-9f28-475d-0df0-dc931b5cda00/public', xHandle: 'OrbitX_Pay', showFrontTags: true, bg: 'from-gray-900 to-black', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], tier: 'Standard', cashback: 'TBD', cashbackToken: 'TBD', fxFee: '2%', annualFee: '$12/year', features: ['Visa Platinum', '0% deposit fees', '$50K daily limit', 'Multi-chain'], perks: ['Entry tier', 'Global coverage', 'Non-custodial'], website: 'https://orbitx.finance', platforms: 'both' },
+  { id: 1241, name: 'OrbitX Lux', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/f5d4447c-9f28-475d-0df0-dc931b5cda00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/9dd951bc-8f0c-428a-df11-7efbbc827100/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/f5d4447c-9f28-475d-0df0-dc931b5cda00/public', xHandle: 'OrbitX_Pay', showFrontTags: true, bg: 'from-gray-900 to-black', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], tier: 'Premium', cashback: 'TBD', cashbackToken: 'TBD', fxFee: '1%', annualFee: '$30/year', features: ['Visa Signature', 'Virtual card included', '0% deposit fees', 'Unlimited daily spend'], perks: ['Lowest FX fees', 'Premium tier', 'Non-custodial'], website: 'https://orbitx.finance', platforms: 'both' },
+  { id: 127, name: 'Gemini', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/c89c9459-b0fb-47ad-5002-0545f9065d00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/7258685c-29fc-40b0-ed22-51b5093a3300/public', xHandle: 'Gemini', showFrontTags: true, bg: 'from-[#F7931A] to-[#E67E00]', silverChip: true, network: 'Mastercard', category: 'exchange', archetype: 'exchange', custody: 'Custodial', chain: 'Multi-chain', regions: ['americas'], cashback: '3%', cashbackToken: 'Crypto', fxFee: '0%', annualFee: '$0', features: ['Up to 3% crypto back', '70+ cryptos', 'No annual fee', 'Regulated'], perks: ['US regulated', 'Winklevoss twins', 'Insurance'], website: 'https://www.gemini.com/credit-card', platforms: 'both' },
+  { id: 129, name: 'Bitget Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/49ba9d86-930d-4b9b-1056-e06c7a762100/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/9f76c4f9-1e82-4856-f4b2-b65b9333c500/public', xHandle: 'bitget', showFrontTags: true, bg: 'from-[#00D6E0] to-[#00B8C2]', silverChip: true, network: 'Visa', category: 'exchange', archetype: 'exchange', custody: 'Custodial', chain: 'Multi-chain', regions: ['global'], tier: 'Standard', cashback: 'Up to 4%', cashbackToken: 'BGB', fxFee: '0%', annualFee: '$0', features: ['Crypto to fiat', 'BGB rewards', 'Global coverage', 'No fees'], perks: ['Fast growing exchange', 'Copy trading leader'], token: { ticker: 'BGB', live: true, cmc: 'bitget-token' }, website: 'https://www.bitget.com/cards', platforms: 'both' },
+  { id: 1291, name: 'Bitget Premier', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/49ba9d86-930d-4b9b-1056-e06c7a762100/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/9f76c4f9-1e82-4856-f4b2-b65b9333c500/public', xHandle: 'bitget', showFrontTags: true, bg: 'from-gray-900 to-black', network: 'Visa', category: 'exchange', archetype: 'exchange', custody: 'Custodial', chain: 'Multi-chain', regions: ['global'], tier: 'Premium', cashback: 'Up to 8%', cashbackToken: 'BGB', fxFee: '0%', annualFee: 'TBD', features: ['Premium tier', 'Higher cashback', 'Priority support', 'Exclusive perks'], perks: ['8% max cashback', 'VIP benefits', 'Premier status'], token: { ticker: 'BGB', live: true, cmc: 'bitget-token' }, website: 'https://www.bitget.com/cards/premier', platforms: 'both' },
+  { id: 130, name: 'COCA', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/67889ec8-ca0a-4ee1-2222-4934458d8400/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/0d3a20fd-fa1d-44a0-f115-b4bf1576d600/public', invertLogo: true, xHandle: 'coca_wallet', showFrontTags: true, bg: 'from-[#2563EB] to-[#1D4ED8]', network: 'Mastercard', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Self-custody', 'Multi-chain', 'DeFi integration'], perks: ['Non-custodial', 'Web3 native'], website: 'https://www.coca.xyz/', platforms: 'both' },
+  { id: 131, name: 'Brighty', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/2dd6a726-d935-49c8-9c3e-94a83e6e8800/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/204bfc5a-d20d-4ddf-6dff-c47d46882f00/public', xHandle: 'brightyapp', showFrontTags: true, bg: 'holographic', network: 'Visa', category: 'fintech', archetype: 'fintech', custody: 'Custodial', chain: 'Multi-chain', regions: ['europe'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Crypto spending', 'IBAN', 'Multi-currency'], perks: ['EU focused', 'Easy onboarding'], website: 'https://brighty.app', platforms: 'both' },
+  { id: 132, name: 'Cypher', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/e1a07b4c-6567-46bb-741b-f9d73c658c00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/e1a07b4c-6567-46bb-741b-f9d73c658c00/public', showBrandName: true, brandNameText: 'Cypher Card', xHandle: 'Cypher_HQ_', showFrontTags: true, bg: 'from-[#E5A835] to-[#D4962A]', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Self-custody', 'Privacy focused', 'Multi-chain'], perks: ['Non-custodial', 'Privacy native'], website: 'https://cypher.com', platforms: 'both' },
+  { id: 134, name: 'Wayex', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/9d3f0844-983f-4183-06d3-4adaa5f74a00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/d0d2a20c-1bcc-482d-db69-4a66d24f9a00/public', xHandle: 'wayex_au', showFrontTags: true, bg: 'from-[#1E3A8A] to-[#1E40AF]', network: 'Visa', category: 'exchange', archetype: 'exchange', custody: 'Custodial', chain: 'Multi-chain', regions: ['apac'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Australian exchange', 'Crypto card'], perks: ['Australian focused'], website: 'https://www.wayex.com/en-US/card/', platforms: 'both' },
+  { id: 136, name: 'Bitpanda', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/142814a1-9f4a-470e-fc28-c3f923062400/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/c5c2cede-0638-4da6-1c98-8ca38bdd5f00/public', xHandle: 'bitpanda', showFrontTags: true, bg: 'from-green-500 to-emerald-700', network: 'Visa', category: 'exchange', archetype: 'exchange', custody: 'Custodial', chain: 'Multi-chain', regions: ['europe'], cashback: '2%', cashbackToken: 'BEST', fxFee: '0%', annualFee: '$0', features: ['BEST token rewards', 'Stocks & metals', 'EU regulated'], perks: ['Austrian exchange', 'Full EU license', 'Multi-asset'], token: { ticker: 'BEST', live: true, cmc: 'bitpanda-ecosystem-token' }, website: 'https://www.bitpanda.com/en/bitpanda-card', platforms: 'both' },
+  { id: 137, name: 'Zypto', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/bb8e09eb-06af-47d4-7755-e01375b85c00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/ed3ab086-26a1-4b49-fdb6-ee505a22b900/public', xHandle: 'ZyptoApp', showFrontTags: true, bg: 'from-yellow-400 to-amber-500', network: 'Visa', category: 'fintech', archetype: 'fintech', custody: 'Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'ZYPTO', fxFee: '0%', annualFee: 'TBD', features: ['Crypto card', 'Zypto token', 'Global coverage'], perks: ['Growing platform'], token: { ticker: 'ZYPTO', live: true, cmc: 'zypto-token' }, website: 'https://zypto.com', platforms: 'both' },
+  { id: 138, name: 'Ledger', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/0c2703c2-09d1-4394-8d3f-aa84bfc95300/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/8d26861d-83ce-47dd-370a-bd1e00d64900/public', xHandle: 'Ledger', showFrontTags: true, bg: 'from-slate-800 to-slate-950', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['europe', 'global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Hardware wallet', 'Ledger Live', 'Self-custody', 'Cold storage'], perks: ['#1 hardware wallet', 'Maximum security', 'CL Card'], website: 'https://www.ledger.com', platforms: 'both' },
+  { id: 139, name: 'Tuyo', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/964b8557-fe60-47e6-43ce-9721fb9b6500/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/8875656b-757d-4b70-4eeb-b82511034c00/public', xHandle: 'itstuyo', showFrontTags: true, bg: 'from-[#1a2a3a] to-[#0f1a24]', network: 'Mastercard', category: 'fintech', archetype: 'fintech', custody: 'Custodial', chain: 'Multi-chain', regions: ['latam'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['LatAm focused', 'Crypto spending', 'Remittances'], perks: ['Latin America', 'Cross-border'], website: 'https://tuyo.io', platforms: 'both' },
+  { id: 140, name: 'Oobit', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/26536164-83f5-4f48-69da-edc98362fb00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/26536164-83f5-4f48-69da-edc98362fb00/public', xHandle: 'oobit_app', showFrontTags: true, bg: 'from-[#f5f5f5] to-[#ffffff]', network: 'Visa', category: 'fintech', archetype: 'fintech', custody: 'Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'OBT', fxFee: '0%', annualFee: 'TBD', features: ['Tap to pay crypto', 'OBT token', 'Global'], perks: ['Easy payments', 'Merchant network'], token: { ticker: 'OBT', live: true, cmc: 'oobit' }, website: 'https://oobit.com', platforms: 'both' },
+  { id: 141, name: 'Deblock', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/4e2b0d3a-9b15-4739-a44c-0bc39a986400/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/54e9edd7-4aa7-4db5-5317-9b9e8bd04b00/public', xHandle: 'DeblockApp', showFrontTags: true, bg: 'from-gray-900 to-black', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Ethereum', regions: ['europe'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Self-custody', 'IBAN', 'Ethereum native', 'EU regulated'], perks: ['Non-custodial banking', 'EU compliant'], website: 'https://deblock.com', platforms: 'both' },
+  { id: 143, name: 'TapX', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/2f986ed4-008c-4002-24e7-3c9f39606200/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/117f9824-ab86-42c9-aaae-bd8ba4f64700/public', brandLogoSize: 'h-10', xHandle: 'tapx_global', showFrontTags: true, bg: 'from-indigo-600 to-blue-800', network: 'Visa/Mastercard', category: 'fintech', archetype: 'fintech', custody: 'Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Multi-network', 'Global coverage', 'Crypto spending'], perks: ['Flexible network'], website: 'https://tapx.com', platforms: 'both' },
+  { id: 144, name: 'Fiat24', logo: 'https://cdn.brandfetch.io/idVnhlPzZX/w/400/h/400/theme/dark/icon.png?c=1bfwsmEH20zzEfSNTed', brandLogo: 'https://cdn.brandfetch.io/idVnhlPzZX/w/400/h/400/theme/dark/icon.png?c=1bfwsmEH20zzEfSNTed', xHandle: 'fiat24_com', showFrontTags: true, bg: 'from-[#6236FF] to-[#4a28cc]', network: 'Mastercard', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Arbitrum', regions: ['europe'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['NFT-based banking', 'Arbitrum native', 'Swiss IBAN', 'Self-custody'], perks: ['Swiss regulated', 'DeFi native', 'NFT account'], website: 'https://fiat24.com', platforms: 'both' },
+  { id: 145, name: 'THORWallet', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/91ac4cf3-67b1-4a3c-981e-ff5298375600/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/d7e0c947-3b30-485b-579a-c1d952066d00/public', xHandle: 'THORWalletDEX', showFrontTags: true, bg: 'from-teal-500 to-cyan-700', network: 'Mastercard', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'THORChain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['THORChain native', 'Cross-chain swaps', 'Self-custody', 'DEX integrated'], perks: ['Non-custodial DEX', 'Cross-chain'], website: 'https://thorwallet.org', platforms: 'both' },
+  { id: 146, name: 'SafePal', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/5c3a2613-d7b9-4b0d-c9b7-e232e84f1800/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/5c3a2613-d7b9-4b0d-c9b7-e232e84f1800/public', xHandle: 'iSafePal', showFrontTags: true, bg: 'from-[#5B4CFF] to-[#4a3de6]', network: 'Mastercard', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'SFP', fxFee: '0%', annualFee: 'TBD', features: ['Hardware + software wallet', 'Multi-chain', 'DeFi integrated', 'Binance backed'], perks: ['Binance investment', 'Hardware security'], token: { ticker: 'SFP', live: true, cmc: 'safepal' }, website: 'https://www.safepal.com', platforms: 'both' },
+  { id: 147, name: 'UR', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/36e01460-9d0b-4c99-9449-1e6e4f0aaf00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/33cc9f93-8d6a-4e7f-03db-4e5e847c8000/public', xHandle: 'UR_Global', showFrontTags: true, bg: 'from-slate-700 to-slate-900', network: 'Mastercard', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Self-custody', 'Privacy focused', 'Multi-chain'], perks: ['Non-custodial', 'Privacy native'], website: 'https://ur.io', platforms: 'both' },
+  { id: 149, name: 'imToken', logo: 'https://logo.clearbit.com/token.im', xHandle: 'imtoken_io', showFrontTags: true, bg: 'from-blue-400 to-blue-600', network: 'Mastercard', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['apac', 'global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Mobile wallet', 'Multi-chain', 'DeFi browser', 'Asia focused'], perks: ['#1 Asia wallet', 'Self-custody'], website: 'https://token.im', platforms: 'both' },
+  { id: 150, name: 'TokenPocket', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/099b796c-64e9-472f-8541-4385529e9800/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/03a070ca-066a-481d-35a8-d6bab3dbc300/public', xHandle: 'TokenPocket_TP', showFrontTags: true, bg: 'from-slate-800 to-slate-950', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['apac', 'global'], cashback: 'TBD', cashbackToken: 'TPT', fxFee: '0%', annualFee: 'TBD', features: ['Multi-chain wallet', 'DApp browser', 'Self-custody', 'Asia focused'], perks: ['Popular in Asia', 'Multi-chain leader'], token: { ticker: 'TPT', live: true, cmc: 'tokenpocket' }, website: 'https://card.tokenpocket.pro/?locale=en#/', platforms: 'both' },
+  { id: 160, name: 'Solcard', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/9c5fd97e-8520-4a6f-0b34-40c8e6207c00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/9c5fd97e-8520-4a6f-0b34-40c8e6207c00/public', xHandle: 'solcard', showFrontTags: true, bg: 'from-gray-900 to-black', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Solana', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Solana native', 'Self-custody', 'Crypto spending'], perks: ['Solana ecosystem', 'Non-custodial'], website: 'https://app.solcard.cc/register?_gl=1*1optia0*_gcl_au*MTczNzcwMzUyMi4xNzY5MDQwNzg3', platforms: 'both' },
+  { id: 161, name: 'Tangem', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/80362bf8-41fe-4389-8c3a-768bc34fde00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/1b46c7de-9428-4c30-bee5-3d1839109700/public', xHandle: 'tangem', showFrontTags: true, bg: 'from-gray-800 to-gray-950', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Hardware wallet card', 'NFC tap to sign', 'Self-custody', 'Cold storage'], perks: ['Card-shaped hardware wallet', 'Maximum security'], website: 'https://tangem.com', platforms: 'both' },
+  { id: 162, name: 'Exa', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/0e19a7a8-ec83-4e88-83d2-c06080489d00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/9ff23500-40b3-4529-1b32-49dfb245a900/public', xHandle: 'Exa_App', showFrontTags: true, bg: 'from-blue-500 to-blue-700', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Self-custody', 'Multi-chain', 'DeFi integration'], perks: ['Non-custodial', 'Web3 native'], website: 'https://exa.io', platforms: 'both' },
+    { id: 164, name: 'Xapo', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/886c5cfb-eee1-4d30-c970-4b226c46c800/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/7cb209df-d225-4642-35d4-3d96d0dcb500/public', xHandle: 'xapo', showFrontTags: true, bg: 'from-[#E63F0C] to-[#b8320a]', network: 'Mastercard', category: 'onchain', archetype: 'wallet', custody: 'Custodial', chain: 'Bitcoin', regions: ['global'], cashback: '1%', cashbackToken: 'BTC', fxFee: '0%', annualFee: 'TBD', features: ['Bitcoin bank', 'USD interest', 'Lightning Network', 'Gibraltar licensed'], perks: ['Bitcoin-first', 'Institutional grade', 'OG crypto bank'], website: 'https://xapo.com', platforms: 'both' },
+  { id: 165, name: 'Avalanche Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/0ada08c0-fb9b-4386-b211-7519bc9be300/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/ddc9ffc1-5ce3-401d-1f0e-b7a267047e00/public', xHandle: 'TheAvaxCard', showFrontTags: true, bg: 'from-[#E84142] to-[#c73637]', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Avalanche', regions: ['global'], cashback: 'TBD', cashbackToken: 'AVAX', fxFee: '0%', annualFee: 'TBD', features: ['Avalanche native', 'AVAX rewards', 'Self-custody'], perks: ['Avalanche ecosystem', 'Fast finality'], token: { ticker: 'AVAX', live: true, cmc: 'avalanche-2' }, website: 'https://www.avalanchecard.com/', platforms: 'both' },
+  { id: 166, name: 'Hana Wallet', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/fc11a359-41bd-44e7-3f87-e9b898417c00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/fc11a359-41bd-44e7-3f87-e9b898417c00/public', brandLogoSize: 'h-10', xHandle: 'hanawallet', showFrontTags: true, bg: 'from-pink-500 to-rose-600', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['apac', 'global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Mobile wallet', 'Multi-chain', 'Self-custody'], perks: ['Asia focused', 'Non-custodial'], website: 'https://hanawallet.io', platforms: 'both' },
+  { id: 167, name: 'Offramp', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/8ada2402-93a4-4da5-eaf2-c1dc538e5400/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/8ada2402-93a4-4da5-eaf2-c1dc538e5400/public', showBrandName: true, brandNameText: 'Offramp', xHandle: 'OfframpXYZ', showFrontTags: true, bg: 'from-[#00FFFF] to-[#00d9d9]', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Stablecoin offramp', 'Self-custody', 'Easy cash out'], perks: ['Offramp focused', 'Non-custodial'], website: 'https://www.offramp.xyz/cards', platforms: 'both' },
+    { id: 169, name: 'Kaze', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/50172868-cc82-4048-4f44-9456396b6600/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/50172868-cc82-4048-4f44-9456396b6600/public', brandLogoSize: 'h-10', xHandle: 'kazepay_en', showFrontTags: true, bg: 'from-purple-600 to-purple-800', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['apac', 'global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Crypto card', 'Self-custody', 'Asia focused'], perks: ['Non-custodial', 'Japan market'], website: 'https://app.kazepay.io/pages/r?c=h0nVLP4Y', platforms: 'both' },
+  { id: 170, name: 'Swype.fun', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/d2d9b9dc-24f4-45da-1c07-f36b709c5a00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/d2d9b9dc-24f4-45da-1c07-f36b709c5a00/public', xHandle: 'BrahmaFi', showFrontTags: true, bg: 'from-[#D4CFC4] to-[#C4BFB4]', network: 'Visa', category: 'onchain', archetype: 'defi', custody: 'Non-Custodial', chain: 'Base', regions: ['global'], cashback: 'None', cashbackToken: 'None', fxFee: '0%', annualFee: '$0', features: ['DeFi credit card', 'Borrow against collateral', 'Aave/Euler integration', 'Real-time USDC loans'], perks: ['No asset selling', 'Self-custody', 'Powered by Brahma'], website: 'https://swype.fun', platforms: 'both' },
+    { id: 175, name: 'Bit2Me', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/916eeb67-3870-4457-098f-ae0a89763700/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/e4f675a5-f4b1-4172-ee40-d9026aef9500/public', xHandle: 'Bit2Me_Global', showFrontTags: true, bg: 'from-[#0046E1] to-[#0036b1]', network: 'Visa', category: 'exchange', archetype: 'exchange', custody: 'Custodial', chain: 'Multi-chain', regions: ['europe'], cashback: 'Up to 9%', cashbackToken: 'B2M', fxFee: '0%', annualFee: 'TBD', features: ['Up to 9% cashback', 'Spanish exchange', 'B2M token rewards', 'Low ATM fees'], perks: ['Spain focused', 'High cashback', 'EU regulated'], token: { ticker: 'B2M', live: true, cmc: 'bit2me' }, website: 'https://bit2me.com', platforms: 'both' },
+    { id: 177, name: 'Verse V-Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/12efc6f8-e958-4e13-d6dd-51be91457700/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/12efc6f8-e958-4e13-d6dd-51be91457700/public', xHandle: 'VerseEcosystem', showFrontTags: true, bg: 'from-[#0a1628] to-[#1a2d4a]', network: 'Mastercard', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'VERSE rewards', cashbackToken: 'VERSE', fxFee: '0%', annualFee: '€49.99', features: ['Self-custody wallet', 'VERSE token rewards', '37M+ merchants', 'Global ATM access'], perks: ['Bitcoin.com ecosystem', 'Non-custodial', 'VERSE burn rewards'], token: { ticker: 'VERSE', live: true, cmc: 'verse-bitcoin' }, website: 'https://verse.bitcoin.com/card/', platforms: 'both' },
+  { id: 179, name: 'Kolo', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/eb87aa31-66b7-493f-3c12-c10563b52b00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/15f6a954-834a-4abb-42dd-b90876f66e00/public', xHandle: 'KoloHub', showFrontTags: true, bg: 'from-[#00D26A] to-[#00a854]', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Self-custody', 'Crypto spending', 'Multi-chain'], perks: ['Non-custodial', 'Web3 native'], website: 'https://kolo.com', platforms: 'both' },
+
+  // ============================================
+  // CATEGORY 3: NEOBANKS WITH DIRECT CRYPTO SPENDING
+  // Only neobanks that allow direct crypto/USDC spending from card
+  // Removed: PayPal, SoFi, Robinhood, N26 (no direct crypto card spend)
+  // ============================================
+  // Revolut - YES allows direct USDC/USDT spending with 0% FX fees
+  { id: 1, name: 'Revolut', logo: 'https://cdn.brandfetch.io/id7X7F9tik/w/400/h/400/theme/dark/icon.png?c=1bfwsmEH20zzEfSNTed', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/54df415b-5829-4d88-12d2-a37678ecfc00/public', xHandle: 'RevolutApp', showFrontTags: true, bg: 'from-gray-900 to-black', network: 'Mastercard', category: 'neobank', archetype: 'bank', custody: 'Custodial', chain: 'Multi-chain', regions: ['europe', 'americas', 'apac'], cashback: '1%', cashbackToken: 'RevPoints', fxFee: '0%', annualFee: '$0', settlement: 'Crypto', features: ['Direct USDC/USDT spend', 'Crypto trading', 'Multi-currency', 'Staking'], perks: ['Spend stablecoins directly', 'MiCA licensed', '65M users'], website: 'https://www.revolut.com/cards', platforms: 'both' },
+  // Cash App - YES allows Bitcoin payments via Lightning Network
+  { id: 3, name: 'Cash App', logo: 'https://static.afterpaycdn.com/en-US/integration/logo/lockup/cashapppay-mono-white-32.svg', brandLogo: 'https://static.afterpaycdn.com/en-US/integration/logo/lockup/cashapppay-mono-white-32.svg', xHandle: 'CashApp', showFrontTags: true, bg: 'from-[#00E013] to-[#00b80f]', network: 'Visa', category: 'neobank', archetype: 'bank', custody: 'Custodial', chain: 'Bitcoin', regions: ['americas'], cashback: 'Boosts', cashbackToken: 'USD', fxFee: '3%', annualFee: '$0', settlement: 'Crypto', features: ['Bitcoin payments', 'Lightning Network', 'USD to BTC conversion', 'Direct deposit'], perks: ['Pay with Bitcoin', 'Lightning enabled', '58M users'], website: 'https://cash.app/card', platforms: 'both' },
+  // Wirex - YES direct crypto spending with up to 8% cashback
+  { id: 7, name: 'Wirex', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/bf2ac4c0-5dd7-489d-7a7a-38f351882b00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/9e1d4ec3-8818-483e-0c09-bc5f5b588300/public', brandLogoSize: 'h-10', xHandle: 'wirexapp', showFrontTags: true, bg: 'from-[#b8f5c8] to-[#d4fce0]', network: 'Visa', category: 'neobank', archetype: 'bank', custody: 'Hybrid', chain: 'Multi-chain', regions: ['europe', 'apac'], cashback: '0.5-8%', cashbackToken: 'WXT', fxFee: '0%', annualFee: '$0-$29.99/mo', settlement: 'Crypto', features: ['Direct crypto spend', '0% crypto loans', 'X-Accounts', '25% APY'], perks: ['685+ cryptos', '0% interest loans', 'Up to 8% cashback'], token: { ticker: 'WXT', live: true, cmc: 'wirex-token' }, website: 'https://wirexapp.com/card', platforms: 'both' },
+  // Nubank - Testing stablecoin card integration, USDC rewards available now
+  { id: 8, name: 'Nubank', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/3ed27f45-12cf-401e-96a9-ecc81f7d4e00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/3ed27f45-12cf-401e-96a9-ecc81f7d4e00/public', showBrandName: true, brandNameText: 'Bank', xHandle: 'nubank', showFrontTags: true, bg: 'from-[#8A05BE] to-[#6a0491]', network: 'Mastercard', category: 'neobank', archetype: 'bank', custody: 'Custodial', chain: 'N/A', regions: ['latam', 'argentina'], cashback: '4% APY', cashbackToken: 'USDC', fxFee: 'Varies', annualFee: '$0', settlement: 'Fiat', features: ['USDC rewards', 'Stablecoin card testing', 'Crypto trading', '4% USDC yield'], perks: ['Largest LatAm bank', '100M+ users', 'Stablecoin card coming'], website: 'https://nubank.com.br', platforms: 'both' },
+
+  // ============================================
+  // COMING SOON - Cards on waitlist or launching soon
+  // ============================================
+  { id: 203, name: 'Exodus Pay', logo: 'https://logo.clearbit.com/exodus.com', xHandle: 'exodus_io', showFrontTags: true, bg: 'from-purple-600 to-violet-800', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['americas'], cashback: 'TBD', cashbackToken: 'USD', fxFee: 'TBD', annualFee: 'TBD', features: ['MoonPay stablecoin', 'Self-custody', 'In-app payments', 'Multi-chain'], perks: ['Exodus wallet', 'MoonPay partner', 'Early 2026'], website: 'https://exodus.com', comingSoon: true, waitlistUrl: 'https://exodus.com', platforms: 'both' },
+  { id: 209, name: 'Moto', logo: 'https://logo.clearbit.com/moto-card.com', xHandle: 'moto_card', showFrontTags: true, bg: 'from-slate-900 to-black', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '0%', annualFee: 'TBD', features: ['Yield-bearing stablecoin', 'Premium credit card', '5-10% APY on deposits', 'Concierge services'], perks: ['HNW focused', 'First true crypto credit card', 'Squads founders'], website: 'https://www.moto-card.com', comingSoon: true, waitlistUrl: 'https://www.moto-card.com', platforms: 'both' },
+  { id: 206, name: 'Backpack Card', logo: 'https://logo.clearbit.com/backpack.exchange', xHandle: 'Backpack', showFrontTags: true, bg: 'from-red-500 to-orange-600', network: 'Visa', category: 'cryptoNative', archetype: 'exchange', custody: 'Custodial', chain: 'Solana', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: 'TBD', annualFee: 'TBD', features: ['Mad Lads team', 'Solana native', 'Exchange integration', 'Points program'], perks: ['$363B+ volume', 'Season 4 points', 'Anticipated launch'], website: 'https://backpack.exchange', comingSoon: true, waitlistUrl: 'https://backpack.exchange', platforms: 'both' },
+  { id: 207, name: 'Offgrid', logo: 'https://logo.clearbit.com/offgrid.cash', xHandle: 'offgridcash', showFrontTags: true, bg: 'from-gray-800 to-gray-950', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: '0%', cashbackToken: 'N/A', fxFee: '0%', annualFee: 'TBD', features: ['No KYC required', 'ZK-proof privacy', 'Dynamic virtual cards', 'Apple/Google Pay'], perks: ['Privacy-first', '$4K/mo limit', 'No data tracking'], website: 'https://offgrid.cash', comingSoon: true, waitlistUrl: 'https://offgrid.cash', platforms: 'both' },
+  { id: 208, name: 'Keyflo', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/6dcbea33-4090-41a4-fe62-9b9b83bc3500/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/6dcbea33-4090-41a4-fe62-9b9b83bc3500/public', xHandle: 'keyfloapp', showFrontTags: true, bg: 'from-indigo-500 to-purple-600', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: 'TBD', annualFee: 'TBD', features: ['Crypto spending', 'Self-custody', 'Mobile app', 'Virtual cards'], perks: ['New entrant', 'Wallet-first', 'Coming 2026'], website: 'https://keyflo.app', comingSoon: true, waitlistUrl: 'https://keyflo.app', platforms: 'both' },
+];
+
+const regionLabels = { global: 'Global', americas: 'Americas', europe: 'Europe', apac: 'Asia-Pacific', latam: 'Latin America', india: 'India', argentina: 'Argentina' };
+const archetypeLabels = { exchange: 'Exchange', wallet: 'Wallet', defi: 'DeFi', bank: 'Bank', stablecoin: 'Stablecoin' };
+
+// ============================================
+// AI PROVIDERS FOR ASK AI WIDGET
+// ============================================
+const aiProviders = [
+  { id: 'perplexity', name: 'Perplexity', logo: 'https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/perplexity-ai-icon.png', iconSize: 'w-6 h-6', bgColor: 'bg-[#1a1a2e]', hoverBg: 'hover:bg-[#2a2a4e]', borderColor: 'border-[#22d3ee]/30', getUrl: (query) => `https://www.perplexity.ai/search?q=${encodeURIComponent(query)}` },
+  { id: 'chatgpt', name: 'ChatGPT', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg', iconSize: 'w-7 h-7', bgColor: 'bg-[#212121]', hoverBg: 'hover:bg-[#343434]', borderColor: 'border-[#212121]', getUrl: (query) => `https://chatgpt.com/?hints=search&q=${encodeURIComponent(query)}` },
+  { id: 'you', name: 'You.com', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/29a3fc9d-9781-47a6-85f4-9a4526950200/public', iconSize: 'w-6 h-6', bgColor: 'bg-[#000000]', hoverBg: 'hover:bg-[#222222]', borderColor: 'border-[#5436DA]/30', getUrl: (query) => `https://you.com/search?q=${encodeURIComponent(query)}&fromSearchBar=true&tbm=youchat` }
+];
+
+// ============================================
+// STAR RATING COMPONENT
+// ============================================
+function StarRating({ rating, onRate, size = 'md', interactive = true, darkMode = true }) {
+  const [hoverRating, setHoverRating] = useState(0);
+  const sizeClasses = size === 'lg' ? 'w-6 h-6' : size === 'sm' ? 'w-3 h-3' : 'w-4 h-4';
+
+  const renderStar = (index) => {
+    // When hovering, always show full stars up to hover position
+    const filled = hoverRating > 0 ? index <= hoverRating : index <= Math.floor(rating);
+    // Only show half stars when NOT hovering and rating has decimal
+    const halfFilled = hoverRating === 0 && !filled && index === Math.ceil(rating) && rating % 1 !== 0;
+
+    return (
+      <button
+        key={index}
+        type="button"
+        onClick={(e) => { e.stopPropagation(); if (interactive && onRate) onRate(index); }}
+        onMouseEnter={() => interactive && setHoverRating(index)}
+        onMouseLeave={() => setHoverRating(0)}
+        className={`${interactive ? 'cursor-pointer hover:scale-110' : 'cursor-default'} transition-transform`}
+        disabled={!interactive}
+      >
+        <svg className={sizeClasses} viewBox="0 0 24 24" fill="none">
+          {halfFilled ? (
+            <>
+              <defs><linearGradient id={`half-${index}`}><stop offset="50%" stopColor="#FBBF24" /><stop offset="50%" stopColor="#374151" /></linearGradient></defs>
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill={`url(#half-${index})`} stroke="#FBBF24" strokeWidth="1" />
+            </>
+          ) : (
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill={filled ? '#FBBF24' : '#374151'} stroke={filled ? '#FBBF24' : '#4B5563'} strokeWidth="1" />
+          )}
+        </svg>
+      </button>
+    );
+  };
+
+  return (
+    <div className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map(renderStar)}
+    </div>
+  );
+}
+
+// ============================================
+// STAR DISPLAY (non-interactive)
+// ============================================
+function StarDisplay({ rating, count }) {
+  return (
+    <div className="flex items-center gap-1">
+      <div className="flex">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <svg key={i} className="w-3 h-3" viewBox="0 0 24 24" fill={i <= rating ? '#FBBF24' : '#374151'}>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+        ))}
+      </div>
+      <span className="text-gray-400 text-[10px]">({count})</span>
+    </div>
+  );
+}
+
+// ============================================
+// RATING SUCCESS ANIMATION
+// ============================================
+function RatingSuccessAnimation({ userRating }) {
+  return (
+    <div className="bg-gradient-to-r from-lime-400/20 to-emerald-500/20 border border-lime-400/30 rounded-lg p-3 text-center" style={{ animation: 'fadeInUp 0.4s ease-out' }}>
+      <div className="flex items-center justify-center gap-2 mb-1">
+        <div className="w-6 h-6 bg-lime-400 rounded-full flex items-center justify-center" style={{ animation: 'ratingSuccess 0.5s ease-out' }}>
+          <svg className="w-4 h-4 text-gray-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 13l4 4L19 7" style={{ strokeDasharray: 50, animation: 'checkmark 0.4s ease-out 0.3s forwards' }} />
+          </svg>
+        </div>
+        <span className="text-lime-400 font-bold text-sm">Thanks!</span>
+      </div>
+      <div className="flex items-center justify-center gap-1">
+        <span className="text-gray-400 text-xs">Your rating:</span>
+        <div className="flex">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <svg key={i} className="w-3 h-3" viewBox="0 0 24 24" fill={i <= userRating ? '#FBBF24' : '#374151'}>
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================
+// ASK AI WIDGET COMPONENT
+// ============================================
+function AskAIWidget({ cardName, darkMode }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const query = `Tell me more about ${cardName} crypto card features and benefits`;
+
+  const handleToggle = (e) => { e.stopPropagation(); setIsOpen(!isOpen); };
+  const handleProviderClick = (e, provider) => { e.stopPropagation(); window.open(provider.getUrl(query), '_blank'); setIsOpen(false); };
+
+  return (
+    <div className="relative flex-shrink-0">
+      <button
+        onClick={handleToggle}
+        className={`w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs transition-all ${
+          isOpen ? (darkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-900') : (darkMode ? 'bg-gray-800 hover:bg-gray-700 text-gray-300' : 'bg-gray-100 hover:bg-gray-200 text-gray-600')
+        }`}
+      >
+        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+        <span>Ask AI</span>
+        <svg className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {isOpen && (
+        <div className={`absolute bottom-full left-0 right-0 mb-1 rounded-xl p-2 shadow-xl z-50 ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
+          <div className="flex justify-center gap-2">
+            {aiProviders.map((provider) => (
+              <button
+                key={provider.id}
+                onClick={(e) => handleProviderClick(e, provider)}
+                className={`w-9 h-9 ${provider.rounded ? 'rounded-full overflow-hidden' : 'rounded-xl'} ${provider.bgColor} ${provider.hoverBg} border ${provider.borderColor} flex items-center justify-center transition-all hover:scale-110`}
+                title={`Ask ${provider.name}`}
+              >
+                <img
+                  src={provider.logo}
+                  alt={provider.name}
+                  className={`${provider.iconSize || 'w-6 h-6'} object-cover`}
+                  onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML = `<span class="text-xs font-bold text-white/70">${provider.name.slice(0,1)}</span>`; }}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================
+// SEARCH ICON COMPONENT
+// ============================================
+function SearchIcon({ className }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+    </svg>
+  );
+}
+
+const learnSections = [
+  { id: 'intro', title: 'What are Crypto Cards?', content: `Crypto cards are debit or credit cards that allow you to spend your cryptocurrency holdings at any merchant that accepts traditional card payments.\n\nThese cards bridge the gap between digital assets and everyday commerce, letting you use your crypto for real-world purchases.` },
+  { id: 'categories', title: 'Card Categories', content: `**Crypto-Native Cards**\nWallet-first or crypto-first products. Often non-custodial or hybrid custody. The card is an interface to onchain funds, typically USDC/stablecoin led. Examples: Coinbase Card, Crypto.com Card, MetaMask Card. These are eligible for "Best crypto card" rankings.\n\n**Onchain Cards**\nStablecoin balances as the primary account. The card abstracts away conversion. Often no traditional bank account required, and typically non-custodial. This is next-gen stablecoin spending - the trend Spendbase is naming.\n\n**Neobanks with Crypto**\nBank or EMI first - crypto is a feature, not the core. Often fully custodial with fiat settlement. Examples: Revolut, Wirex. Included but clearly labeled as Bank-led · Custodial · Fiat-settled.` },
+  { id: 'stablecoins', title: 'Stablecoins Explained', content: `Stablecoins are cryptocurrencies designed to maintain a stable value, typically pegged 1:1 to fiat currencies like the US Dollar.\n\nFor crypto card users, stablecoins offer: no volatility risk, predictable balances, and faster settlement. Popular stablecoins include USDC, USDT, and DAI.` },
+  { id: 'custody', title: 'Self-Custody vs Custodial', content: `**Non-Custodial / Self-Custody**\nYou hold your own private keys through a personal wallet. You have full control over your funds. No third party can freeze or access your assets.\n\n**Custodial**\nThe card provider holds your funds on your behalf. Easier to use but requires trust in the provider. May offer additional features like fraud protection.` },
+  { id: 'benefits', title: 'Benefits of Crypto Cards', content: `**Cashback Rewards**: Earn 1-15% back in crypto or stablecoins on purchases.\n\n**No FX Fees**: Many cards offer 0% foreign exchange fees, perfect for travel.\n\n**Global Access**: Use anywhere Visa/Mastercard is accepted - millions of merchants worldwide.\n\n**DeFi Integration**: Some cards let you spend directly from DeFi positions without selling.` },
+  { id: 'faq', title: 'FAQ', content: `**Are crypto cards safe?** Yes, reputable cards use bank-grade security and are often backed by regulated entities.\n\n**Can I use them internationally?** Yes! Most work anywhere Visa or Mastercard is accepted.\n\n**Do I need to sell my crypto?** Depends on the card. Onchain cards let you spend stablecoins directly, while others auto-convert at point of sale.` },
+];
+
+function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isInCompare = false, onCompareToggle }) {
+  const [flipped, setFlipped] = useState(false);
+  const cardRating = ratings?.[card.id] || { average: 0, count: 0 };
+  const hasUserRated = userRatedCards[card.id];
+  const userRating = userRatedCards[card.id] || 0;
+
+  const getCategoryStyle = () => {
+    if (card.category === 'cryptoNative') return { bg: 'bg-lime-500/20', text: 'text-lime-400', label: 'CRYPTO-NATIVE' };
+    if (card.category === 'onchain') return { bg: 'bg-purple-500/20', text: 'text-purple-400', label: 'ONCHAIN' };
+    return { bg: 'bg-gray-500/20', text: 'text-gray-400', label: 'NEOBANK' };
+  };
+  const catStyle = getCategoryStyle();
+
+  // Visa logo SVG (white)
+  const VisaLogo = () => (
+    <svg viewBox="0 0 100 32" className="h-6 w-auto fill-white opacity-90">
+      <path d="M40.5 2.1l-5.2 25.8h-6.5l5.2-25.8h6.5zm26.3 16.7l3.4-9.4 2 9.4h-5.4zm7.3 9.1h6l-5.2-25.8h-5.5c-1.2 0-2.3.7-2.8 1.8l-9.8 24h6.9l1.4-3.8h8.4l.6 3.8zm-17.3-8.4c0-6.8-9.4-7.2-9.4-10.2 0-.9.9-1.9 2.8-2.1 1-.1 3.6-.2 6.6 1.1l1.2-5.5c-1.6-.6-3.7-1.2-6.3-1.2-6.6 0-11.3 3.5-11.3 8.6 0 3.7 3.3 5.8 5.9 7.1 2.6 1.3 3.5 2.1 3.5 3.3 0 1.8-2.1 2.6-4 2.6-3.4.1-5.4-.9-6.9-1.6l-1.2 5.7c1.6.7 4.5 1.4 7.5 1.4 7 0 11.6-3.5 11.6-8.9m-27.6-17.4l-10.6 25.8H12l-5.2-20.6c-.3-1.2-.6-1.7-1.6-2.2-1.6-.9-4.3-1.7-6.6-2.2l.2-.8h11.1c1.4 0 2.7 1 3 2.1l2.8 14.6 6.8-16.7h6.9z"/>
+    </svg>
+  );
+
+  // Mastercard logo SVG (white circles)
+  const MastercardLogo = () => (
+    <svg viewBox="0 0 50 32" className="h-6 w-auto">
+      <circle cx="18" cy="16" r="12" fill="white" opacity="0.8"/>
+      <circle cx="32" cy="16" r="12" fill="white" opacity="0.6"/>
+    </svg>
+  );
+
+  // EMV Chip SVG with shimmer
+  const ChipSVG = () => {
+    const isSilver = card.silverChip;
+    const gradientColors = isSilver
+      ? { c1: '#e8e8e8', c2: '#c0c0c0', c3: '#d8d8d8', c4: '#a8a8a8', c5: '#e0e0e0', stroke: '#909090', lines: '#808080' }
+      : { c1: '#f5d778', c2: '#e8c252', c3: '#f5d778', c4: '#d4a84b', c5: '#f5d778', stroke: '#c9a227', lines: '#b8941f' };
+    return (
+    <div className="relative w-12 h-9 overflow-hidden rounded">
+      <svg viewBox="0 0 50 40" className="w-12 h-9">
+        <defs>
+          <linearGradient id={`chip-${card.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={gradientColors.c1}/>
+            <stop offset="25%" stopColor={gradientColors.c2}/>
+            <stop offset="50%" stopColor={gradientColors.c3}/>
+            <stop offset="75%" stopColor={gradientColors.c4}/>
+            <stop offset="100%" stopColor={gradientColors.c5}/>
+          </linearGradient>
+        </defs>
+        <rect x="2" y="2" width="46" height="36" rx="4" fill={`url(#chip-${card.id})`} stroke={gradientColors.stroke} strokeWidth="1"/>
+        <rect x="8" y="8" width="14" height="10" rx="1" fill="none" stroke={gradientColors.lines} strokeWidth="1.5"/>
+        <rect x="28" y="8" width="14" height="10" rx="1" fill="none" stroke={gradientColors.lines} strokeWidth="1.5"/>
+        <rect x="8" y="22" width="14" height="10" rx="1" fill="none" stroke={gradientColors.lines} strokeWidth="1.5"/>
+        <rect x="28" y="22" width="14" height="10" rx="1" fill="none" stroke={gradientColors.lines} strokeWidth="1.5"/>
+        <line x1="25" y1="8" x2="25" y2="32" stroke={gradientColors.lines} strokeWidth="1.5"/>
+        <line x1="8" y1="20" x2="42" y2="20" stroke={gradientColors.lines} strokeWidth="1.5"/>
+      </svg>
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent" style={{ animation: 'chipShimmer 3s infinite', width: '30%' }}></div>
+    </div>
+  );};
+
+  return (
+    <div className="cursor-pointer w-full max-w-sm mx-auto" style={{ perspective: '1000px', height: flipped ? '380px' : '252px', transition: 'height 0.5s ease-in-out' }} onMouseEnter={() => setFlipped(true)} onMouseLeave={() => setFlipped(false)}>
+      <div style={{ position: 'relative', width: '100%', height: '100%', transformStyle: 'preserve-3d', transition: 'transform 0.6s', transform: flipped ? 'rotateY(180deg)' : 'none' }}>
+        {/* FRONT */}
+        <div style={{ position: 'absolute', width: '100%', height: '252px', backfaceVisibility: 'hidden' }}>
+          <div className={`h-full rounded-2xl p-4 text-white shadow-xl relative overflow-hidden flex flex-col ${card.bg === 'holographic' || card.bg === 'solayer-gradient' || card.bg === 'kosh-gradient' || card.bg === 'bleap-gradient' || card.bg === 'redotpay-gradient' ? '' : 'bg-gradient-to-br ' + card.bg}`} style={card.bg === 'holographic' ? { background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 25%, #d299c2 50%, #a8c0ff 75%, #c2ffd8 100%)' } : card.bg === 'solayer-gradient' ? { background: 'linear-gradient(160deg, #1a5c4c 0%, #134539 30%, #0d3330 60%, #0a2725 100%)' } : card.bg === 'kosh-gradient' ? { background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #1a1a1a 50%, #2d2d2d 75%, #1a1a1a 100%)' } : card.bg === 'bleap-gradient' ? { background: 'radial-gradient(ellipse at 70% 40%, #d4d4d4 0%, #a3a3a3 30%, #737373 60%, #525252 100%)' } : card.bg === 'redotpay-gradient' ? { background: 'linear-gradient(135deg, #E31B54 0%, #E31B54 40%, #FF3366 60%, #E31B54 100%)' } : {}}>
+            {/* Shimmer effect */}
+            <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-shimmer" style={{ animation: 'shimmer 3s infinite' }}></div>
+            </div>
+            {/* Header row with brand, tier tag, and hover hint */}
+            <div className="flex items-center justify-between mb-4 relative z-10">
+              <div className="flex items-center gap-2">
+                {card.brandLogo ? (
+                  <>
+                    <img src={card.brandLogo} alt={card.name} className={`${card.brandLogoSize || 'h-6'} object-contain`} style={card.invertLogo ? { filter: 'invert(1) brightness(2)' } : {}} onError={(e) => { e.target.style.display='none'; if(e.target.nextSibling) e.target.nextSibling.style.display='inline'; }} />
+                    {card.showBrandName && <span className="font-bold text-base" style={card.brandNameColor ? { color: card.brandNameColor } : {}}>{card.brandNameText || card.name}</span>}
+                  </>
+                ) : (
+                  <span className="font-bold text-base">{card.name}</span>
+                )}
+                {card.brandLogo && !card.showBrandName && <span className="font-bold text-base" style={{ display: 'none' }}>{card.name}</span>}
+                {card.tier && <span className={`text-[10px] px-2 py-0.5 rounded font-medium ${card.tier === 'Elite' ? 'bg-yellow-500/30 text-yellow-300' : card.tier === 'Premium' ? 'bg-pink-500/30 text-pink-300' : 'bg-gray-500/30 text-gray-300'}`}>{card.tier}</span>}
+              </div>
+              <span className="text-white/30 text-[10px]">Hover for details</span>
+            </div>
+            <div className="flex items-center justify-between mb-3 relative z-10">
+              <ChipSVG />
+              <img src="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/7fd91b7b-f411-4d8c-f682-3f3ba62f5e00/public" alt="Contactless" className="w-7 h-7 opacity-30 mr-4" />
+            </div>
+            <div className="grid grid-cols-2 gap-2 mb-2 text-xs relative z-10">
+              <div className="bg-black/20 rounded px-2 py-1"><span className="text-white/50">Cashback</span><p className="font-bold text-lime-400">{card.cashback}</p></div>
+              <div className="bg-black/20 rounded px-2 py-1"><span className="text-white/50">Annual Fee</span><p className={`font-bold ${card.annualFee === '$0' ? 'text-green-400' : 'text-white'}`}>{card.annualFee}</p></div>
+            </div>
+            {/* Ratings and Visa/Mastercard row - centered vertically */}
+            <div className="flex items-center justify-between my-auto relative z-10">
+              <div className="flex items-center gap-2">
+                {cardRating.count > 0 && <StarDisplay rating={cardRating.average} count={cardRating.count} />}
+              </div>
+              {card.network === 'Visa' ? <VisaLogo /> : <MastercardLogo />}
+            </div>
+            {/* Chain and Token row at very bottom */}
+            <div className="flex items-center justify-between mt-1 relative z-10">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs bg-black/20 text-cyan-300 px-2 py-1 rounded">{card.chain}</span>
+                {card.token && (
+                  card.token.live ? (
+                    <span className="text-xs bg-gradient-to-r from-amber-400/30 to-orange-500/30 border border-amber-400/50 text-amber-300 px-2 py-1 rounded">
+                      <span className="font-bold">${card.token.ticker}</span>
+                    </span>
+                  ) : (
+                    <span className="text-xs bg-gray-500/30 border border-gray-500/50 text-gray-300 px-2 py-1 rounded">
+                      <span className="font-medium">${card.token.ticker}</span>
+                    </span>
+                  )
+                )}
+                {card.showFrontTags && (
+                  <>
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold ${catStyle.bg} ${catStyle.text}`}>{catStyle.label}</span>
+                    {card.archetype && <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold ${card.archetype === 'exchange' ? 'bg-blue-500/20 text-blue-300' : card.archetype === 'wallet' ? 'bg-orange-500/20 text-orange-300' : card.archetype === 'defi' ? 'bg-cyan-500/20 text-cyan-300' : 'bg-purple-500/20 text-purple-300'}`}>{archetypeLabels[card.archetype]}</span>}
+                    {(card.custody === 'Self-Custody' || card.custody === 'Non-Custodial') && <span className="text-[9px] px-1.5 py-0.5 rounded font-bold bg-lime-400/20 text-lime-300 border border-lime-400/30">{card.custody}</span>}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* BACK */}
+        <div style={{ position: 'absolute', width: '100%', height: '100%', backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
+          <div className="h-full bg-gray-900 rounded-2xl p-4 text-white border border-gray-700 flex flex-col">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                {card.logo ? (
+                  card.xHandle ? (
+                    <a href={`https://x.com/${card.xHandle}`} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="hover:scale-125 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all duration-200 cursor-pointer" title={`Follow @${card.xHandle} on X`}>
+                      <img src={card.logo} alt={card.name} className="h-6 object-contain" style={card.invertLogo ? { filter: 'invert(1) brightness(2)' } : {}} onError={(e) => e.target.style.display='none'} />
+                    </a>
+                  ) : (
+                    <img src={card.logo} alt={card.name} className="h-6 object-contain" style={card.invertLogo ? { filter: 'invert(1) brightness(2)' } : {}} onError={(e) => e.target.style.display='none'} />
+                  )
+                ) : (
+                  <>
+                    <img src={card.logo} alt="" className="w-6 h-6 rounded-full bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
+                    <span className="font-bold text-sm">{card.name}</span>
+                  </>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                {card.token && (
+                  card.token.live ? (
+                    <a href={`https://coinmarketcap.com/currencies/${card.token.cmc}/`} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/50 hover:scale-125 hover:shadow-lg hover:shadow-amber-500/40 hover:text-amber-200 hover:border-amber-400 transition-all duration-200 cursor-pointer" title={`View $${card.token.ticker} on CoinMarketCap`}>${card.token.ticker}</a>
+                  ) : (
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-gray-600/20 text-gray-400 border border-gray-600/30 flex items-center gap-1">🔜 ${card.token.ticker}</span>
+                  )
+                )}
+                {card.xHandle && (
+                  <a href={`https://x.com/${card.xHandle}`} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="relative z-50 flex items-center gap-1 px-2 py-1 rounded bg-gray-700/80 hover:bg-white hover:text-black text-white transition-all duration-200 cursor-pointer" title={`@${card.xHandle}`}>
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    <span className="text-[10px] font-medium">Follow</span>
+                  </a>
+                )}
+                {!card.showFrontTags && <span className={`text-[9px] px-2 py-0.5 rounded font-bold ${catStyle.bg} ${catStyle.text}`}>{catStyle.label}</span>}
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-1 mb-2">
+              {card.tier && <span className={`text-[10px] px-2 py-0.5 rounded ${card.tier === 'Elite' ? 'bg-yellow-500/20 text-yellow-400' : card.tier === 'Premium' ? 'bg-pink-500/20 text-pink-400' : 'bg-gray-500/20 text-gray-400'}`}>{card.tier}</span>}
+              {!card.showFrontTags && card.archetype && <span className={`text-[10px] px-2 py-0.5 rounded ${card.archetype === 'exchange' ? 'bg-blue-500/20 text-blue-400' : card.archetype === 'wallet' ? 'bg-orange-500/20 text-orange-400' : card.archetype === 'defi' ? 'bg-cyan-500/20 text-cyan-400' : card.archetype === 'stablecoin' ? 'bg-purple-500/20 text-purple-400' : card.archetype === 'bank' ? 'bg-gray-500/20 text-gray-400' : 'bg-purple-500/20 text-purple-400'}`}>{archetypeLabels[card.archetype]}</span>}
+            </div>
+            <div className="flex-1 overflow-y-auto pr-1">
+              <div className="grid grid-cols-2 gap-2 mb-2 text-xs">
+                <div className="bg-gray-800 rounded-lg p-2"><p className="text-gray-400">FX Fee</p><p className={`font-bold ${card.fxFee === '0%' ? 'text-green-400' : 'text-white'}`}>{card.fxFee}</p></div>
+                <div className="bg-gray-800 rounded-lg p-2"><p className="text-gray-400">Spend Limit</p><p className="font-bold text-cyan-400 text-[11px]">{card.spendLimit || 'Unlimited'}</p></div>
+                <div className="bg-gray-800 rounded-lg p-2"><p className="text-gray-400">Cashback</p><p className="font-bold text-lime-400">{card.cashback} <span className="font-normal text-gray-400">({card.cashbackToken})</span></p></div>
+                <div className="bg-gray-800 rounded-lg p-2"><p className="text-gray-400">Custody</p><p className={`font-bold text-[11px] ${(card.custody === 'Self-Custody' || card.custody === 'Non-Custodial') ? 'text-lime-400' : 'text-cyan-400'}`}>{card.custody}</p></div>
+              </div>
+              <div className="mb-2"><p className="text-gray-400 text-xs mb-1">Features</p><div className="flex flex-wrap gap-1">{card.features?.slice(0,4).map((f,i) => <span key={i} className="text-[10px] px-2 py-0.5 bg-gray-800 text-gray-300 rounded">{f}</span>)}</div></div>
+              <div className="mb-2"><p className="text-gray-400 text-xs mb-1">Perks</p><div className="flex flex-wrap gap-1">{card.perks?.slice(0,3).map((p,i) => <span key={i} className="text-[10px] px-2 py-0.5 bg-lime-400/10 text-lime-300 rounded">{p}</span>)}</div></div>
+            </div>
+            {/* Rating Section */}
+            {hasUserRated ? (
+              <div className="mb-2">
+                <RatingSuccessAnimation userRating={userRating} />
+              </div>
+            ) : (
+              <div className="bg-gray-800 hover:bg-gray-750 rounded-lg p-2 mb-2 transition-colors" style={{ '--tw-bg-opacity': 1 }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#374151'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#1f2937'}>
+                <p className="text-gray-400 text-xs mb-1">Rate this card</p>
+                <div className="flex items-center justify-between">
+                  <StarRating rating={cardRating.average} onRate={(r) => onRate && onRate(card.id, r)} size="sm" interactive={true} />
+                  <span className="text-gray-500 text-[10px]">{cardRating.count} reviews</span>
+                </div>
+              </div>
+            )}
+            {/* Action Buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={(e) => { e.stopPropagation(); onCompareToggle && onCompareToggle(card); }}
+                className={`flex-1 py-2 rounded-lg text-xs transition ${isInCompare ? 'bg-lime-400 text-gray-900 font-bold' : 'bg-gray-800 hover:bg-gray-700 text-white'}`}
+              >
+                {isInCompare ? '✓ Added' : '+ Compare'}
+              </button>
+              <a
+                href={card.website || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="flex-1 py-2 bg-gradient-to-r from-lime-400 to-emerald-500 hover:from-lime-300 hover:to-emerald-400 text-gray-900 rounded-lg text-xs font-bold text-center block transition-all hover:scale-105 hover:shadow-lg hover:shadow-lime-400/25"
+              >Apply Now</a>
+            </div>
+            {/* Ask AI Widget */}
+            <div className="mt-2">
+              <AskAIWidget cardName={card.name} darkMode={darkMode} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Sun icon for light mode
+function SunIcon({ className }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+    </svg>
+  );
+}
+
+// Moon icon for dark mode
+function MoonIcon({ className }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+    </svg>
+  );
+}
+
+// ============================================
+// CARD WIZARD - Find Your Perfect Card
+// ============================================
+function CardWizard({ darkMode, onViewCard }) {
+  const [step, setStep] = useState(1);
+  const [answers, setAnswers] = useState({
+    region: null,
+    currency: null,
+    custody: null,
+    kyc: null,
+    spending: null,
+    platform: null
+  });
+  const [results, setResults] = useState(null);
+  const [showResults, setShowResults] = useState(false);
+
+  const regions = [
+    { id: 'europe', label: 'Europe', icon: '🇪🇺', desc: 'EU, UK, Switzerland' },
+    { id: 'americas', label: 'Americas', icon: '🌎', desc: 'USA, Canada, Latin America' },
+    { id: 'apac', label: 'Asia Pacific', icon: '🌏', desc: 'Australia, Singapore, etc.' },
+    { id: 'global', label: 'Global / Other', icon: '🌍', desc: 'Worldwide access' }
+  ];
+
+  const currencies = [
+    { id: 'usd', label: 'USD', icon: '$', desc: 'US Dollar' },
+    { id: 'eur', label: 'EUR', icon: '€', desc: 'Euro' },
+    { id: 'gbp', label: 'GBP', icon: '£', desc: 'British Pound' },
+    { id: 'crypto', label: 'Crypto Native', icon: '₿', desc: 'Stablecoins / BTC / ETH' }
+  ];
+
+  const custodyOptions = [
+    { id: 'self', label: 'Self-Custody', icon: '🔐', desc: 'I control my keys', tag: 'Non-Custodial' },
+    { id: 'custodial', label: 'Custodial', icon: '🏦', desc: 'Provider holds funds', tag: 'Custodial' },
+    { id: 'any', label: 'No Preference', icon: '🤷', desc: 'Either works for me', tag: null }
+  ];
+
+  const kycOptions = [
+    { id: 'full', label: 'Full KYC OK', icon: '✅', desc: 'ID verification, proof of address', value: 'full' },
+    { id: 'light', label: 'Light KYC', icon: '📧', desc: 'Email + phone only', value: 'light' },
+    { id: 'none', label: 'No KYC', icon: '🥷', desc: 'Anonymous / minimal info', value: 'none' }
+  ];
+
+  const spendingOptions = [
+    { id: 'low', label: 'Under $500', icon: '💵', desc: 'Casual spending', min: 0, max: 500 },
+    { id: 'medium', label: '$500 - $2,000', icon: '💰', desc: 'Regular use', min: 500, max: 2000 },
+    { id: 'high', label: '$2,000 - $10,000', icon: '💎', desc: 'Power user', min: 2000, max: 10000 },
+    { id: 'whale', label: '$10,000+', icon: '🐋', desc: 'High volume', min: 10000, max: Infinity }
+  ];
+
+  const platformOptions = [
+    { id: 'ios', label: 'iOS (iPhone)', icon: '📱', desc: 'Apple devices' },
+    { id: 'android', label: 'Android', icon: '📱', desc: 'Android devices' },
+    { id: 'both', label: 'Both', icon: '📲', desc: 'Use both platforms' },
+    { id: 'any', label: 'No Preference', icon: '🤷', desc: 'Any platform works' }
+  ];
+
+  const handleSelect = (field, value) => {
+    setAnswers(prev => ({ ...prev, [field]: value }));
+    if (step < 6) {
+      setTimeout(() => setStep(step + 1), 300);
+    }
+  };
+
+  const calculateResults = () => {
+    let filtered = [...allCards];
+
+    // Filter by region
+    if (answers.region && answers.region !== 'global') {
+      filtered = filtered.filter(card =>
+        card.regions?.includes(answers.region) || card.regions?.includes('global')
+      );
+    }
+
+    // Filter by custody
+    if (answers.custody && answers.custody !== 'any') {
+      const custodyTag = answers.custody === 'self' ? 'Non-Custodial' : 'Custodial';
+      filtered = filtered.filter(card => card.custody === custodyTag || card.custody === 'Hybrid');
+    }
+
+    // Filter by KYC preference (using archetype as proxy)
+    if (answers.kyc === 'none') {
+      // Prefer onchain/wallet types for no KYC
+      filtered = filtered.filter(card =>
+        card.category === 'onchain' || card.archetype === 'wallet'
+      );
+    } else if (answers.kyc === 'light') {
+      // Fintech and some onchain usually have lighter KYC
+      filtered = filtered.filter(card =>
+        card.category !== 'neobank' || card.archetype !== 'bank'
+      );
+    }
+
+    // Filter by platform - exclude cards that don't support user's device
+    if (answers.platform && answers.platform !== 'any') {
+      filtered = filtered.filter(card => {
+        if (!card.platforms) return true; // Include if no platform data
+        if (answers.platform === 'ios') return card.platforms === 'ios' || card.platforms === 'both';
+        if (answers.platform === 'android') return card.platforms === 'android' || card.platforms === 'both';
+        if (answers.platform === 'both') return card.platforms === 'both';
+        return true;
+      });
+    }
+
+    // Exclude coming soon cards from recommendations
+    filtered = filtered.filter(card => !card.comingSoon);
+
+    // Score cards based on spending amount and cashback
+    filtered = filtered.map(card => {
+      let score = 50; // Base score
+
+      // Cashback scoring
+      const cashbackStr = String(card.cashback || '0');
+      const cashbackMatch = cashbackStr.match(/(\d+(?:\.\d+)?)/);
+      const cashbackRate = cashbackMatch ? parseFloat(cashbackMatch[1]) : 0;
+      score += cashbackRate * 10;
+
+      // FX Fee scoring (lower is better)
+      const fxStr = String(card.fxFee || '0');
+      const fxMatch = fxStr.match(/(\d+(?:\.\d+)?)/);
+      const fxRate = fxMatch ? parseFloat(fxMatch[1]) : 0;
+      score -= fxRate * 5;
+
+      // Annual fee scoring
+      const annualStr = String(card.annualFee || '$0');
+      if (annualStr === '$0' || annualStr === '€0' || annualStr.toLowerCase() === 'free') {
+        score += 10;
+      }
+
+      // Token rewards bonus
+      if (card.token?.live) score += 5;
+
+      // Self-custody bonus if preferred
+      if (answers.custody === 'self' && card.custody === 'Non-Custodial') {
+        score += 15;
+      }
+
+      // Region match bonus
+      if (card.regions?.includes(answers.region)) {
+        score += 10;
+      }
+
+      // Platform match bonus
+      if (answers.platform && answers.platform !== 'any' && card.platforms) {
+        if (answers.platform === 'both' && card.platforms === 'both') {
+          score += 15;
+        } else if (answers.platform === 'ios' && (card.platforms === 'ios' || card.platforms === 'both')) {
+          score += 10;
+        } else if (answers.platform === 'android' && (card.platforms === 'android' || card.platforms === 'both')) {
+          score += 10;
+        }
+      }
+
+      // Spending tier bonus - match card tier to spending level
+      if (answers.spending === 'whale') {
+        // High spenders prefer premium/elite cards and exchanges
+        if (card.tier === 'Elite' || card.tier === 'Premium') score += 20;
+        if (card.archetype === 'exchange') score += 10;
+      } else if (answers.spending === 'high') {
+        // Power users benefit from premium features
+        if (card.tier === 'Premium') score += 15;
+        if (cashbackRate >= 3) score += 10;
+      } else if (answers.spending === 'low') {
+        // Casual users prefer no/low fees
+        if (annualStr === '$0' || annualStr === '€0') score += 15;
+        if (card.tier === 'Standard' || !card.tier) score += 5;
+      }
+
+      // Archetype bonuses based on user preferences
+      if (answers.custody === 'self' && card.archetype === 'defi') score += 10;
+      if (answers.kyc === 'none' && card.archetype === 'wallet') score += 10;
+
+      return { ...card, score };
+    });
+
+    // Sort by score
+    filtered.sort((a, b) => b.score - a.score);
+
+    // Return top 6 results
+    setResults(filtered.slice(0, 6));
+    setShowResults(true);
+  };
+
+  const resetWizard = () => {
+    setStep(1);
+    setAnswers({ region: null, currency: null, custody: null, kyc: null, spending: null, platform: null });
+    setResults(null);
+    setShowResults(false);
+  };
+
+  const progress = (step / 6) * 100;
+
+  const renderStep = () => {
+    const stepConfig = {
+      1: { title: 'Where do you live?', subtitle: 'This helps us find cards available in your region', field: 'region', options: regions },
+      2: { title: 'What currency do you mainly use?', subtitle: 'Your primary spending currency', field: 'currency', options: currencies },
+      3: { title: 'Custody preference?', subtitle: 'Who controls your crypto', field: 'custody', options: custodyOptions },
+      4: { title: 'KYC comfort level?', subtitle: 'How much verification are you OK with', field: 'kyc', options: kycOptions },
+      5: { title: 'Monthly spending (USD)?', subtitle: 'Helps us recommend the best rewards', field: 'spending', options: spendingOptions },
+      6: { title: 'What device do you use?', subtitle: 'Some cards have better app support on certain platforms', field: 'platform', options: platformOptions }
+    };
+
+    const config = stepConfig[step];
+
+    return (
+      <div className="space-y-6">
+        <div className="text-center">
+          <h2 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+            {config.title}
+          </h2>
+          <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            {config.subtitle}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
+          {config.options.map(option => (
+            <button
+              key={option.id}
+              onClick={() => handleSelect(config.field, option.id)}
+              className={`p-4 rounded-xl border-2 text-left transition-all hover:scale-[1.02] ${
+                answers[config.field] === option.id
+                  ? 'border-lime-400 bg-lime-400/10'
+                  : darkMode
+                    ? 'border-gray-700 bg-gray-800/50 hover:border-gray-600'
+                    : 'border-gray-200 bg-white hover:border-gray-300'
+              }`}
+            >
+              <div className="text-2xl mb-2">{option.icon}</div>
+              <div className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                {option.label}
+              </div>
+              <div className={`text-xs mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                {option.desc}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const renderResults = () => {
+    if (!results || results.length === 0) {
+      return (
+        <div className="text-center py-12">
+          <div className="text-4xl mb-4">😕</div>
+          <h3 className={`text-xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+            No perfect matches found
+          </h3>
+          <p className={`text-sm mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            Try adjusting your preferences
+          </p>
+          <button
+            onClick={resetWizard}
+            className="px-6 py-3 bg-lime-400 text-gray-900 rounded-lg font-semibold hover:bg-lime-300 transition"
+          >
+            Start Over
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-6">
+        <div className="text-center">
+          <div className="text-4xl mb-3">🎉</div>
+          <h2 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+            Your Top Matches
+          </h2>
+          <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            Based on your preferences, here are the best cards for you
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+          {results.map((card, index) => (
+            <div
+              key={card.id}
+              className={`relative p-4 rounded-xl border transition-all hover:scale-[1.02] ${
+                index === 0
+                  ? 'border-lime-400 bg-gradient-to-br from-lime-400/10 to-emerald-500/10'
+                  : darkMode
+                    ? 'border-gray-700 bg-gray-800/50'
+                    : 'border-gray-200 bg-white'
+              }`}
+            >
+              {index === 0 && (
+                <div className="absolute -top-2 -right-2 bg-lime-400 text-gray-900 text-xs font-bold px-2 py-1 rounded-full">
+                  #1 Match
+                </div>
+              )}
+
+              <div className="flex items-center gap-3 mb-3">
+                <img
+                  src={card.brandLogo || card.logo}
+                  alt={card.name}
+                  className="w-10 h-10 rounded-lg object-contain"
+                  onError={(e) => { e.target.src = card.logo; }}
+                />
+                <div>
+                  <h3 className={`font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                    {card.name}
+                  </h3>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className={`text-xs px-1.5 py-0.5 rounded ${
+                      card.custody === 'Non-Custodial'
+                        ? 'bg-lime-400/20 text-lime-400'
+                        : 'bg-blue-400/20 text-blue-400'
+                    }`}>
+                      {card.custody}
+                    </span>
+                    <span className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                      {card.network}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className={`space-y-1.5 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className="flex justify-between">
+                  <span>Cashback</span>
+                  <span className="font-semibold text-lime-400">{card.cashback || 'TBD'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>FX Fee</span>
+                  <span className={card.fxFee === '0%' ? 'text-lime-400 font-semibold' : ''}>{card.fxFee || 'TBD'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Annual Fee</span>
+                  <span>{card.annualFee || 'TBD'}</span>
+                </div>
+              </div>
+
+              {card.token?.live && (
+                <div className="mt-3 flex items-center gap-1.5">
+                  <span className="text-xs bg-gradient-to-r from-amber-400/30 to-orange-500/30 border border-amber-400/50 text-amber-300 px-2 py-0.5 rounded">
+                    ${card.token.ticker} rewards
+                  </span>
+                </div>
+              )}
+
+              <a
+                href={card.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 block w-full py-2 text-center text-sm font-semibold rounded-lg bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 hover:from-lime-300 hover:to-emerald-400 transition"
+              >
+                Learn More →
+              </a>
+            </div>
+          ))}
+        </div>
+
+        <div className="text-center pt-4">
+          <button
+            onClick={resetWizard}
+            className={`px-6 py-2 rounded-lg text-sm font-medium transition ${
+              darkMode
+                ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            ← Start Over
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      {/* Hero Section */}
+      {!showResults && step === 1 && !answers.region && (
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-lime-400/20 to-emerald-500/20 border border-lime-400/30 mb-6">
+            <span className="text-lime-400">✨</span>
+            <span className={`text-sm font-medium ${darkMode ? 'text-lime-400' : 'text-lime-600'}`}>
+              Card Wizard
+            </span>
+          </div>
+          <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+            Find Your Perfect<br />
+            <span className="bg-gradient-to-r from-lime-400 to-emerald-500 bg-clip-text text-transparent">
+              Crypto Card
+            </span>
+          </h1>
+          <p className={`text-lg max-w-xl mx-auto ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            Answer 6 quick questions and we'll match you with the best cards for your needs
+          </p>
+        </div>
+      )}
+
+      {/* Progress Bar */}
+      {!showResults && (
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-2">
+            <span className={`text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              Step {step} of 6
+            </span>
+            {step > 1 && (
+              <button
+                onClick={() => setStep(step - 1)}
+                className={`text-sm ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}`}
+              >
+                ← Back
+              </button>
+            )}
+          </div>
+          <div className={`h-2 rounded-full ${darkMode ? 'bg-gray-800' : 'bg-gray-200'}`}>
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-lime-400 to-emerald-500 transition-all duration-500"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Content */}
+      {showResults ? renderResults() : renderStep()}
+
+      {/* Find Cards Button */}
+      {!showResults && step === 6 && answers.platform && (
+        <div className="text-center mt-8">
+          <button
+            onClick={calculateResults}
+            className="px-8 py-4 bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 rounded-xl font-bold text-lg hover:from-lime-300 hover:to-emerald-400 transition-all hover:scale-105 shadow-lg shadow-lime-400/25"
+          >
+            🔍 Find My Perfect Cards
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================
+// PRIVACY POLICY PAGE
+// ============================================
+function PrivacyPolicy({ darkMode }) {
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      <h1 className={`text-4xl font-bold mb-8 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Privacy Policy</h1>
+      <div className={`prose max-w-none ${darkMode ? 'prose-invert' : ''}`}>
+        <p className={`text-sm mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Last updated: January 2026</p>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>1. Introduction</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            Welcome to Spendbase ("we," "our," or "us"). We are committed to protecting your privacy and personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website spendbase.cards.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>2. Information We Collect</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            <strong>Information You Provide:</strong> When you subscribe to our newsletter or contact us, we may collect your email address and any other information you voluntarily provide.
+          </p>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            <strong>Automatically Collected Information:</strong> We may automatically collect certain information about your device, including your IP address, browser type, operating system, and browsing behavior through cookies and similar technologies.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>3. How We Use Your Information</h2>
+          <ul className={`list-disc pl-6 mb-4 space-y-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            <li>To provide and maintain our service</li>
+            <li>To send you newsletters and updates (if subscribed)</li>
+            <li>To respond to your inquiries and support requests</li>
+            <li>To analyze usage patterns and improve our website</li>
+            <li>To comply with legal obligations</li>
+          </ul>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>4. Information Sharing</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            We do not sell, trade, or rent your personal information to third parties. We may share information with service providers who assist us in operating our website, conducting our business, or serving our users, so long as those parties agree to keep this information confidential.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>5. Cookies</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            We use cookies and similar tracking technologies to track activity on our website and hold certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>6. Third-Party Links</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            Our website contains links to third-party crypto card providers and other external sites. We are not responsible for the privacy practices of these external sites. We encourage you to read the privacy policies of any third-party sites you visit.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>7. Data Security</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            We implement appropriate technical and organizational measures to protect your personal information. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>8. Your Rights</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            You have the right to access, correct, or delete your personal information. To exercise these rights, please contact us at hello@spendbase.cards.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>9. Contact Us</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            If you have questions about this Privacy Policy, please contact us at: <a href="mailto:hello@spendbase.cards" className="text-lime-400 hover:underline">hello@spendbase.cards</a>
+          </p>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+// ============================================
+// TERMS OF SERVICE PAGE
+// ============================================
+function TermsOfService({ darkMode }) {
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      <h1 className={`text-4xl font-bold mb-8 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Terms of Service</h1>
+      <div className={`prose max-w-none ${darkMode ? 'prose-invert' : ''}`}>
+        <p className={`text-sm mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Last updated: January 2026</p>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>1. Acceptance of Terms</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            By accessing and using Spendbase (spendbase.cards), you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our website.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>2. Description of Service</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            Spendbase is an informational platform that aggregates and compares cryptocurrency debit cards. We provide information about various crypto card offerings to help users make informed decisions. We do not issue cards, hold funds, or provide financial services directly.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>3. Disclaimer</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            <strong>Not Financial Advice:</strong> The information provided on Spendbase is for informational purposes only and should not be construed as financial, investment, or legal advice. Always conduct your own research and consult with qualified professionals before making financial decisions.
+          </p>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            <strong>Accuracy:</strong> While we strive to keep information accurate and up-to-date, we make no representations or warranties about the completeness, accuracy, or reliability of the information on our website. Card terms, fees, and features may change without notice.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>4. Third-Party Services</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            Our website contains links to third-party crypto card providers. We are not responsible for the content, policies, or practices of these third-party services. Your use of third-party services is at your own risk and subject to their respective terms and conditions.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>5. Affiliate Relationships</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            Some links on our website may be affiliate links, meaning we may earn a commission if you sign up for a card through our links. This does not affect our editorial independence or the information we provide.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>6. User Conduct</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            You agree not to use our website for any unlawful purpose or in any way that could damage, disable, or impair the website. You also agree not to attempt to gain unauthorized access to any part of the website.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>7. Intellectual Property</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            All content on Spendbase, including text, graphics, logos, and software, is the property of Spendbase or its content suppliers and is protected by intellectual property laws. Card logos and trademarks belong to their respective owners.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>8. Limitation of Liability</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            To the fullest extent permitted by law, Spendbase shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of your use of or inability to use our website or any third-party services linked from our website.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>9. Changes to Terms</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            We reserve the right to modify these Terms of Service at any time. Changes will be effective immediately upon posting to the website. Your continued use of the website after any changes constitutes acceptance of the new terms.
+          </p>
+        </section>
+
+        <section className="mb-8">
+          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>10. Contact Us</h2>
+          <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            If you have questions about these Terms of Service, please contact us at: <a href="mailto:hello@spendbase.cards" className="text-lime-400 hover:underline">hello@spendbase.cards</a>
+          </p>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode, searchTerm, setSearchTerm }) {
+  return (
+    <header className={`border-b sticky top-0 z-40 backdrop-blur-sm ${darkMode ? 'border-gray-800 bg-gray-950/80' : 'border-gray-200 bg-white/80'}`}>
+      <div className="max-w-6xl mx-auto px-4 py-3">
+        <div className="flex items-center justify-between gap-4">
+          <button onClick={() => setActiveView('cards')} className="flex-shrink-0">
+            <img
+              src={darkMode
+                ? "https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/135aa8ee-6c5c-4779-7f78-cfbffb724600/public"
+                : "https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/bf8b9a1c-ce8b-49da-48d1-027b873f3300/public"
+              }
+              alt="Spendbase"
+              className={darkMode ? "h-14" : "h-32"}
+              style={{ objectFit: 'contain' }}
+            />
+          </button>
+
+          {/* Search Bar - visible only on cards view */}
+          {activeView === 'cards' && (
+            <div className="flex-1 max-w-md mx-4 relative hidden md:block">
+              <SearchIcon className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} />
+              <input
+                type="text"
+                placeholder="Search by name, blockchain, feature..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={`w-full pl-10 pr-4 py-2 rounded-lg text-sm transition focus:outline-none focus:ring-2 focus:ring-lime-400 ${
+                  darkMode
+                    ? 'bg-gray-900 border border-gray-800 text-white placeholder-gray-500'
+                    : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'
+                }`}
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 ${darkMode ? 'text-gray-500 hover:text-gray-300' : 'text-gray-400 hover:text-gray-600'}`}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          )}
+
+          <nav className="hidden lg:flex items-center gap-1">
+            {['cards','wizard','learn','rewards'].map(v => (
+              <button
+                key={v}
+                onClick={() => setActiveView(v)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                  activeView === v
+                    ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900')
+                    : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')
+                }`}
+            >
+              {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? '✨ Find My Card' : v.charAt(0).toUpperCase()+v.slice(1)}
+            </button>
+          ))}
+          </nav>
+          <div className="flex items-center gap-3">
+            {/* Dark/Light Mode Toggle */}
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className={`p-2 rounded-lg transition ${darkMode ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {darkMode ? <SunIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5" />}
+            </button>
+            <button onClick={onSubscribe} className="bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 rounded-lg text-sm font-medium text-white">Subscribe</button>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, compareList, onCompareToggle }) {
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [custodyFilter, setCustodyFilter] = useState('all');
+  const [networkFilter, setNetworkFilter] = useState('all');
+  const [regionFilter, setRegionFilter] = useState('all');
+  const [archetypeFilter, setArchetypeFilter] = useState('all');
+  const [platformFilter, setPlatformFilter] = useState('all');
+  const [ratingSort, setRatingSort] = useState('none'); // 'none', 'highest', 'lowest'
+
+  let filtered = allCards;
+
+  // Exclude Coming Soon cards from all views except the Coming Soon tab OR when searching
+  if (categoryFilter !== 'comingSoon' && !searchTerm) {
+    filtered = filtered.filter(c => !c.comingSoon);
+  }
+
+  // Search filter
+  if (searchTerm) {
+    const term = searchTerm.toLowerCase();
+    filtered = filtered.filter(c =>
+      c.name.toLowerCase().includes(term) ||
+      c.chain.toLowerCase().includes(term) ||
+      c.features?.some(f => f.toLowerCase().includes(term)) ||
+      c.perks?.some(p => p.toLowerCase().includes(term)) ||
+      c.archetype?.toLowerCase().includes(term) ||
+      c.custody.toLowerCase().includes(term)
+    );
+  }
+
+  // Category filters
+  if (categoryFilter !== 'all') {
+    if (categoryFilter === 'cryptoNative') filtered = filtered.filter(c => c.category === 'cryptoNative');
+    else if (categoryFilter === 'onchain') filtered = filtered.filter(c => c.category === 'onchain');
+    else if (categoryFilter === 'neobank') filtered = filtered.filter(c => c.category === 'neobank');
+    else if (categoryFilter === 'staking') filtered = filtered.filter(c => c.token);
+    else if (categoryFilter === 'comingSoon') filtered = filtered.filter(c => c.comingSoon);
+  }
+  if (custodyFilter !== 'all') {
+    if (custodyFilter === 'self') filtered = filtered.filter(c => c.custody === 'Non-Custodial');
+    else if (custodyFilter === 'custodial') filtered = filtered.filter(c => c.custody === 'Custodial' || c.custody === 'Hybrid');
+  }
+  if (networkFilter !== 'all') filtered = filtered.filter(c => c.network.toLowerCase() === networkFilter);
+  if (regionFilter !== 'all') filtered = filtered.filter(c => c.regions?.includes(regionFilter));
+  if (archetypeFilter !== 'all') filtered = filtered.filter(c => c.archetype === archetypeFilter);
+  if (platformFilter !== 'all') {
+    if (platformFilter === 'ios') filtered = filtered.filter(c => c.platforms === 'ios' || c.platforms === 'both');
+    else if (platformFilter === 'android') filtered = filtered.filter(c => c.platforms === 'android' || c.platforms === 'both');
+    else if (platformFilter === 'both') filtered = filtered.filter(c => c.platforms === 'both');
+  }
+
+  // Rating sort
+  if (ratingSort !== 'none' && ratings) {
+    filtered = [...filtered].sort((a, b) => {
+      const ratingA = ratings[a.id]?.average || 0;
+      const ratingB = ratings[b.id]?.average || 0;
+      return ratingSort === 'highest' ? ratingB - ratingA : ratingA - ratingB;
+    });
+  }
+
+  const clearFilters = () => { setCategoryFilter('all'); setCustodyFilter('all'); setNetworkFilter('all'); setRegionFilter('all'); setArchetypeFilter('all'); setPlatformFilter('all'); setRatingSort('none'); };
+  const hasActiveFilters = categoryFilter !== 'all' || custodyFilter !== 'all' || networkFilter !== 'all' || regionFilter !== 'all' || archetypeFilter !== 'all' || platformFilter !== 'all' || ratingSort !== 'none' || (searchTerm && searchTerm.length > 0);
+
+  // Category descriptions for the filter section
+  const categoryDescriptions = {
+    cryptoNative: 'Wallet-first · USDC/stablecoin led · Best crypto cards',
+    onchain: 'Stablecoin accounts · Non-custodial · Next-gen spending',
+    neobank: 'Bank-led · Custodial · Fiat-settled',
+    staking: 'Cards with native tokens · Earn token rewards · Token-based cashback',
+    comingSoon: 'Waitlist open · Launching soon · Get early access'
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto p-6">
+      <div className="mb-6">
+        <h2 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Explore Crypto Cards</h2>
+        <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Compare {allCards.length} crypto debit cards. Hover for details.</p>
+      </div>
+
+      {/* Wizard Promo Banner */}
+      <div className={`mb-6 p-4 rounded-xl border bg-gradient-to-r ${darkMode ? 'from-lime-400/10 to-emerald-500/10 border-lime-400/30' : 'from-lime-50 to-emerald-50 border-lime-200'}`}>
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center gap-3">
+            <div className="text-3xl">✨</div>
+            <div>
+              <h3 className={`font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Not sure which card is right for you?</h3>
+              <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Take our 60-second quiz to find your perfect match</p>
+            </div>
+          </div>
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('navigateTo', { detail: 'wizard' }))}
+            className="px-5 py-2.5 bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 rounded-lg font-semibold text-sm hover:from-lime-300 hover:to-emerald-400 transition-all hover:scale-105 shadow-lg shadow-lime-400/20"
+          >
+            🔍 Find My Card
+          </button>
+        </div>
+      </div>
+
+      {/* CATEGORY TABS - Primary filter */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {[
+          {id:'all', label:'All Cards', color:'bg-white text-gray-900'},
+          {id:'cryptoNative', label:'Crypto-Native', color:'bg-lime-400 text-gray-900'},
+          {id:'onchain', label:'Onchain', color:'bg-purple-500 text-white'},
+          {id:'neobank', label:'Neobanks + Crypto', color:'bg-gray-600 text-white'},
+          {id:'staking', label:'Token Rewards', color:'bg-gradient-to-r from-amber-400 to-orange-500 text-gray-900'},
+          {id:'comingSoon', label:'🚀 Coming Soon', color:'bg-gradient-to-r from-cyan-400 to-blue-500 text-gray-900'}
+        ].map(f => (
+          <button key={f.id} onClick={() => setCategoryFilter(f.id)} className={`px-4 py-2 rounded-lg text-sm font-medium transition ${categoryFilter === f.id ? f.color : (darkMode ? 'bg-gray-800 text-gray-400 hover:text-white' : 'bg-gray-200 text-gray-600 hover:text-gray-900')}`}>
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Category description */}
+      {categoryFilter !== 'all' && (
+        <div className={`mb-6 p-3 rounded-lg border ${
+          categoryFilter === 'cryptoNative' ? 'bg-lime-400/10 border-lime-400/30 text-lime-600' :
+          categoryFilter === 'onchain' ? 'bg-purple-500/10 border-purple-500/30 text-purple-600' :
+          categoryFilter === 'staking' ? 'bg-amber-400/10 border-amber-400/30 text-amber-600' :
+          categoryFilter === 'comingSoon' ? 'bg-cyan-400/10 border-cyan-400/30 text-cyan-600' :
+          (darkMode ? 'bg-gray-700/30 border-gray-600 text-gray-400' : 'bg-gray-100 border-gray-300 text-gray-600')
+        }`}>
+          <span className="text-sm">{categoryDescriptions[categoryFilter]}</span>
+        </div>
+      )}
+
+      {/* SECONDARY FILTERS */}
+      <div className={`rounded-xl p-4 mb-8 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Custody</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'self',label:'Self-Custody'},{id:'custodial',label:'Custodial'}].map(f => <button key={f.id} onClick={() => setCustodyFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${custodyFilter === f.id ? 'bg-cyan-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
+          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Network</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'visa',label:'Visa'},{id:'mastercard',label:'MC'}].map(f => <button key={f.id} onClick={() => setNetworkFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${networkFilter === f.id ? 'bg-purple-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
+          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Region</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'americas',label:'US'},{id:'europe',label:'EU'},{id:'apac',label:'APAC'},{id:'global',label:'Global'}].map(f => <button key={f.id} onClick={() => setRegionFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${regionFilter === f.id ? 'bg-orange-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
+          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Type</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'exchange',label:'Exchange'},{id:'wallet',label:'Wallet'},{id:'defi',label:'DeFi'},{id:'stablecoin',label:'Stablecoin'}].map(f => <button key={f.id} onClick={() => setArchetypeFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${archetypeFilter === f.id ? 'bg-pink-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
+          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Platform</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'ios',label:'iOS'},{id:'android',label:'Android'},{id:'both',label:'Both'}].map(f => <button key={f.id} onClick={() => setPlatformFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${platformFilter === f.id ? 'bg-blue-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
+          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Sort by Rating</label><div className="flex flex-wrap gap-1">{[{id:'none',label:'Default'},{id:'highest',label:'★ Highest'},{id:'lowest',label:'★ Lowest'}].map(f => <button key={f.id} onClick={() => setRatingSort(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${ratingSort === f.id ? 'bg-yellow-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
+        </div>
+        <div className={`mt-3 pt-3 border-t flex justify-between items-center ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+          <span className={darkMode ? 'text-gray-500 text-sm' : 'text-gray-500 text-sm'}>{filtered.length} cards found</span>
+          {hasActiveFilters && <button onClick={clearFilters} className="text-lime-500 text-sm">Clear filters</button>}
+        </div>
+      </div>
+
+      {/* CARDS GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">{filtered.map(card => <Card key={card.id} card={card} ratings={ratings} onRate={onRate} darkMode={darkMode} userRatedCards={userRatedCards} isInCompare={compareList?.some(c => c.id === card.id)} onCompareToggle={onCompareToggle} />)}</div>
+
+      {/* STATS */}
+      <div className="mt-12 grid grid-cols-3 gap-4">
+        <div className={`rounded-xl p-6 text-center ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-sm'}`}><p className="text-3xl font-bold text-lime-500">$18B+</p><p className={darkMode ? 'text-gray-500 text-sm' : 'text-gray-500 text-sm'}>Annual Volume</p></div>
+        <div className={`rounded-xl p-6 text-center ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-sm'}`}><p className="text-3xl font-bold text-purple-500">$308B</p><p className={darkMode ? 'text-gray-500 text-sm' : 'text-gray-500 text-sm'}>Stablecoin Supply</p></div>
+        <div className={`rounded-xl p-6 text-center ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-sm'}`}><p className="text-3xl font-bold text-cyan-500">460%</p><p className={darkMode ? 'text-gray-500 text-sm' : 'text-gray-500 text-sm'}>YoY Growth</p></div>
+      </div>
+    </div>
+  );
+}
+
+function LearnSection({ darkMode }) {
+  const [activeSection, setActiveSection] = useState('intro');
+  const active = learnSections.find(s => s.id === activeSection);
+  return (
+    <div className="max-w-6xl mx-auto p-6">
+      <div className="mb-8">
+        <h2 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Learn About Crypto Cards</h2>
+        <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Everything you need to know.</p>
+      </div>
+      <div className="grid lg:grid-cols-4 gap-6">
+        <nav className="space-y-1">
+          {learnSections.map(s => (
+            <button
+              key={s.id}
+              onClick={() => setActiveSection(s.id)}
+              className={`w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 transition ${
+                activeSection === s.id
+                  ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900')
+                  : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')
+              }`}
+            >
+              <span className="text-sm">{s.title}</span>
+            </button>
+          ))}
+        </nav>
+        <div className={`lg:col-span-3 rounded-2xl p-6 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-sm'}`}>
+          <div className="mb-6">
+            <h3 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{active.title}</h3>
+          </div>
+          {active.content.split('\n\n').map((p,i) => (
+            <p key={i} className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              {p.split('**').map((part,j) => j%2===1 ? <strong key={j} className={darkMode ? 'text-white' : 'text-gray-900'}>{part}</strong> : part)}
+            </p>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function VideoRewardsPage({ darkMode, onNavigateToDemo }) {
+  return (
+    <div className="max-w-6xl mx-auto p-6">
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center">
+        {/* Coming Soon Badge */}
+        <div className="mb-6">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30">
+            <span className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></span>
+            <span className="text-purple-400 text-sm font-medium">Coming Soon</span>
+          </span>
+        </div>
+
+        {/* Icon */}
+        <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-600 rounded-3xl flex items-center justify-center mb-8 shadow-lg shadow-purple-500/20">
+          <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+
+        {/* Title */}
+        <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+          Video Rewards
+        </h2>
+
+        {/* Description */}
+        <p className={`text-lg max-w-md mb-8 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+          Earn crypto rewards by watching educational videos about DeFi, stablecoins, and blockchain technology.
+        </p>
+
+        {/* Features Preview */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl w-full mb-10">
+          <div className={`rounded-xl p-4 text-center ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-sm'}`}>
+            <div className="text-2xl mb-2">🎬</div>
+            <p className={`font-medium text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Watch & Learn</p>
+            <p className="text-gray-500 text-xs">Educational content</p>
+          </div>
+          <div className={`rounded-xl p-4 text-center ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-sm'}`}>
+            <div className="text-2xl mb-2">💰</div>
+            <p className={`font-medium text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Earn Crypto</p>
+            <p className="text-gray-500 text-xs">Rewards in stablecoins</p>
+          </div>
+          <div className={`rounded-xl p-4 text-center ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-sm'}`}>
+            <div className="text-2xl mb-2">🏆</div>
+            <p className={`font-medium text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Level Up</p>
+            <p className="text-gray-500 text-xs">Unlock higher rewards</p>
+          </div>
+        </div>
+
+        {/* Email Signup */}
+        <div className={`rounded-2xl p-6 max-w-md w-full mb-8 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-sm'}`}>
+          <p className={`font-medium mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Get notified when we launch</p>
+          <div className="flex gap-2">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className={`flex-1 px-4 py-3 rounded-lg text-sm focus:outline-none focus:border-purple-500 ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`}
+            />
+            <button className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium rounded-lg text-sm whitespace-nowrap hover:opacity-90 transition">
+              Notify Me
+            </button>
+          </div>
+        </div>
+
+        {/* See Demo Link */}
+        <button
+          onClick={onNavigateToDemo}
+          className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors group"
+        >
+          <span className="text-sm font-medium">See Demo Page</span>
+          <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ============================================
+// VIDEO DEMO PAGE - Carousel of ViewFi videos
+// ============================================
+function VideoDemoPage({ darkMode, onBack }) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const videos = [
+    { id: '104', title: 'Learn About DeFi' },
+    { id: '104', title: 'Stablecoin Basics' },
+    { id: '104', title: 'Crypto Card Guide' },
+    { id: '104', title: 'Blockchain 101' },
+    { id: '104', title: 'Earn Rewards' },
+  ];
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % videos.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + videos.length) % videos.length);
+
+  return (
+    <div className="max-w-6xl mx-auto p-6">
+      {/* Back Button */}
+      <button
+        onClick={onBack}
+        className={`mb-6 inline-flex items-center gap-2 text-sm ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+        Back to Video Rewards
+      </button>
+
+      {/* Header */}
+      <div className="text-center mb-10">
+        <h2 className="text-3xl font-bold mb-3 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+          Video Demo
+        </h2>
+        <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+          Watch videos and earn crypto rewards - powered by ViewFi
+        </p>
+      </div>
+
+      {/* Video Carousel */}
+      <div className="relative max-w-4xl mx-auto">
+        {/* Main Video Container */}
+        <div className={`rounded-2xl overflow-hidden ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-lg'}`}>
+          {/* Video Title */}
+          <div className={`px-6 py-4 border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+            <div className="flex items-center justify-between">
+              <h3 className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                {videos[currentSlide].title}
+              </h3>
+              <span className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                {currentSlide + 1} / {videos.length}
+              </span>
+            </div>
+          </div>
+
+          {/* ViewFi Embed */}
+          <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+            <iframe
+              src={`https://video-rewards.com/widget/${videos[currentSlide].id}?muted=1`}
+              title={videos[currentSlide].title}
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+              loading="lazy"
+              allow="autoplay; fullscreen; encrypted-media"
+              referrerPolicy="strict-origin-when-cross-origin"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+              scrolling="yes"
+              allowFullScreen
+            />
+          </div>
+        </div>
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={prevSlide}
+          className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 w-10 h-10 rounded-full flex items-center justify-center transition-all ${darkMode ? 'bg-gray-800 hover:bg-gray-700 text-white' : 'bg-white hover:bg-gray-100 text-gray-900 shadow-lg'}`}
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button
+          onClick={nextSlide}
+          className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 w-10 h-10 rounded-full flex items-center justify-center transition-all ${darkMode ? 'bg-gray-800 hover:bg-gray-700 text-white' : 'bg-white hover:bg-gray-100 text-gray-900 shadow-lg'}`}
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Slide Indicators */}
+      <div className="flex justify-center gap-2 mt-6">
+        {videos.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentSlide(idx)}
+            className={`w-2 h-2 rounded-full transition-all ${currentSlide === idx ? 'bg-purple-500 w-6' : darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-300 hover:bg-gray-400'}`}
+          />
+        ))}
+      </div>
+
+      {/* Video Thumbnails */}
+      <div className="grid grid-cols-5 gap-3 mt-8 max-w-4xl mx-auto">
+        {videos.map((video, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentSlide(idx)}
+            className={`rounded-xl overflow-hidden transition-all ${currentSlide === idx ? 'ring-2 ring-purple-500 scale-105' : 'opacity-60 hover:opacity-100'}`}
+          >
+            <div className={`aspect-video flex items-center justify-center ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+              <div className="text-center p-2">
+                <div className="text-2xl mb-1">🎬</div>
+                <p className={`text-xs font-medium truncate ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{video.title}</p>
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {/* Powered By */}
+      <div className="text-center mt-10">
+        <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+          Powered by <span className="font-semibold text-purple-400">ViewFi</span> - Watch to Earn
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function SubscribeModal({ open, onClose, darkMode }) {
+  const [submitted, setSubmitted] = useState(false);
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
+      <div className={`rounded-2xl w-full max-w-md overflow-hidden ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        <div className="bg-gradient-to-r from-lime-400 to-emerald-500 p-6 text-gray-900">
+          <h3 className="text-xl font-bold">{submitted ? 'You\'re In!' : 'Get the Inside Scoop'}</h3>
+          {!submitted && <p className="text-sm mt-1 opacity-80">Join 10,000+ crypto card enthusiasts</p>}
+        </div>
+        <div className="p-6">
+          {submitted ? (
+            <div className="text-center py-4">
+              <div className="text-5xl mb-4">🎉</div>
+              <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Check your inbox for a welcome gift!</p>
+              <button onClick={() => {setSubmitted(false);onClose()}} className={`w-full py-3 rounded-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900'}`}>Close</button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className={`p-4 rounded-xl ${darkMode ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
+                <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  Get <span className="font-semibold text-lime-400">weekly updates</span> from card providers including:
+                </p>
+                <ul className={`mt-2 space-y-1 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  <li className="flex items-center gap-2"><span className="text-lime-400">✓</span> Exclusive offers & discounts</li>
+                  <li className="flex items-center gap-2"><span className="text-lime-400">✓</span> Token airdrops & rewards</li>
+                  <li className="flex items-center gap-2"><span className="text-lime-400">✓</span> New card launches & features</li>
+                  <li className="flex items-center gap-2"><span className="text-lime-400">✓</span> Cashback promotions</li>
+                </ul>
+              </div>
+              <input type="text" placeholder="Name" className={`w-full px-4 py-3 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`} />
+              <input type="email" placeholder="Email" className={`w-full px-4 py-3 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`} />
+              <select className={`w-full px-4 py-3 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`}><option>Country</option><option>US</option><option>UK</option><option>EU</option></select>
+              <select className={`w-full px-4 py-3 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`}><option>Monthly spend</option><option>Less than $500</option><option>$500-$5,000</option><option>$5,000+</option></select>
+              <button onClick={() => setSubmitted(true)} className="w-full py-3 bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 font-bold rounded-lg hover:shadow-lg hover:shadow-lime-500/30 transition-all">Subscribe for Free</button>
+              <p className={`text-xs text-center ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>No spam. Unsubscribe anytime.</p>
+              <button onClick={onClose} className="w-full py-2 text-gray-500 text-sm hover:text-gray-400 transition-colors">Maybe later</button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================
+// LIST CARD MODAL - Submit your card for listing
+// ============================================
+function ListCardModal({ open, onClose, darkMode }) {
+  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    cardName: '',
+    companyName: '',
+    contactName: '',
+    email: '',
+    website: '',
+    network: '',
+    regions: '',
+    cashback: '',
+    custody: '',
+    description: ''
+  });
+
+  if (!open) return null;
+
+  const handleChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = () => {
+    // In production, this would send to an API
+    console.log('Card listing submission:', formData);
+    setSubmitted(true);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div className={`rounded-2xl w-full max-w-lg overflow-hidden my-8 ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        <div className="bg-gradient-to-r from-cyan-400 to-blue-500 p-6 text-gray-900">
+          <h3 className="text-xl font-bold">{submitted ? 'Submission Received!' : 'List Your Crypto Card'}</h3>
+          <p className="text-sm opacity-80 mt-1">{submitted ? 'We\'ll review and get back to you' : 'Get your card featured on Spendbase'}</p>
+        </div>
+        <div className="p-6 max-h-[60vh] overflow-y-auto">
+          {submitted ? (
+            <div className="text-center py-6">
+              <div className="text-5xl mb-4">🎉</div>
+              <p className={`mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Thanks for submitting! Our team will review your card and reach out within 2-3 business days.
+              </p>
+              <button onClick={() => {setSubmitted(false); setFormData({ cardName: '', companyName: '', contactName: '', email: '', website: '', network: '', regions: '', cashback: '', custody: '', description: '' }); onClose();}} className={`w-full py-3 rounded-lg font-medium ${darkMode ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}`}>Close</button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Card Name *</label>
+                  <input type="text" name="cardName" value={formData.cardName} onChange={handleChange} placeholder="e.g. Acme Card" className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
+                </div>
+                <div>
+                  <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Company Name *</label>
+                  <input type="text" name="companyName" value={formData.companyName} onChange={handleChange} placeholder="e.g. Acme Inc" className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Contact Name *</label>
+                  <input type="text" name="contactName" value={formData.contactName} onChange={handleChange} placeholder="Your name" className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
+                </div>
+                <div>
+                  <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Email *</label>
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@company.com" className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
+                </div>
+              </div>
+              <div>
+                <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Card Website *</label>
+                <input type="url" name="website" value={formData.website} onChange={handleChange} placeholder="https://yourcard.com" className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Network</label>
+                  <select name="network" value={formData.network} onChange={handleChange} className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`}>
+                    <option value="">Select network</option>
+                    <option value="Visa">Visa</option>
+                    <option value="Mastercard">Mastercard</option>
+                    <option value="Both">Both</option>
+                  </select>
+                </div>
+                <div>
+                  <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Custody Type</label>
+                  <select name="custody" value={formData.custody} onChange={handleChange} className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`}>
+                    <option value="">Select type</option>
+                    <option value="Self-Custody">Self-Custody</option>
+                    <option value="Custodial">Custodial</option>
+                    <option value="Hybrid">Hybrid</option>
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Available Regions</label>
+                  <input type="text" name="regions" value={formData.regions} onChange={handleChange} placeholder="e.g. US, EU, Global" className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
+                </div>
+                <div>
+                  <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Cashback Rate</label>
+                  <input type="text" name="cashback" value={formData.cashback} onChange={handleChange} placeholder="e.g. 1-3%" className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
+                </div>
+              </div>
+              <div>
+                <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Card Description</label>
+                <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Tell us about your card's unique features..." rows={3} className={`w-full px-4 py-2.5 rounded-lg text-sm resize-none ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
+              </div>
+              <button onClick={handleSubmit} disabled={!formData.cardName || !formData.email || !formData.website} className={`w-full py-3 font-bold rounded-lg transition ${formData.cardName && formData.email && formData.website ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-gray-900 hover:from-cyan-300 hover:to-blue-400' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}`}>Submit for Review</button>
+              <button onClick={onClose} className="w-full py-2 text-gray-500 text-sm hover:text-gray-400">Cancel</button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================
+// ADVERTISE MODAL - Advertising inquiry form
+// ============================================
+function AdvertiseModal({ open, onClose, darkMode }) {
+  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    contactName: '',
+    email: '',
+    company: '',
+    country: '',
+    phone: '',
+    budget: '',
+    message: ''
+  });
+
+  if (!open) return null;
+
+  const handleChange = (e) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = () => {
+    // In production, this would send to an API
+    console.log('Advertising inquiry:', formData);
+    setSubmitted(true);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div className={`rounded-2xl w-full max-w-lg overflow-hidden my-8 ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        <div className="bg-gradient-to-r from-lime-400 to-emerald-500 p-6 text-gray-900">
+          <h3 className="text-xl font-bold">{submitted ? 'Thank You!' : 'Advertise Your Card'}</h3>
+          <p className="text-sm opacity-80 mt-1">{submitted ? 'We\'ll be in touch within 24 hours' : 'Reach thousands of crypto card enthusiasts'}</p>
+        </div>
+        <div className="p-6">
+          {submitted ? (
+            <div className="text-center py-6">
+              <div className="text-5xl mb-4">🚀</div>
+              <p className={`text-lg font-medium mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Inquiry Submitted!</p>
+              <p className={`mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Our partnerships team will contact you shortly to discuss advertising opportunities.</p>
+              <button onClick={() => {setSubmitted(false);setFormData({contactName:'',email:'',company:'',country:'',phone:'',budget:'',message:''});onClose()}} className={`w-full py-3 rounded-lg font-medium ${darkMode ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'} transition`}>Close</button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className={`p-4 rounded-xl ${darkMode ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
+                <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  <span className="font-semibold text-lime-400">Premium placement</span> for your crypto card:
+                </p>
+                <ul className={`mt-2 space-y-1 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  <li className="flex items-center gap-2"><span className="text-lime-400">✓</span> Featured card positioning</li>
+                  <li className="flex items-center gap-2"><span className="text-lime-400">✓</span> Newsletter sponsorship</li>
+                  <li className="flex items-center gap-2"><span className="text-lime-400">✓</span> Social media promotion</li>
+                  <li className="flex items-center gap-2"><span className="text-lime-400">✓</span> Custom comparison highlights</li>
+                </ul>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Contact Name *</label>
+                  <input type="text" name="contactName" value={formData.contactName} onChange={handleChange} placeholder="Your name" className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
+                </div>
+                <div>
+                  <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Email *</label>
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="you@company.com" className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
+                </div>
+              </div>
+              <div>
+                <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Company Name *</label>
+                <input type="text" name="company" value={formData.company} onChange={handleChange} placeholder="Your company or card name" className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Country</label>
+                  <select name="country" value={formData.country} onChange={handleChange} className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`}>
+                    <option value="">Select country</option>
+                    <option value="US">United States</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="DE">Germany</option>
+                    <option value="FR">France</option>
+                    <option value="ES">Spain</option>
+                    <option value="NL">Netherlands</option>
+                    <option value="AU">Australia</option>
+                    <option value="SG">Singapore</option>
+                    <option value="AE">UAE</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Phone Number</label>
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+1 (555) 000-0000" className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
+                </div>
+              </div>
+              <div>
+                <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Monthly Budget</label>
+                <select name="budget" value={formData.budget} onChange={handleChange} className={`w-full px-4 py-2.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`}>
+                  <option value="">Select budget range</option>
+                  <option value="<1000">Less than $1,000</option>
+                  <option value="1000-5000">$1,000 - $5,000</option>
+                  <option value="5000-10000">$5,000 - $10,000</option>
+                  <option value="10000-25000">$10,000 - $25,000</option>
+                  <option value="25000+">$25,000+</option>
+                  <option value="custom">Custom / Let's discuss</option>
+                </select>
+              </div>
+              <div>
+                <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Message (Optional)</label>
+                <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Tell us about your advertising goals..." rows={3} className={`w-full px-4 py-2.5 rounded-lg text-sm resize-none ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
+              </div>
+              <button onClick={handleSubmit} disabled={!formData.contactName || !formData.email || !formData.company} className={`w-full py-3 font-bold rounded-lg transition ${formData.contactName && formData.email && formData.company ? 'bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 hover:shadow-lg hover:shadow-lime-500/30' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}`}>Submit Inquiry</button>
+              <button onClick={onClose} className="w-full py-2 text-gray-500 text-sm hover:text-gray-400 transition-colors">Cancel</button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================
+// COMPARE DRAWER COMPONENT
+// ============================================
+function CompareDrawer({ compareList, onRemove, onCompare, onClear, darkMode }) {
+  if (compareList.length === 0) return null;
+
+  return (
+    <div className={`fixed bottom-0 left-0 right-0 z-40 border-t shadow-2xl ${darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}`}>
+      <div className="max-w-6xl mx-auto p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <span className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>Compare Cards</span>
+            <span className="text-xs bg-lime-400 text-gray-900 px-2 py-0.5 rounded-full font-bold">{compareList.length}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={onClear} className={`text-xs px-3 py-1.5 rounded-lg ${darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100'}`}>Clear All</button>
+            <button
+              onClick={onCompare}
+              disabled={compareList.length < 2}
+              className={`text-xs px-4 py-1.5 rounded-lg font-bold transition ${compareList.length >= 2 ? 'bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}`}
+            >
+              Compare {compareList.length >= 2 ? `(${compareList.length})` : '(min 2)'}
+            </button>
+          </div>
+        </div>
+        <div className="flex gap-3 overflow-x-auto pb-2">
+          {compareList.map(card => (
+            <div key={card.id} className={`flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+              <img src={card.logo} alt="" className="w-6 h-6 rounded-full bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
+              <span className={`text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{card.name}</span>
+              <button onClick={() => onRemove(card.id)} className="text-gray-500 hover:text-red-400 ml-1">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================
+// COMPARE MODAL COMPONENT
+// ============================================
+function CompareModal({ open, onClose, compareList, darkMode }) {
+  if (!open || compareList.length < 2) return null;
+
+  const attributes = [
+    { key: 'cashback', label: 'Cashback', highlight: true },
+    { key: 'fxFee', label: 'FX Fee' },
+    { key: 'annualFee', label: 'Annual Fee' },
+    { key: 'custody', label: 'Custody' },
+    { key: 'network', label: 'Network' },
+    { key: 'chain', label: 'Chain' },
+    { key: 'category', label: 'Category' },
+  ];
+
+  return (
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 overflow-auto">
+      <div className={`rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-auto ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        <div className="sticky top-0 bg-gradient-to-r from-lime-400 to-emerald-500 p-4 flex items-center justify-between">
+          <h3 className="text-xl font-bold text-gray-900">Compare Cards</h3>
+          <button onClick={onClose} className="text-gray-900/70 hover:text-gray-900">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+        <div className="p-4 overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr>
+                <th className={`text-left p-3 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}></th>
+                {compareList.map(card => (
+                  <th key={card.id} className="p-3 text-center min-w-[150px]">
+                    <div className="flex flex-col items-center gap-2">
+                      <img src={card.logo} alt="" className="w-12 h-12 rounded-full bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
+                      <span className={`font-bold text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{card.name}</span>
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {attributes.map((attr, idx) => (
+                <tr key={attr.key} className={idx % 2 === 0 ? (darkMode ? 'bg-gray-800/50' : 'bg-gray-50') : ''}>
+                  <td className={`p-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{attr.label}</td>
+                  {compareList.map(card => (
+                    <td key={card.id} className={`p-3 text-center text-sm ${attr.highlight ? 'text-lime-400 font-bold' : (darkMode ? 'text-white' : 'text-gray-900')}`}>
+                      {attr.key === 'category' ? (card.category === 'cryptoNative' ? 'Crypto-Native' : card.category === 'onchain' ? 'Onchain' : 'Neobank') : card[attr.key] || '-'}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+              <tr className={darkMode ? 'bg-gray-800/50' : 'bg-gray-50'}>
+                <td className={`p-3 text-sm font-medium ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Features</td>
+                {compareList.map(card => (
+                  <td key={card.id} className="p-3 text-center">
+                    <div className="flex flex-wrap justify-center gap-1">
+                      {card.features?.slice(0, 3).map((f, i) => (
+                        <span key={i} className={`text-[10px] px-2 py-0.5 rounded ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-600'}`}>{f}</span>
+                      ))}
+                    </div>
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className={`p-4 border-t ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+          <button onClick={onClose} className={`w-full py-3 rounded-lg font-medium ${darkMode ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}`}>Close</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Composite ratings from iOS App Store, Google Play, and Cryptonoshi rankings
+// Formula: (iOS × 0.30) + (Android × 0.30) + (Cryptonoshi × 0.40)
+// Cryptonoshi rank converted to score: 5 - ((rank/63) × 1.5)
+const cardRatingsData = {
+  // === TOP TIER (4.5+) - Excellent across all metrics ===
+  'Binance': { ios: 4.8, android: 4.8, cryptonoshi: null, composite: 4.8, reviews: 150000 },
+  'Bybit': { ios: 4.7, android: 4.5, cryptonoshi: null, composite: 4.6, reviews: 41500 },
+  'Gemini': { ios: 4.8, android: 4.3, cryptonoshi: null, composite: 4.55, reviews: 150000 },
+  'Coinbase': { ios: 4.7, android: 4.5, cryptonoshi: null, composite: 4.6, reviews: 185000 },
+  'Crypto.com': { ios: 4.7, android: 4.6, cryptonoshi: null, composite: 4.65, reviews: 140000 },
+  'Trust Wallet': { ios: 4.7, android: 4.6, cryptonoshi: null, composite: 4.65, reviews: 190000 },
+  'Ledger': { ios: 4.7, android: 4.7, cryptonoshi: null, composite: 4.7, reviews: 50000 },
+
+  // === HIGH TIER (4.0-4.5) - Strong performers ===
+  'Nexo': { ios: 4.0, android: 4.1, cryptonoshi: 1, composite: 4.5, reviews: 30000 }, // #1 on Cryptonoshi boosts score
+  'Holyheld': { ios: null, android: null, cryptonoshi: 6, composite: 4.4, reviews: 1500 }, // #6 on Cryptonoshi
+  'KAST': { ios: null, android: null, cryptonoshi: 8, composite: 4.3, reviews: 2000 }, // #8 on Cryptonoshi
+  'Kolo': { ios: null, android: null, cryptonoshi: 11, composite: 4.2, reviews: 1000 }, // #11 on Cryptonoshi
+  'Bitpanda': { ios: 4.4, android: 4.4, cryptonoshi: null, composite: 4.4, reviews: 25000 },
+  'OKX': { ios: 4.6, android: 4.5, cryptonoshi: null, composite: 4.55, reviews: 80000 },
+  'Kraken': { ios: 4.5, android: 4.4, cryptonoshi: null, composite: 4.45, reviews: 35000 },
+  'MetaMask': { ios: 4.5, android: 4.4, cryptonoshi: null, composite: 4.45, reviews: 100000 },
+  'Phantom': { ios: 4.8, android: 4.7, cryptonoshi: null, composite: 4.75, reviews: 45000 },
+    'Revolut': { ios: 4.6, android: 4.5, cryptonoshi: null, composite: 4.55, reviews: 500000 },
+  'Cash App': { ios: 4.7, android: 4.6, cryptonoshi: null, composite: 4.65, reviews: 400000 },
+  'Wirex': { ios: 3.7, android: 3.5, cryptonoshi: 53, composite: 3.6, reviews: 10000 },
+  'Nubank': { ios: 4.7, android: 4.6, cryptonoshi: null, composite: 4.65, reviews: 350000 },
+
+  // === MID TIER (3.5-4.0) - Average performers ===
+  'Binance US': { ios: 4.2, android: 4.0, cryptonoshi: null, composite: 4.1, reviews: 110000 },
+  'WhiteBIT': { ios: 4.0, android: 3.9, cryptonoshi: 32, composite: 3.8, reviews: 15000 },
+  'Bit2Me': { ios: 4.0, android: 3.8, cryptonoshi: 52, composite: 3.7, reviews: 8000 },
+  
+  // === NEWER/NICHE CARDS - Limited data, use feature-based estimates ===
+  'Solayer Emerald': { ios: null, android: null, cryptonoshi: null, composite: 4.3, reviews: 40000 }, // 40K+ users, new launch
+  'Gnosis Pay': { ios: null, android: null, cryptonoshi: null, composite: 4.0, reviews: 500 }, // Non-custodial leader
+  'Bleap': { ios: null, android: null, cryptonoshi: null, composite: 3.9, reviews: 300 },
+  'Redotpay': { ios: 4.2, android: 4.0, cryptonoshi: null, composite: 4.1, reviews: 5000 },
+  'Solflare': { ios: 4.6, android: 4.5, cryptonoshi: null, composite: 4.55, reviews: 8000 },
+  'Backpack': { ios: 4.5, android: 4.3, cryptonoshi: null, composite: 4.4, reviews: 3000 },
+  'Rain': { ios: null, android: null, cryptonoshi: null, composite: 4.0, reviews: 200 }, // B2B focused
+  'Tria': { ios: null, android: null, cryptonoshi: null, composite: 3.8, reviews: 150 },
+  'Moto': { ios: null, android: null, cryptonoshi: null, composite: 4.2, reviews: 20 }, // HNW focused, pre-launch
+  'COCA': { ios: null, android: null, cryptonoshi: null, composite: 3.8, reviews: 200 },
+  'Kontigo': { ios: null, android: null, cryptonoshi: null, composite: 3.7, reviews: 100 },
+  'Cypher': { ios: null, android: null, cryptonoshi: null, composite: 3.9, reviews: 250 },
+  'Fold': { ios: 4.2, android: 4.0, cryptonoshi: null, composite: 4.0, reviews: 12000 }, // Good app, bad Trustpilot
+  'SafePal': { ios: 4.4, android: 4.3, cryptonoshi: null, composite: 4.35, reviews: 20000 },
+  'imToken': { ios: 4.3, android: 4.2, cryptonoshi: null, composite: 4.25, reviews: 15000 },
+  'TokenPocket': { ios: 4.2, android: 4.1, cryptonoshi: null, composite: 4.15, reviews: 10000 },
+  'Xapo': { ios: 4.0, android: 3.9, cryptonoshi: null, composite: 3.95, reviews: 5000 },
+  'Verse V-Card': { ios: 4.3, android: 4.2, cryptonoshi: null, composite: 4.25, reviews: 25000 },
+  'Brighty': { ios: null, android: null, cryptonoshi: null, composite: 3.8, reviews: 400 },
+  'Bitget Card': { ios: 4.5, android: 4.4, cryptonoshi: null, composite: 4.45, reviews: 50000 },
+  'Bitget Premier': { ios: 4.5, android: 4.4, cryptonoshi: null, composite: 4.5, reviews: 50000 },
+  'OrbitX Neo': { ios: null, android: null, cryptonoshi: null, composite: 3.7, reviews: 150 },
+  'OrbitX Lux': { ios: null, android: null, cryptonoshi: null, composite: 3.8, reviews: 150 },
+};
+
+// Generate ratings using composite data where available, with smart fallbacks
+const generateInitialRatings = () => {
+  const ratings = {};
+  allCards.forEach(card => {
+    const data = cardRatingsData[card.name];
+    if (data) {
+      // Use researched composite score
+      ratings[card.id] = {
+        average: data.composite,
+        count: data.reviews
+      };
+    } else {
+      // Smart fallback based on card characteristics
+      let baseScore = 3.8;
+      let reviewCount = Math.floor(Math.random() * 300) + 100;
+
+      // Boost for non-custodial (users prefer self-custody)
+      if (card.custody === 'Non-Custodial') baseScore += 0.2;
+
+      // Boost for established exchanges
+      if (card.archetype === 'exchange') baseScore += 0.1;
+
+      // Boost for cards with live tokens
+      if (card.token?.live) baseScore += 0.1;
+
+      // Cap at 4.5 for unknown cards
+      baseScore = Math.min(baseScore, 4.5);
+
+      // Add small random variance
+      const variance = (Math.random() - 0.5) * 0.2;
+      const finalScore = Math.max(3.0, Math.min(5.0, baseScore + variance));
+
+      ratings[card.id] = {
+        average: parseFloat(finalScore.toFixed(1)),
+        count: reviewCount
+      };
+    }
+  });
+  return ratings;
+};
+
+/*
+ * ============================================================================
+ * RATINGS API SPECIFICATION (Future Backend Integration)
+ * ============================================================================
+ *
+ * BASE URL: https://api.spendbase.io/v1
+ *
+ * ENDPOINTS:
+ *
+ * 1. GET /ratings
+ *    Fetch aggregated community ratings for all cards
+ *    Response: {
+ *      "cards": {
+ *        "card_id": {
+ *          "average": 4.5,           // Community average (1-5)
+ *          "count": 1250,            // Total ratings count
+ *          "distribution": {         // Rating breakdown
+ *            "1": 25, "2": 50, "3": 125, "4": 400, "5": 650
+ *          },
+ *          "sources": {              // Source breakdown for transparency
+ *            "ios": { "average": 4.7, "count": 150000 },
+ *            "android": { "average": 4.5, "count": 120000 },
+ *            "cryptonoshi": { "rank": 8, "score": 4.3 },
+ *            "community": { "average": 4.2, "count": 1250 }
+ *          }
+ *        }
+ *      },
+ *      "lastUpdated": "2025-01-20T12:00:00Z"
+ *    }
+ *
+ * 2. POST /ratings
+ *    Submit a user rating
+ *    Request: {
+ *      "cardId": 123,
+ *      "rating": 4,                  // 1-5 stars
+ *      "userId": "anon_abc123",      // Anonymous ID (fingerprint or generated)
+ *      "metadata": {                 // Optional context
+ *        "hasUsedCard": true,
+ *        "region": "europe",
+ *        "useCase": "daily_spending"
+ *      }
+ *    }
+ *    Response: {
+ *      "success": true,
+ *      "newAverage": 4.51,
+ *      "newCount": 1251
+ *    }
+ *
+ * 3. GET /ratings/:cardId
+ *    Fetch detailed ratings for a specific card
+ *    Response: {
+ *      "cardId": 123,
+ *      "average": 4.5,
+ *      "count": 1250,
+ *      "distribution": { "1": 25, "2": 50, "3": 125, "4": 400, "5": 650 },
+ *      "recentReviews": [
+ *        { "rating": 5, "date": "2025-01-19", "region": "europe" },
+ *        { "rating": 4, "date": "2025-01-18", "region": "americas" }
+ *      ],
+ *      "trend": "up"                 // up, down, stable (last 30 days)
+ *    }
+ *
+ * 4. GET /ratings/user/:userId
+ *    Fetch user's rating history (for syncing across devices)
+ *    Response: {
+ *      "userId": "anon_abc123",
+ *      "ratings": { "123": 4, "456": 5 }
+ *    }
+ *
+ * COMPOSITE SCORE FORMULA (Backend Calculation):
+ * ------------------------------------------------
+ * finalScore = (
+ *   (iosRating * 0.25) +           // iOS App Store
+ *   (androidRating * 0.25) +       // Google Play
+ *   (cryptonoshiScore * 0.30) +    // Expert ranking (converted to 1-5)
+ *   (communityRating * 0.20)       // User community ratings
+ * )
+ *
+ * When community count < 100: reduce community weight, increase others
+ * When no app store data: redistribute to cryptonoshi + community
+ *
+ * RATE LIMITING:
+ * - 1 rating per card per user per 30 days
+ * - 10 ratings per user per hour
+ * - Anonymous users identified by fingerprint hash
+ *
+ * ANTI-GAMING:
+ * - Outlier detection (ratings far from mean get less weight)
+ * - Velocity checks (sudden rating spikes flagged)
+ * - Optional verified user badge (connected wallet/email)
+ *
+ * ============================================================================
+ */
+
+// localStorage keys for persistence
+const STORAGE_KEYS = {
+  USER_RATINGS: 'spendbase_user_ratings',
+  RATINGS_CACHE: 'spendbase_ratings_cache',
+  CACHE_TIMESTAMP: 'spendbase_cache_timestamp'
+};
+
+// Load user ratings from localStorage
+const loadUserRatings = () => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.USER_RATINGS);
+    return stored ? JSON.parse(stored) : {};
+  } catch (e) {
+    console.warn('Failed to load user ratings from localStorage:', e);
+    return {};
+  }
+};
+
+// Save user ratings to localStorage
+const saveUserRatings = (ratings) => {
+  try {
+    localStorage.setItem(STORAGE_KEYS.USER_RATINGS, JSON.stringify(ratings));
+  } catch (e) {
+    console.warn('Failed to save user ratings to localStorage:', e);
+  }
+};
+
+// Merge user ratings into base ratings
+const mergeUserRatings = (baseRatings, userRatings) => {
+  const merged = { ...baseRatings };
+  Object.entries(userRatings).forEach(([cardId, userRating]) => {
+    if (merged[cardId]) {
+      // Recalculate average including user's rating
+      const current = baseRatings[cardId];
+      merged[cardId] = {
+        average: ((current.average * current.count) + userRating) / (current.count + 1),
+        count: current.count + 1,
+        userRated: true
+      };
+    }
+  });
+  return merged;
+};
+
+function Spendbase() {
+  const [activeView, setActiveView] = useState('cards');
+  const [showSubscribe, setShowSubscribe] = useState(false);
+  const [showListCard, setShowListCard] = useState(false);
+  const [showAdvertise, setShowAdvertise] = useState(false);
+  const [darkMode, setDarkMode] = useState(true); // Default to dark mode
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Initialize ratings with localStorage persistence
+  const [userRatedCards, setUserRatedCards] = useState(() => loadUserRatings());
+  const [ratings, setRatings] = useState(() => {
+    const baseRatings = generateInitialRatings();
+    const storedUserRatings = loadUserRatings();
+    return mergeUserRatings(baseRatings, storedUserRatings);
+  });
+
+  const [compareList, setCompareList] = useState([]); // Cards to compare
+  const [showCompareModal, setShowCompareModal] = useState(false);
+
+  // Listen for navigation events (from wizard promo banner)
+  React.useEffect(() => {
+    const handleNavigate = (e) => setActiveView(e.detail);
+    window.addEventListener('navigateTo', handleNavigate);
+    return () => window.removeEventListener('navigateTo', handleNavigate);
+  }, []);
+
+  // Handle card rating with localStorage persistence
+  const handleRate = (cardId, rating) => {
+    // Prevent multiple ratings for same card
+    if (userRatedCards[cardId]) return;
+
+    // Update the ratings display
+    setRatings(prev => {
+      const current = prev[cardId] || { average: 0, count: 0 };
+      const newCount = current.count + 1;
+      const newAverage = ((current.average * current.count) + rating) / newCount;
+      return { ...prev, [cardId]: { average: newAverage, count: newCount, userRated: true } };
+    });
+
+    // Mark this card as rated by user and persist to localStorage
+    const newUserRatedCards = { ...userRatedCards, [cardId]: rating };
+    setUserRatedCards(newUserRatedCards);
+    saveUserRatings(newUserRatedCards);
+
+    // Future: Send to backend API
+    // submitRatingToAPI(cardId, rating).catch(console.error);
+  };
+
+  // Handle compare toggle
+  const handleCompareToggle = (card) => {
+    setCompareList(prev => {
+      const exists = prev.find(c => c.id === card.id);
+      if (exists) {
+        return prev.filter(c => c.id !== card.id);
+      } else if (prev.length < 4) {
+        return [...prev, card];
+      }
+      return prev; // Max 4 cards
+    });
+  };
+
+  const handleRemoveFromCompare = (cardId) => {
+    setCompareList(prev => prev.filter(c => c.id !== cardId));
+  };
+
+  const handleClearCompare = () => {
+    setCompareList([]);
+  };
+
+  return (
+    <div className={`min-h-screen transition-colors ${darkMode ? 'bg-gray-950 text-white' : 'bg-gray-50 text-gray-900'}`}>
+      <Header
+        activeView={activeView}
+        setActiveView={setActiveView}
+        onSubscribe={() => setShowSubscribe(true)}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
+      <main className={compareList.length > 0 ? 'pb-32' : ''}>
+        {activeView === 'cards' ? <CardsView darkMode={darkMode} searchTerm={searchTerm} ratings={ratings} onRate={handleRate} userRatedCards={userRatedCards} compareList={compareList} onCompareToggle={handleCompareToggle} /> :
+         activeView === 'wizard' ? <CardWizard darkMode={darkMode} /> :
+         activeView === 'learn' ? <LearnSection darkMode={darkMode} /> :
+         activeView === 'privacy' ? <PrivacyPolicy darkMode={darkMode} /> :
+         activeView === 'terms' ? <TermsOfService darkMode={darkMode} /> :
+         activeView === 'demo' ? <VideoDemoPage darkMode={darkMode} onBack={() => setActiveView('rewards')} /> :
+         <VideoRewardsPage darkMode={darkMode} onNavigateToDemo={() => setActiveView('demo')} />}
+      </main>
+
+      {/* Stablecoin Adoption Progress Bar */}
+      <div className={`border-t py-8 ${darkMode ? 'border-gray-800 bg-gray-900/50' : 'border-gray-200 bg-gray-50'}`}>
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">💵</span>
+              <h3 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                Global Stablecoin Adoption
+              </h3>
+            </div>
+            <p className={`text-sm text-center max-w-lg ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              1.25% of all USD in circulation is now held in stablecoins — and growing fast
+            </p>
+            <div className="w-full max-w-2xl mt-2">
+              <div className={`relative h-8 rounded-full overflow-hidden ${darkMode ? 'bg-gray-800' : 'bg-gray-200'}`}>
+                {/* Background pattern to represent total USD */}
+                <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px)' }}></div>
+                {/* Stablecoin progress */}
+                <div
+                  className="h-full bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500 rounded-full relative transition-all duration-1000 ease-out"
+                  style={{ width: '1.25%', minWidth: '60px' }}
+                >
+                  {/* Shimmer effect */}
+                  <div className="absolute inset-0 overflow-hidden rounded-full">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent" style={{ animation: 'shimmer 2s infinite' }}></div>
+                  </div>
+                </div>
+                {/* Percentage label */}
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                  <span className={`text-xs font-medium ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                    $21.5T USD Supply
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center mt-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500"></div>
+                  <span className={`text-sm font-semibold ${darkMode ? 'text-teal-400' : 'text-teal-600'}`}>
+                    1.25% Stablecoins (~$268B)
+                  </span>
+                </div>
+                <span className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                  USDT, USDC, PYUSD, CASH & more
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer className={`border-t py-8 ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+              © 2026 Spendbase
+            </div>
+            <div className="flex items-center gap-6">
+              <button
+                onClick={() => setShowAdvertise(true)}
+                className={`text-sm hover:underline transition ${darkMode ? 'text-lime-400 hover:text-lime-300' : 'text-lime-600 hover:text-lime-700'}`}
+              >
+                Advertise Your Card
+              </button>
+              <button
+                onClick={() => setShowListCard(true)}
+                className={`text-sm hover:underline transition ${darkMode ? 'text-cyan-400 hover:text-cyan-300' : 'text-cyan-600 hover:text-cyan-700'}`}
+              >
+                List Your Card
+              </button>
+              <a
+                href="#privacy"
+                onClick={(e) => { e.preventDefault(); setActiveView('privacy'); }}
+                className={`text-sm hover:underline transition ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}`}
+              >
+                Privacy Policy
+              </a>
+              <a
+                href="#terms"
+                onClick={(e) => { e.preventDefault(); setActiveView('terms'); }}
+                className={`text-sm hover:underline transition ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}`}
+              >
+                Terms of Service
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+      <CompareDrawer
+        compareList={compareList}
+        onRemove={handleRemoveFromCompare}
+        onCompare={() => setShowCompareModal(true)}
+        onClear={handleClearCompare}
+        darkMode={darkMode}
+      />
+      <CompareModal open={showCompareModal} onClose={() => setShowCompareModal(false)} compareList={compareList} darkMode={darkMode} />
+      <SubscribeModal open={showSubscribe} onClose={() => setShowSubscribe(false)} darkMode={darkMode} />
+      <ListCardModal open={showListCard} onClose={() => setShowListCard(false)} darkMode={darkMode} />
+      <AdvertiseModal open={showAdvertise} onClose={() => setShowAdvertise(false)} darkMode={darkMode} />
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Spendbase />);
+  </script>
+</body>
+</html>
