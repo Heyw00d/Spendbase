@@ -1395,7 +1395,7 @@ function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode,
           )}
 
           <nav className="hidden lg:flex items-center gap-1">
-            {['cards','wizard','learn','rewards'].map(v => (
+            {['cards','wizard','ratings','learn','rewards'].map(v => (
               <button
                 key={v}
                 onClick={() => setActiveView(v)}
@@ -1405,7 +1405,7 @@ function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode,
                     : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')
                 }`}
             >
-              {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? '✨ Find My Card' : v.charAt(0).toUpperCase()+v.slice(1)}
+              {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? '✨ Find My Card' : v === 'ratings' ? '📊 Scores' : v.charAt(0).toUpperCase()+v.slice(1)}
             </button>
           ))}
           </nav>
@@ -2231,6 +2231,301 @@ function CompareModal({ open, onClose, compareList, darkMode }) {
   );
 }
 
+// ============================================
+// RATINGS PAGE - Transparent score breakdown
+// ============================================
+function RatingsPage({ darkMode, ratings, userRatedCards, onRate }) {
+  const [sortKey, setSortKey] = useState('composite');
+  const [sortDir, setSortDir] = useState('desc');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+
+  const handleSort = (key) => {
+    if (sortKey === key) {
+      setSortDir(sortDir === 'desc' ? 'asc' : 'desc');
+    } else {
+      setSortKey(key);
+      setSortDir('desc');
+    }
+  };
+
+  // Build ratings table data
+  const tableData = allCards.map(card => {
+    const data = cardRatingsData[card.name] || {};
+    const spendbaseRating = ratings?.[card.id];
+    return {
+      id: card.id,
+      name: card.name,
+      logo: card.logo,
+      category: card.category,
+      ios: data.ios,
+      android: data.android,
+      trustpilot: data.trustpilot || null,
+      cryptonoshi: data.cryptonoshi,
+      spendbase: spendbaseRating?.average || null,
+      spendbaseCount: spendbaseRating?.count || 0,
+      composite: data.composite || spendbaseRating?.average || 3.5,
+      totalReviews: data.reviews || 0,
+      hasUserRated: !!userRatedCards?.[card.id],
+      website: card.website,
+    };
+  });
+
+  // Filter
+  let filtered = tableData;
+  if (categoryFilter !== 'all') {
+    filtered = filtered.filter(c => c.category === categoryFilter);
+  }
+
+  // Sort
+  filtered.sort((a, b) => {
+    let aVal = a[sortKey];
+    let bVal = b[sortKey];
+    // Handle nulls - push to bottom
+    if (aVal === null && bVal === null) return 0;
+    if (aVal === null) return 1;
+    if (bVal === null) return -1;
+    // Cryptonoshi lower is better
+    if (sortKey === 'cryptonoshi') {
+      return sortDir === 'desc' ? aVal - bVal : bVal - aVal;
+    }
+    return sortDir === 'desc' ? bVal - aVal : aVal - bVal;
+  });
+
+  const ScoreCell = ({ value, type }) => {
+    if (value === null || value === undefined) {
+      return <span className="text-gray-500">—</span>;
+    }
+    let color = 'text-gray-400';
+    if (type === 'cryptonoshi') {
+      // Lower is better for rank
+      if (value <= 10) color = 'text-lime-400 font-bold';
+      else if (value <= 25) color = 'text-green-400';
+      else if (value <= 40) color = 'text-yellow-400';
+      else color = 'text-orange-400';
+      return <span className={color}>#{value}</span>;
+    } else {
+      // Higher is better for scores
+      if (value >= 4.5) color = 'text-lime-400 font-bold';
+      else if (value >= 4.0) color = 'text-green-400';
+      else if (value >= 3.5) color = 'text-yellow-400';
+      else color = 'text-orange-400';
+      return <span className={color}>{value.toFixed(1)}</span>;
+    }
+  };
+
+  const SortHeader = ({ label, sortKeyName, info }) => (
+    <th
+      className={`p-3 text-left cursor-pointer hover:bg-gray-800/50 transition select-none ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}
+      onClick={() => handleSort(sortKeyName)}
+      title={info}
+    >
+      <div className="flex items-center gap-1">
+        <span className="text-xs font-medium">{label}</span>
+        {sortKey === sortKeyName && (
+          <span className="text-lime-400">{sortDir === 'desc' ? '↓' : '↑'}</span>
+        )}
+      </div>
+    </th>
+  );
+
+  const communityVotes = tableData.reduce((sum, c) => sum + (c.spendbaseCount || 0), 0);
+  const cardsWithSpendbaseRatings = tableData.filter(c => c.spendbaseCount > 0).length;
+
+  return (
+    <div className={`min-h-screen ${darkMode ? 'bg-gray-950' : 'bg-gray-50'}`}>
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+            📊 Card Ratings & Scores
+          </h1>
+          <p className={`text-lg ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Transparent breakdown of how we score crypto cards
+          </p>
+        </div>
+
+        {/* Stats Banner */}
+        <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 mb-8`}>
+          <div className={`p-4 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+            <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{tableData.length}</p>
+            <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Cards Tracked</p>
+          </div>
+          <div className={`p-4 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+            <p className={`text-2xl font-bold text-lime-400`}>{communityVotes.toLocaleString()}</p>
+            <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Community Votes</p>
+          </div>
+          <div className={`p-4 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+            <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{cardsWithSpendbaseRatings}</p>
+            <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Community Rated</p>
+          </div>
+          <div className={`p-4 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+            <p className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>5</p>
+            <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Data Sources</p>
+          </div>
+        </div>
+
+        {/* Methodology */}
+        <div className={`p-6 rounded-xl mb-8 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+          <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>📐 How We Calculate Scores</h2>
+          <div className="grid md:grid-cols-5 gap-4 text-sm">
+            <div className={`p-3 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
+              <div className="flex items-center gap-2 mb-1">
+                <span>📱</span>
+                <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>iOS App Store</span>
+              </div>
+              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Apple App Store rating (1-5 stars)</p>
+            </div>
+            <div className={`p-3 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
+              <div className="flex items-center gap-2 mb-1">
+                <span>🤖</span>
+                <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>Google Play</span>
+              </div>
+              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Play Store rating (1-5 stars)</p>
+            </div>
+            <div className={`p-3 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
+              <div className="flex items-center gap-2 mb-1">
+                <span>⭐</span>
+                <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>Trustpilot</span>
+              </div>
+              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Trustpilot rating (coming soon)</p>
+            </div>
+            <div className={`p-3 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
+              <div className="flex items-center gap-2 mb-1">
+                <span>🏆</span>
+                <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>Cryptonoshi</span>
+              </div>
+              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Industry ranking (#1-63, lower = better)</p>
+            </div>
+            <div className={`p-3 rounded-lg ${darkMode ? 'bg-lime-400/10 border border-lime-400/30' : 'bg-lime-50 border border-lime-200'}`}>
+              <div className="flex items-center gap-2 mb-1">
+                <span>💚</span>
+                <span className={`font-medium text-lime-600`}>Spendbase</span>
+              </div>
+              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Community votes from you!</p>
+            </div>
+          </div>
+          <p className={`mt-4 text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+            <strong>Current formula:</strong> (iOS × 0.30) + (Android × 0.30) + (Cryptonoshi × 0.40). 
+            <span className="text-lime-400 ml-1">Spendbase community scores will be weighted at 15% once we reach 1,000 votes.</span>
+          </p>
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {['all', 'onchain', 'cryptoNative', 'neobank'].map(cat => (
+            <button
+              key={cat}
+              onClick={() => setCategoryFilter(cat)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
+                categoryFilter === cat
+                  ? 'bg-lime-400 text-gray-900'
+                  : (darkMode ? 'bg-gray-800 text-gray-400 hover:text-white' : 'bg-gray-200 text-gray-600 hover:text-gray-900')
+              }`}
+            >
+              {cat === 'all' ? 'All Cards' : cat === 'cryptoNative' ? 'Crypto-Native' : cat === 'onchain' ? 'Onchain' : 'Neobank'}
+            </button>
+          ))}
+        </div>
+
+        {/* Table */}
+        <div className={`rounded-xl overflow-hidden border ${darkMode ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-200'}`}>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className={darkMode ? 'bg-gray-800' : 'bg-gray-100'}>
+                <tr>
+                  <th className={`p-3 text-left ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <span className="text-xs font-medium">Card</span>
+                  </th>
+                  <SortHeader label="iOS" sortKeyName="ios" info="Apple App Store rating" />
+                  <SortHeader label="Android" sortKeyName="android" info="Google Play Store rating" />
+                  <SortHeader label="Trustpilot" sortKeyName="trustpilot" info="Trustpilot rating (coming soon)" />
+                  <SortHeader label="Cryptonoshi" sortKeyName="cryptonoshi" info="Industry ranking (lower is better)" />
+                  <SortHeader label="Spendbase" sortKeyName="spendbase" info="Community rating from Spendbase users" />
+                  <SortHeader label="Composite" sortKeyName="composite" info="Weighted average score" />
+                  <th className={`p-3 text-left ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <span className="text-xs font-medium">Action</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((card, idx) => (
+                  <tr
+                    key={card.id}
+                    className={`border-t ${darkMode ? 'border-gray-800 hover:bg-gray-800/50' : 'border-gray-100 hover:bg-gray-50'} transition`}
+                  >
+                    <td className="p-3">
+                      <div className="flex items-center gap-3">
+                        <img src={card.logo} alt="" className="w-8 h-8 rounded-full bg-gray-800 object-cover" onError={(e) => e.target.style.display='none'} />
+                        <div>
+                          <p className={`font-medium text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{card.name}</p>
+                          <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                            {card.totalReviews > 0 ? `${card.totalReviews.toLocaleString()} reviews` : 'New'}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-3 text-sm"><ScoreCell value={card.ios} /></td>
+                    <td className="p-3 text-sm"><ScoreCell value={card.android} /></td>
+                    <td className="p-3 text-sm"><ScoreCell value={card.trustpilot} /></td>
+                    <td className="p-3 text-sm"><ScoreCell value={card.cryptonoshi} type="cryptonoshi" /></td>
+                    <td className="p-3 text-sm">
+                      {card.spendbase ? (
+                        <div>
+                          <ScoreCell value={card.spendbase} />
+                          <span className={`text-xs ml-1 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>({card.spendbaseCount})</span>
+                        </div>
+                      ) : (
+                        <span className="text-gray-500 text-xs">No votes</span>
+                      )}
+                    </td>
+                    <td className="p-3">
+                      <span className={`text-lg font-bold ${card.composite >= 4.5 ? 'text-lime-400' : card.composite >= 4.0 ? 'text-green-400' : card.composite >= 3.5 ? 'text-yellow-400' : 'text-orange-400'}`}>
+                        {card.composite.toFixed(1)}
+                      </span>
+                    </td>
+                    <td className="p-3">
+                      {card.hasUserRated ? (
+                        <span className="text-xs text-lime-400">✓ Voted</span>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            const event = new CustomEvent('navigate', { detail: 'cards' });
+                            window.dispatchEvent(event);
+                          }}
+                          className="text-xs px-3 py-1.5 rounded-lg bg-lime-400 text-gray-900 font-medium hover:bg-lime-300 transition"
+                        >
+                          Rate
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className={`mt-8 p-6 rounded-xl text-center ${darkMode ? 'bg-gradient-to-r from-lime-400/10 to-emerald-400/10 border border-lime-400/20' : 'bg-gradient-to-r from-lime-50 to-emerald-50 border border-lime-200'}`}>
+          <h3 className={`text-xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Help Build the Most Trusted Crypto Card Rankings</h3>
+          <p className={`mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Rate the cards you've used. Your votes shape the Spendbase community score.
+          </p>
+          <button
+            onClick={() => {
+              const event = new CustomEvent('navigate', { detail: 'cards' });
+              window.dispatchEvent(event);
+            }}
+            className="px-6 py-3 rounded-lg bg-lime-400 text-gray-900 font-bold hover:bg-lime-300 transition"
+          >
+            Start Rating Cards →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Composite ratings from iOS App Store, Google Play, and Cryptonoshi rankings
 // Formula: (iOS × 0.30) + (Android × 0.30) + (Cryptonoshi × 0.40)
 // Cryptonoshi rank converted to score: 5 - ((rank/63) × 1.5)
@@ -2552,6 +2847,7 @@ function Spendbase() {
       <main className={compareList.length > 0 ? 'pb-32' : ''}>
         {activeView === 'cards' ? <CardsView darkMode={darkMode} searchTerm={searchTerm} ratings={ratings} onRate={handleRate} userRatedCards={userRatedCards} compareList={compareList} onCompareToggle={handleCompareToggle} /> :
          activeView === 'wizard' ? <CardWizard darkMode={darkMode} /> :
+         activeView === 'ratings' ? <RatingsPage darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} /> :
          activeView === 'learn' ? <LearnSection darkMode={darkMode} /> :
          activeView === 'privacy' ? <PrivacyPolicy darkMode={darkMode} /> :
          activeView === 'terms' ? <TermsOfService darkMode={darkMode} /> :
