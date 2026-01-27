@@ -549,7 +549,11 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
   // Detect if touch device
   const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
-  const handleInteraction = () => {
+  const handleInteraction = (e) => {
+    // Don't flip if clicking on a link or button
+    if (e.target.closest('a') || e.target.closest('button')) {
+      return;
+    }
     if (isTouchDevice) {
       setFlipped(!flipped);
     }
