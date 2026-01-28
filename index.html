@@ -194,15 +194,17 @@ const SPENDBASE_API = {
   endpoint: 'https://script.google.com/macros/s/AKfycbwF2uTFxGqrJvPnwgwQJ54b6mwZCeZ6B9SXJrZq2hmaqb90IKUOazuXXZXsBgy0lE2CfQ/exec'
 };
 
-// Form submission helper
+// Form submission helper (Google Apps Script requires no-cors mode)
 async function submitToAPI(type, data) {
   try {
-    const response = await fetch(SPENDBASE_API.endpoint, {
+    await fetch(SPENDBASE_API.endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({ type, ...data })
     });
-    return await response.json();
+    // no-cors mode doesn't return readable response, assume success
+    return { success: true };
   } catch (error) {
     console.error('API Error:', error);
     return { success: false, error: error.message };
