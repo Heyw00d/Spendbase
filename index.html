@@ -2061,7 +2061,7 @@ function ListCardModal({ open, onClose, darkMode }) {
                 <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Card Description</label>
                 <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Tell us about your card's unique features..." rows={3} className={`w-full px-4 py-2.5 rounded-lg text-sm resize-none ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
               </div>
-              <button onClick={handleSubmit} disabled={!formData.cardName || !formData.email || !formData.website} className={`w-full py-3 font-bold rounded-lg transition ${formData.cardName && formData.email && formData.website ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-gray-900 hover:from-cyan-300 hover:to-blue-400' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}`}>Submit for Review</button>
+              <button onClick={handleSubmit} disabled={loading || !formData.cardName || !formData.email || !formData.website} className={`w-full py-3 font-bold rounded-lg transition ${!loading && formData.cardName && formData.email && formData.website ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-gray-900 hover:from-cyan-300 hover:to-blue-400' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}`}>{loading ? 'Submitting...' : 'Submit for Review'}</button>
               <button onClick={onClose} className="w-full py-2 text-gray-500 text-sm hover:text-gray-400">Cancel</button>
             </div>
           )}
@@ -2181,7 +2181,7 @@ function AdvertiseModal({ open, onClose, darkMode }) {
                 <label className={`text-xs font-medium mb-1 block ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>Message (Optional)</label>
                 <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Tell us about your advertising goals..." rows={3} className={`w-full px-4 py-2.5 rounded-lg text-sm resize-none ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`} />
               </div>
-              <button onClick={handleSubmit} disabled={!formData.contactName || !formData.email || !formData.company} className={`w-full py-3 font-bold rounded-lg transition ${formData.contactName && formData.email && formData.company ? 'bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 hover:shadow-lg hover:shadow-lime-500/30' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}`}>Submit Inquiry</button>
+              <button onClick={handleSubmit} disabled={loading || !formData.contactName || !formData.email || !formData.company} className={`w-full py-3 font-bold rounded-lg transition ${!loading && formData.contactName && formData.email && formData.company ? 'bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 hover:shadow-lg hover:shadow-lime-500/30' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}`}>{loading ? 'Submitting...' : 'Submit Inquiry'}</button>
               <button onClick={onClose} className="w-full py-2 text-gray-500 text-sm hover:text-gray-400 transition-colors">Cancel</button>
             </div>
           )}
