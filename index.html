@@ -2664,7 +2664,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-950' : 'bg-gray-50'}`}>
       {/* SEO: This would be server-rendered with proper meta tags */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto px-4 py-4 sm:py-8">
         {/* Back Button */}
         <button
           onClick={onBack}
@@ -2677,73 +2677,73 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
         </button>
 
         {/* Hero Section */}
-        <div className={`rounded-2xl overflow-hidden mb-8 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-          <div className={`p-6 bg-gradient-to-r ${card.bg || 'from-gray-700 to-gray-800'}`}>
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-4">
-                <img src={card.logo} alt={card.name} className="w-16 h-16 rounded-xl bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
+        <div className={`rounded-2xl overflow-hidden mb-6 sm:mb-8 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+          <div className={`p-4 sm:p-6 bg-gradient-to-r ${card.bg || 'from-gray-700 to-gray-800'}`}>
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <img src={card.logo} alt={card.name} className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
                 <div>
-                  <h1 className="text-2xl font-bold text-white">{card.name}</h1>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-white/80 text-sm">{categoryLabels[card.category]}</span>
+                  <h1 className="text-xl sm:text-2xl font-bold text-white">{card.name}</h1>
+                  <div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-1">
+                    <span className="text-white/80 text-xs sm:text-sm">{categoryLabels[card.category]}</span>
                     <span className="text-white/50">•</span>
-                    <span className="text-white/80 text-sm">{card.network}</span>
+                    <span className="text-white/80 text-xs sm:text-sm">{card.network}</span>
                     {card.chain && card.chain !== 'N/A' && (
                       <>
-                        <span className="text-white/50">•</span>
-                        <span className="text-white/80 text-sm">{card.chain}</span>
+                        <span className="text-white/50 hidden sm:inline">•</span>
+                        <span className="text-white/80 text-xs sm:text-sm hidden sm:inline">{card.chain}</span>
                       </>
                     )}
                   </div>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="flex items-center gap-1">
+              <div className="flex items-center gap-2 sm:flex-col sm:items-end sm:text-right">
+                <div className="flex items-center gap-0.5 sm:gap-1">
                   {[1,2,3,4,5].map(i => (
-                    <svg key={i} className="w-5 h-5" viewBox="0 0 24 24" fill={i <= Math.round(ratingsData.composite || 3.5) ? '#FBBF24' : '#374151'}>
+                    <svg key={i} className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill={i <= Math.round(ratingsData.composite || 3.5) ? '#FBBF24' : '#374151'}>
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                     </svg>
                   ))}
                 </div>
-                <p className="text-white/80 text-sm mt-1">{(ratingsData.composite || 3.5).toFixed(1)} Composite Score</p>
+                <p className="text-white/80 text-xs sm:text-sm">{(ratingsData.composite || 3.5).toFixed(1)} Score</p>
               </div>
             </div>
           </div>
           
           {/* Quick Stats */}
-          <div className="grid grid-cols-4 divide-x divide-gray-800">
-            <div className="p-4 text-center">
-              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Cashback</p>
-              <p className={`text-lg font-bold text-lime-400`}>{card.cashback}</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y sm:divide-y-0 divide-gray-800">
+            <div className="p-3 sm:p-4 text-center">
+              <p className={`text-[10px] sm:text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Cashback</p>
+              <p className={`text-base sm:text-lg font-bold text-lime-400`}>{card.cashback}</p>
             </div>
-            <div className="p-4 text-center">
-              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>FX Fee</p>
-              <p className={`text-lg font-bold ${card.fxFee === '0%' ? 'text-lime-400' : 'text-white'}`}>{card.fxFee}</p>
+            <div className="p-3 sm:p-4 text-center">
+              <p className={`text-[10px] sm:text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>FX Fee</p>
+              <p className={`text-base sm:text-lg font-bold ${card.fxFee === '0%' ? 'text-lime-400' : 'text-white'}`}>{card.fxFee}</p>
             </div>
-            <div className="p-4 text-center">
-              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Annual Fee</p>
-              <p className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{card.annualFee || '$0'}</p>
+            <div className="p-3 sm:p-4 text-center">
+              <p className={`text-[10px] sm:text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Annual Fee</p>
+              <p className={`text-base sm:text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{card.annualFee || '$0'}</p>
             </div>
-            <div className="p-4 text-center">
-              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Custody</p>
-              <p className={`text-lg font-bold ${card.custody === 'Non-Custodial' ? 'text-lime-400' : 'text-cyan-400'}`}>{card.custody}</p>
+            <div className="p-3 sm:p-4 text-center">
+              <p className={`text-[10px] sm:text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Custody</p>
+              <p className={`text-base sm:text-lg font-bold ${card.custody === 'Non-Custodial' ? 'text-lime-400' : 'text-cyan-400'}`}>{card.custody === 'Non-Custodial' ? 'Self' : card.custody}</p>
             </div>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+        <div className="flex gap-2 mb-4 sm:mb-6 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
           {['overview', 'ratings', 'reviews', 'availability'].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition ${
+              className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition flex-shrink-0 ${
                 activeTab === tab
                   ? 'bg-lime-400 text-gray-900'
                   : (darkMode ? 'bg-gray-800 text-gray-400 hover:text-white' : 'bg-gray-200 text-gray-600 hover:text-gray-900')
               }`}
             >
-              {tab === 'overview' ? '📋 Overview' : tab === 'ratings' ? '📊 Ratings' : tab === 'reviews' ? '💬 Reviews' : '🌍 Availability'}
+              {tab === 'overview' ? '📋 Overview' : tab === 'ratings' ? '📊 Ratings' : tab === 'reviews' ? '💬 Reviews' : '🌍 Where'}
             </button>
           ))}
         </div>
@@ -2753,9 +2753,9 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
           <div className="space-y-6">
             {/* SEO Overview Paragraph */}
             {cardSEOContent[card.name]?.overview && (
-              <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-                <h2 className={`text-xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                  {card.name} Card Review 2026
+              <div className={`p-4 sm:p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+                <h2 className={`text-lg sm:text-xl font-bold mb-3 sm:mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  {card.name} Review 2026
                 </h2>
                 <div className={`prose prose-sm max-w-none ${darkMode ? 'prose-invert' : ''}`}>
                   {cardSEOContent[card.name].overview.split('\n\n').map((paragraph, i) => (
@@ -2767,27 +2767,27 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
 
             {/* Pros and Cons */}
             {cardSEOContent[card.name]?.pros && (
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-                  <h3 className={`text-lg font-bold mb-4 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <div className={`p-4 sm:p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+                  <h3 className={`text-base sm:text-lg font-bold mb-3 sm:mb-4 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                     <span className="text-green-400">✓</span> Pros
                   </h3>
-                  <ul className="space-y-3">
+                  <ul className="space-y-2 sm:space-y-3">
                     {cardSEOContent[card.name].pros.map((pro, i) => (
-                      <li key={i} className={`flex items-start gap-2 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                      <li key={i} className={`flex items-start gap-2 text-xs sm:text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                         <span className="text-green-400 mt-0.5">✓</span>
                         {pro}
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-                  <h3 className={`text-lg font-bold mb-4 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                <div className={`p-4 sm:p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+                  <h3 className={`text-base sm:text-lg font-bold mb-3 sm:mb-4 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                     <span className="text-red-400">✗</span> Cons
                   </h3>
-                  <ul className="space-y-3">
+                  <ul className="space-y-2 sm:space-y-3">
                     {cardSEOContent[card.name].cons.map((con, i) => (
-                      <li key={i} className={`flex items-start gap-2 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                      <li key={i} className={`flex items-start gap-2 text-xs sm:text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                         <span className="text-red-400 mt-0.5">✗</span>
                         {con}
                       </li>
