@@ -741,7 +741,7 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
             </div>
             {/* Learn More Button */}
             <button
-              onClick={(e) => { e.stopPropagation(); window.location.hash = `card/${card.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`; }}
+              onClick={(e) => { e.stopPropagation(); window.dispatchEvent(new CustomEvent('navigateToCard', { detail: card })); }}
               className="w-full mt-2 py-2 rounded-lg text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition flex items-center justify-center gap-2"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -1382,27 +1382,19 @@ function TermsOfService({ darkMode }) {
   );
 }
 
-function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode, searchTerm, setSearchTerm }) {
+function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, searchTerm, setSearchTerm }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  // Navigate to home - clears URL hash and sets view to cards
-  const goHome = () => {
-    window.history.pushState(null, '', '/');
-    setActiveView('cards');
-    setMobileMenuOpen(false);
-  };
-
   const handleNavClick = (view) => {
-    setActiveView(view);
+    navigateTo(view);
     setMobileMenuOpen(false);
   };
-
   return (
     <header className={`border-b sticky top-0 z-40 backdrop-blur-sm ${darkMode ? 'border-gray-800 bg-gray-950/80' : 'border-gray-200 bg-white/80'}`}>
       <div className="max-w-6xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-4">
           {/* Logo - navigates to home */}
-          <button onClick={goHome} className="flex-shrink-0">
+          <button onClick={() => handleNavClick('cards')} className="flex-shrink-0">
             <img
               src={darkMode
                 ? "https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/135aa8ee-6c5c-4779-7f78-cfbffb724600/public"
@@ -4653,8 +4645,103 @@ const mergeUserRatings = (baseRatings, userRatings) => {
   return merged;
 };
 
+// Route map: view <-> path
+const VIEW_TO_PATH = {
+  cards: '/',
+  learn: '/learn',
+  rewards: '/rewards',
+  wizard: '/find-my-card',
+  ratings: '/scores',
+  privacy: '/privacy',
+  terms: '/terms',
+  demo: '/demo',
+};
+const PATH_TO_VIEW = {};
+Object.entries(VIEW_TO_PATH).forEach(([view, path]) => { PATH_TO_VIEW[path] = view; });
+
+function getViewFromPath(pathname) {
+  if (PATH_TO_VIEW[pathname]) return { view: PATH_TO_VIEW[pathname] };
+  if (pathname.startsWith('/card/')) return { view: 'cardDetail', slug: pathname.replace('/card/', '') };
+  return { view: 'cards' }; // fallback
+}
+
+function getCardSlug(card) {
+  return card.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
+// SEO meta updater
+function updateSEO(view, cardName) {
+  const BASE = 'https://spendbase.cards';
+  const titles = {
+    cards: 'Best Crypto Cards 2025 | Compare USDC & Bitcoin Debit Cards | Spendbase',
+    learn: 'Learn About Crypto Cards | Guides & Education | Spendbase',
+    rewards: 'Video Rewards | Earn While Learning About Crypto Cards | Spendbase',
+    wizard: 'Find My Perfect Crypto Card | Card Finder Quiz | Spendbase',
+    ratings: 'Crypto Card Scores & Ratings | Community Reviews | Spendbase',
+    privacy: 'Privacy Policy | Spendbase',
+    terms: 'Terms of Service | Spendbase',
+    demo: 'Video Demo | Spendbase',
+  };
+  const descriptions = {
+    cards: 'Compare the best crypto debit cards for 2025. Find USDC, Bitcoin, and stablecoin cards with cashback, low fees, and global acceptance.',
+    learn: 'Learn everything about crypto cards — guides, education, and tips for spending your digital assets in the real world.',
+    rewards: 'Earn rewards by watching educational videos about crypto cards and decentralized finance.',
+    wizard: 'Take our 60-second quiz to find the perfect crypto debit card for your spending style.',
+    ratings: 'Community scores and ratings for crypto debit cards. See which cards users love most.',
+    privacy: 'Spendbase privacy policy — how we handle your data.',
+    terms: 'Spendbase terms of service.',
+    demo: 'Watch a video demo of Spendbase features.',
+  };
+
+  let title, desc, canonical;
+  if (view === 'cardDetail' && cardName) {
+    title = `${cardName} Crypto Card Review | Features, Fees & Cashback | Spendbase`;
+    desc = `Detailed review of the ${cardName} crypto debit card — features, fees, cashback, and community ratings.`;
+    canonical = BASE + '/card/' + cardName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  } else {
+    title = titles[view] || titles.cards;
+    desc = descriptions[view] || descriptions.cards;
+    canonical = BASE + (VIEW_TO_PATH[view] || '/');
+  }
+
+  document.title = title;
+
+  // Meta description
+  let metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) metaDesc.setAttribute('content', desc);
+
+  // Canonical
+  let canonicalEl = document.querySelector('link[rel="canonical"]');
+  if (canonicalEl) canonicalEl.setAttribute('href', canonical);
+  else {
+    canonicalEl = document.createElement('link');
+    canonicalEl.rel = 'canonical';
+    canonicalEl.href = canonical;
+    document.head.appendChild(canonicalEl);
+  }
+
+  // OG tags
+  const ogUpdates = { 'og:title': title, 'og:description': desc, 'og:url': canonical };
+  Object.entries(ogUpdates).forEach(([prop, val]) => {
+    let el = document.querySelector(`meta[property="${prop}"]`);
+    if (el) el.setAttribute('content', val);
+  });
+}
+
 function Spendbase() {
-  const [activeView, setActiveView] = useState('cards');
+  // Determine initial view from URL
+  const initialRoute = React.useMemo(() => {
+    // Backward compat: redirect #card/slug to /card/slug
+    const hash = window.location.hash;
+    if (hash.startsWith('#card/')) {
+      const slug = hash.replace('#card/', '');
+      window.history.replaceState({}, '', '/card/' + slug);
+      return { view: 'cardDetail', slug };
+    }
+    return getViewFromPath(window.location.pathname);
+  }, []);
+
+  const [activeView, setActiveView] = useState(initialRoute.view);
   const [showSubscribe, setShowSubscribe] = useState(false);
   const [showListCard, setShowListCard] = useState(false);
   const [showAdvertise, setShowAdvertise] = useState(false);
@@ -4673,41 +4760,70 @@ function Spendbase() {
   const [showCompareModal, setShowCompareModal] = useState(false);
 
   // Selected card for detail view
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedCard, setSelectedCard] = useState(() => {
+    if (initialRoute.view === 'cardDetail' && initialRoute.slug) {
+      return allCards.find(c => getCardSlug(c) === initialRoute.slug) || null;
+    }
+    return null;
+  });
 
-  // Listen for navigation events (from wizard promo banner)
-  React.useEffect(() => {
-    const handleNavigate = (e) => setActiveView(e.detail);
-    window.addEventListener('navigateTo', handleNavigate);
-    return () => window.removeEventListener('navigateTo', handleNavigate);
+  // Navigation helper: sets state + pushState + SEO
+  const navigateTo = React.useCallback((view, path, cardName) => {
+    if (path === undefined) path = VIEW_TO_PATH[view] || '/';
+    setActiveView(view);
+    window.history.pushState({ view }, '', path);
+    window.scrollTo(0, 0);
+    updateSEO(view, cardName);
   }, []);
 
-  // Handle hash-based routing for card detail pages
+  const navigateToCard = React.useCallback((card) => {
+    const slug = getCardSlug(card);
+    setSelectedCard(card);
+    setActiveView('cardDetail');
+    window.history.pushState({ view: 'cardDetail', slug }, '', '/card/' + slug);
+    window.scrollTo(0, 0);
+    updateSEO('cardDetail', card.name);
+  }, []);
+
+  // SEO on mount
   React.useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash.startsWith('#card/')) {
-        const slug = hash.replace('#card/', '');
-        const card = allCards.find(c => 
-          c.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === slug
-        );
-        if (card) {
-          setSelectedCard(card);
-          setActiveView('cardDetail');
-        }
-      } else if (hash === '' || hash === '#') {
+    updateSEO(activeView, selectedCard ? selectedCard.name : null);
+  }, []);
+
+  // Listen for navigation events (from wizard promo banner etc.)
+  React.useEffect(() => {
+    const handleNavigate = (e) => {
+      const view = e.detail;
+      navigateTo(view);
+    };
+    const handleCardNavigate = (e) => {
+      navigateToCard(e.detail);
+    };
+    window.addEventListener('navigateTo', handleNavigate);
+    window.addEventListener('navigateToCard', handleCardNavigate);
+    return () => {
+      window.removeEventListener('navigateTo', handleNavigate);
+      window.removeEventListener('navigateToCard', handleCardNavigate);
+    };
+  }, [navigateTo, navigateToCard]);
+
+  // Handle browser back/forward
+  React.useEffect(() => {
+    const handlePopState = () => {
+      const route = getViewFromPath(window.location.pathname);
+      setActiveView(route.view);
+      if (route.view === 'cardDetail' && route.slug) {
+        const card = allCards.find(c => getCardSlug(c) === route.slug);
+        setSelectedCard(card || null);
+        updateSEO('cardDetail', card ? card.name : null);
+      } else {
         setSelectedCard(null);
-        if (activeView === 'cardDetail') setActiveView('cards');
+        updateSEO(route.view);
       }
     };
-    
-    // Check on mount
-    handleHashChange();
-    
-    // Listen for changes
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [activeView]);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   // Handle card rating with localStorage persistence
   const handleRate = (cardId, rating) => {
@@ -4756,7 +4872,7 @@ function Spendbase() {
     <div className={`min-h-screen transition-colors ${darkMode ? 'bg-gray-950 text-white' : 'bg-gray-50 text-gray-900'}`}>
       <Header
         activeView={activeView}
-        setActiveView={setActiveView}
+        navigateTo={navigateTo}
         onSubscribe={() => setShowSubscribe(true)}
         darkMode={darkMode}
         setDarkMode={setDarkMode}
@@ -4764,15 +4880,15 @@ function Spendbase() {
         setSearchTerm={setSearchTerm}
       />
       <main className={compareList.length > 0 ? 'pb-32' : ''}>
-        {activeView === 'cardDetail' && selectedCard ? <CardDetailPage card={selectedCard} darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} onBack={() => { window.location.hash = ''; setSelectedCard(null); setActiveView('cards'); }} /> :
+        {activeView === 'cardDetail' && selectedCard ? <CardDetailPage card={selectedCard} darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} onBack={() => { setSelectedCard(null); navigateTo('cards'); }} /> :
          activeView === 'cards' ? <CardsView darkMode={darkMode} searchTerm={searchTerm} ratings={ratings} onRate={handleRate} userRatedCards={userRatedCards} compareList={compareList} onCompareToggle={handleCompareToggle} /> :
          activeView === 'wizard' ? <CardWizard darkMode={darkMode} /> :
          activeView === 'ratings' ? <RatingsPage darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} /> :
          activeView === 'learn' ? <LearnSection darkMode={darkMode} /> :
          activeView === 'privacy' ? <PrivacyPolicy darkMode={darkMode} /> :
          activeView === 'terms' ? <TermsOfService darkMode={darkMode} /> :
-         activeView === 'demo' ? <VideoDemoPage darkMode={darkMode} onBack={() => setActiveView('rewards')} /> :
-         <VideoRewardsPage darkMode={darkMode} onNavigateToDemo={() => setActiveView('demo')} />}
+         activeView === 'demo' ? <VideoDemoPage darkMode={darkMode} onBack={() => navigateTo('rewards')} /> :
+         <VideoRewardsPage darkMode={darkMode} onNavigateToDemo={() => navigateTo('demo')} />}
       </main>
 
       {/* Stablecoin Adoption Progress Bar */}
@@ -4845,15 +4961,15 @@ function Spendbase() {
                 List Your Card
               </button>
               <a
-                href="#privacy"
-                onClick={(e) => { e.preventDefault(); setActiveView('privacy'); }}
+                href="/privacy"
+                onClick={(e) => { e.preventDefault(); navigateTo('privacy'); }}
                 className={`text-sm hover:underline transition ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}`}
               >
                 Privacy Policy
               </a>
               <a
-                href="#terms"
-                onClick={(e) => { e.preventDefault(); setActiveView('terms'); }}
+                href="/terms"
+                onClick={(e) => { e.preventDefault(); navigateTo('terms'); }}
                 className={`text-sm hover:underline transition ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}`}
               >
                 Terms of Service
