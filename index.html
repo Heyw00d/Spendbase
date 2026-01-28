@@ -1955,6 +1955,7 @@ function SubscribeModal({ open, onClose, darkMode }) {
 // ============================================
 function ListCardModal({ open, onClose, darkMode }) {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     cardName: '',
     companyName: '',
@@ -1974,9 +1975,11 @@ function ListCardModal({ open, onClose, darkMode }) {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = () => {
-    // In production, this would send to an API
-    console.log('Card listing submission:', formData);
+  const handleSubmit = async () => {
+    if (!formData.cardName || !formData.email) return;
+    setLoading(true);
+    await submitToAPI('listing', formData);
+    setLoading(false);
     setSubmitted(true);
   };
 
@@ -2071,6 +2074,7 @@ function ListCardModal({ open, onClose, darkMode }) {
 // ============================================
 function AdvertiseModal({ open, onClose, darkMode }) {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     contactName: '',
     email: '',
@@ -2087,9 +2091,11 @@ function AdvertiseModal({ open, onClose, darkMode }) {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = () => {
-    // In production, this would send to an API
-    console.log('Advertising inquiry:', formData);
+  const handleSubmit = async () => {
+    if (!formData.email || !formData.company) return;
+    setLoading(true);
+    await submitToAPI('advertise', formData);
+    setLoading(false);
     setSubmitted(true);
   };
 
