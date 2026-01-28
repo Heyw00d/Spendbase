@@ -336,6 +336,7 @@ const allCards = [
   { id: 206, name: 'Backpack Card', logo: 'https://logo.clearbit.com/backpack.exchange', xHandle: 'Backpack', showFrontTags: true, bg: 'from-red-500 to-orange-600', network: 'Visa', category: 'cryptoNative', archetype: 'exchange', custody: 'Custodial', chain: 'Solana', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: 'TBD', annualFee: 'TBD', features: ['Mad Lads team', 'Solana native', 'Exchange integration', 'Points program'], perks: ['$363B+ volume', 'Season 4 points', 'Anticipated launch'], website: 'https://backpack.exchange', comingSoon: true, waitlistUrl: 'https://backpack.exchange', platforms: 'both' },
   { id: 207, name: 'Offgrid', logo: 'https://logo.clearbit.com/offgrid.cash', xHandle: 'offgridcash', showFrontTags: true, bg: 'from-gray-800 to-gray-950', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: '0%', cashbackToken: 'N/A', fxFee: '0%', annualFee: 'TBD', features: ['No KYC required', 'ZK-proof privacy', 'Dynamic virtual cards', 'Apple/Google Pay'], perks: ['Privacy-first', '$4K/mo limit', 'No data tracking'], website: 'https://offgrid.cash', comingSoon: true, waitlistUrl: 'https://offgrid.cash', platforms: 'both' },
   { id: 208, name: 'Keyflo', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/6dcbea33-4090-41a4-fe62-9b9b83bc3500/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/6dcbea33-4090-41a4-fe62-9b9b83bc3500/public', xHandle: 'keyfloapp', showFrontTags: true, bg: 'from-indigo-500 to-purple-600', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: 'TBD', annualFee: 'TBD', features: ['Crypto spending', 'Self-custody', 'Mobile app', 'Virtual cards'], perks: ['New entrant', 'Wallet-first', 'Coming 2026'], website: 'https://keyflo.app', comingSoon: true, waitlistUrl: 'https://keyflo.app', platforms: 'both' },
+  { id: 210, name: 'Stealf', logo: 'https://logo.clearbit.com/stealf.xyz', xHandle: 'stealf_finance', showFrontTags: true, bg: 'from-emerald-600 to-teal-800', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['europe', 'global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: 'TBD', annualFee: 'TBD', features: ['Privacy wallet', 'USDC spending', 'SEPA transfers', 'Arcium encryption'], perks: ['Two-wallet system', 'Self-custody + compliance', 'Solana-powered'], website: 'https://stealf.xyz', comingSoon: true, waitlistUrl: 'https://stealf.xyz', platforms: 'both' },
 ];
 
 const regionLabels = { global: 'Global', americas: 'Americas', europe: 'Europe', apac: 'Asia-Pacific', latam: 'Latin America', india: 'India', argentina: 'Argentina' };
@@ -730,12 +731,12 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
                 {isInCompare ? '✓ Added' : '+ Compare'}
               </button>
               <a
-                href={card.website || '#'}
+                href={card.comingSoon ? (card.waitlistUrl || card.website) : card.website || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.open(e.currentTarget.href, '_blank'); }}
-                className="flex-1 py-2 bg-gradient-to-r from-lime-400 to-emerald-500 hover:from-lime-300 hover:to-emerald-400 text-gray-900 rounded-lg text-xs font-bold text-center block transition-all hover:scale-105 hover:shadow-lg hover:shadow-lime-400/25"
-              >Apply Now</a>
+                className={`flex-1 py-2 rounded-lg text-xs font-bold text-center block transition-all hover:scale-105 hover:shadow-lg ${card.comingSoon ? 'bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-gray-900 hover:shadow-cyan-400/25' : 'bg-gradient-to-r from-lime-400 to-emerald-500 hover:from-lime-300 hover:to-emerald-400 text-gray-900 hover:shadow-lime-400/25'}`}
+              >{card.comingSoon ? 'Join Waitlist' : 'Apply Now'}</a>
             </div>
             {/* Learn More Button */}
             <button
@@ -2925,12 +2926,12 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
             {/* CTA */}
             <div className="flex gap-4">
               <a
-                href={card.website}
+                href={card.comingSoon ? (card.waitlistUrl || card.website) : card.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 py-4 rounded-xl bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 font-bold text-center hover:opacity-90 transition"
+                className={`flex-1 py-4 rounded-xl font-bold text-center hover:opacity-90 transition ${card.comingSoon ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-gray-900' : 'bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900'}`}
               >
-                Apply Now →
+                {card.comingSoon ? 'Join Waitlist →' : 'Apply Now →'}
               </a>
               {card.xHandle && (
                 <a
