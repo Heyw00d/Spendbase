@@ -1042,7 +1042,7 @@ function CardWizard({ darkMode, onViewCard }) {
     return (
       <div className="space-y-6">
         <div className="text-center">
-          <div className="text-4xl mb-3">🎉</div>
+          
           <h2 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
             Your Top Matches
           </h2>
@@ -1152,7 +1152,6 @@ function CardWizard({ darkMode, onViewCard }) {
       {!showResults && step === 1 && !answers.region && (
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-lime-400/20 to-emerald-500/20 border border-lime-400/30 mb-6">
-            <span className="text-lime-400">✨</span>
             <span className={`text-sm font-medium ${darkMode ? 'text-lime-400' : 'text-lime-600'}`}>
               Card Wizard
             </span>
@@ -1498,7 +1497,7 @@ function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, se
                       : (darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50')
                   }`}
                 >
-                  {v === 'rewards' ? '🎬 Video Rewards' : v === 'wizard' ? '✨ Find My Card' : v === 'cards' ? '💳 All Cards' : v === 'learn' ? '📚 Learn' : v.charAt(0).toUpperCase()+v.slice(1)}
+                  {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'cards' ? 'All Cards' : v === 'learn' ? 'Learn' : v.charAt(0).toUpperCase()+v.slice(1)}
                 </button>
               ))}
               {/* Mobile Subscribe button */}
@@ -1622,7 +1621,7 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
       <div className={`mb-4 sm:mb-6 p-3 sm:p-4 rounded-xl border bg-gradient-to-r ${darkMode ? 'from-lime-400/10 to-emerald-500/10 border-lime-400/30' : 'from-lime-50 to-emerald-50 border-lime-200'}`}>
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <div className="text-xl sm:text-3xl flex-shrink-0">✨</div>
+            <div className="text-xl sm:text-3xl flex-shrink-0"></div>
             <div className="min-w-0">
               <h3 className={`font-bold text-sm sm:text-base truncate ${darkMode ? 'text-white' : 'text-gray-900'}`}>Not sure which card?</h3>
               <p className={`text-xs sm:text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'} hidden sm:block`}>Take our 60-second quiz to find your perfect match</p>
@@ -1781,12 +1780,10 @@ function VideoRewardsPage({ darkMode, onNavigateToDemo }) {
             <p className="text-gray-500 text-xs">Educational content</p>
           </div>
           <div className={`rounded-xl p-4 text-center ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-sm'}`}>
-            <div className="text-2xl mb-2">💰</div>
             <p className={`font-medium text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Earn Crypto</p>
             <p className="text-gray-500 text-xs">Rewards in stablecoins</p>
           </div>
           <div className={`rounded-xl p-4 text-center ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-sm'}`}>
-            <div className="text-2xl mb-2">🏆</div>
             <p className={`font-medium text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Level Up</p>
             <p className="text-gray-500 text-xs">Unlock higher rewards</p>
           </div>
@@ -1977,7 +1974,7 @@ function SubscribeModal({ open, onClose, darkMode }) {
         <div className="p-6">
           {submitted ? (
             <div className="text-center py-4">
-              <div className="text-5xl mb-4">🎉</div>
+              
               <p className={`mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>Check your inbox for a welcome gift!</p>
               <button onClick={() => {setSubmitted(false);setFormData({name:'',email:'',country:'',monthlySpend:''});onClose()}} className={`w-full py-3 rounded-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900'}`}>Close</button>
             </div>
@@ -2052,7 +2049,7 @@ function ListCardModal({ open, onClose, darkMode }) {
         <div className="p-6 max-h-[60vh] overflow-y-auto">
           {submitted ? (
             <div className="text-center py-6">
-              <div className="text-5xl mb-4">🎉</div>
+              
               <p className={`mb-6 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
                 Thanks for submitting! Our team will review your card and reach out within 2-3 business days.
               </p>
@@ -2168,7 +2165,7 @@ function AdvertiseModal({ open, onClose, darkMode }) {
         <div className="p-6">
           {submitted ? (
             <div className="text-center py-6">
-              <div className="text-5xl mb-4">🚀</div>
+              
               <p className={`text-lg font-medium mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Inquiry Submitted!</p>
               <p className={`mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Our partnerships team will contact you shortly to discuss advertising opportunities.</p>
               <button onClick={() => {setSubmitted(false);setFormData({contactName:'',email:'',company:'',country:'',phone:'',budget:'',message:''});onClose()}} className={`w-full py-3 rounded-lg font-medium ${darkMode ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'} transition`}>Close</button>
@@ -2469,7 +2466,7 @@ function RatingsPage({ darkMode, ratings, userRatedCards, onRate }) {
         {/* Header */}
         <div className="mb-8">
           <h1 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-            📊 Card Ratings & Scores
+            Card Ratings & Scores
           </h1>
           <p className={`text-lg ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
             Transparent breakdown of how we score crypto cards
@@ -2808,7 +2805,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
                   : (darkMode ? 'bg-gray-800 text-gray-400 hover:text-white' : 'bg-gray-200 text-gray-600 hover:text-gray-900')
               }`}
             >
-              {tab === 'overview' ? '📋 Overview' : tab === 'ratings' ? '📊 Ratings' : tab === 'reviews' ? '💬 Reviews' : '🌍 Where'}
+              {tab === 'overview' ? 'Overview' : tab === 'ratings' ? 'Ratings' : tab === 'reviews' ? 'Reviews' : 'Where'}
             </button>
           ))}
         </div>
@@ -2865,7 +2862,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
             {/* FAQ Section */}
             {cardSEOContent[card.name]?.faq && (
               <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-                <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>❓ Frequently Asked Questions</h2>
+                <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Frequently Asked Questions</h2>
                 <div className="space-y-4">
                   {cardSEOContent[card.name].faq.map((item, i) => (
                     <details key={i} className={`group rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
@@ -2886,7 +2883,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
 
             {/* Features */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>✨ Features</h2>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Features</h2>
               <div className="flex flex-wrap gap-2">
                 {card.features?.map((f, i) => (
                   <span key={i} className={`px-3 py-1.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>{f}</span>
@@ -2896,7 +2893,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
 
             {/* Perks */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>🎁 Perks & Benefits</h2>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Perks & Benefits</h2>
               <div className="flex flex-wrap gap-2">
                 {card.perks?.map((p, i) => (
                   <span key={i} className="px-3 py-1.5 rounded-lg text-sm bg-lime-400/10 text-lime-400 border border-lime-400/20">{p}</span>
@@ -2906,7 +2903,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
 
             {/* Rewards */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>💰 Rewards</h2>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Rewards</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
                   <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Cashback Rate</p>
@@ -2927,7 +2924,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
             {card.token?.live && tokenMarketData[card.token.ticker] && (
               <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>📈 Token Market Data</h2>
+                  <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Token Market Data</h2>
                   <a 
                     href={`https://coinmarketcap.com/currencies/${card.token.cmc}/`}
                     target="_blank"
@@ -3049,7 +3046,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
           <div className="space-y-6">
             {/* Score Breakdown */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>📊 Score Breakdown</h2>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Score Breakdown</h2>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <ScoreBadge value={ratingsData.ios} label="iOS App Store" />
                 <ScoreBadge value={ratingsData.android} label="Google Play" />
@@ -3133,7 +3130,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
           <div className="space-y-6">
             {/* Regions */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>🌍 Available Regions</h2>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Available Regions</h2>
               <div className="flex flex-wrap gap-2">
                 {card.regions?.map((r, i) => (
                   <span key={i} className={`px-3 py-1.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
@@ -3160,7 +3157,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
 
             {/* Card Details */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>💳 Card Details</h2>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Card Details</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
                   <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Card Network</p>
@@ -4897,7 +4894,6 @@ function Spendbase() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col items-center gap-3">
             <div className="flex items-center gap-2">
-              <span className="text-2xl">💵</span>
               <h3 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
                 Global Stablecoin Adoption
               </h3>
