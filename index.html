@@ -741,7 +741,7 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
             </div>
             {/* Learn More Button */}
             <button
-              onClick={(e) => { e.stopPropagation(); window.location.hash = `card/${card.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`; }}
+              onClick={(e) => { e.stopPropagation(); const slug = card.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''); window.history.pushState(null, '', `/card/${slug}/`); window.dispatchEvent(new PopStateEvent('popstate')); }}
               className="w-full mt-2 py-2 rounded-lg text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition flex items-center justify-center gap-2"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -4682,31 +4682,56 @@ function Spendbase() {
     return () => window.removeEventListener('navigateTo', handleNavigate);
   }, []);
 
-  // Handle hash-based routing for card detail pages
+  // Handle path + hash based routing for card detail pages
   React.useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash.startsWith('#card/')) {
-        const slug = hash.replace('#card/', '');
-        const card = allCards.find(c => 
-          c.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === slug
-        );
+    const findCardBySlug = (slug) => {
+      return allCards.find(c => 
+        c.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') === slug
+      );
+    };
+
+    const handleRouteChange = () => {
+      // Check path first: /card/slug/ 
+      const pathMatch = window.location.pathname.match(/^\/card\/([^/]+)/);
+      if (pathMatch) {
+        const card = findCardBySlug(pathMatch[1]);
         if (card) {
           setSelectedCard(card);
           setActiveView('cardDetail');
+          return;
         }
-      } else if (hash === '' || hash === '#') {
+      }
+      
+      // Fallback: hash routing (#card/slug) for backward compat
+      const hash = window.location.hash;
+      if (hash.startsWith('#card/')) {
+        const slug = hash.replace('#card/', '');
+        const card = findCardBySlug(slug);
+        if (card) {
+          // Upgrade hash URL to clean path URL
+          window.history.replaceState(null, '', `/card/${slug}/`);
+          setSelectedCard(card);
+          setActiveView('cardDetail');
+          return;
+        }
+      }
+      
+      if (window.location.pathname === '/' && (hash === '' || hash === '#')) {
         setSelectedCard(null);
         if (activeView === 'cardDetail') setActiveView('cards');
       }
     };
     
     // Check on mount
-    handleHashChange();
+    handleRouteChange();
     
     // Listen for changes
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleRouteChange);
+    window.addEventListener('hashchange', handleRouteChange);
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+      window.removeEventListener('hashchange', handleRouteChange);
+    };
   }, [activeView]);
 
   // Handle card rating with localStorage persistence
@@ -4764,7 +4789,7 @@ function Spendbase() {
         setSearchTerm={setSearchTerm}
       />
       <main className={compareList.length > 0 ? 'pb-32' : ''}>
-        {activeView === 'cardDetail' && selectedCard ? <CardDetailPage card={selectedCard} darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} onBack={() => { window.location.hash = ''; setSelectedCard(null); setActiveView('cards'); }} /> :
+        {activeView === 'cardDetail' && selectedCard ? <CardDetailPage card={selectedCard} darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} onBack={() => { window.history.pushState(null, '', '/'); setSelectedCard(null); setActiveView('cards'); }} /> :
          activeView === 'cards' ? <CardsView darkMode={darkMode} searchTerm={searchTerm} ratings={ratings} onRate={handleRate} userRatedCards={userRatedCards} compareList={compareList} onCompareToggle={handleCompareToggle} /> :
          activeView === 'wizard' ? <CardWizard darkMode={darkMode} /> :
          activeView === 'ratings' ? <RatingsPage darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} /> :
