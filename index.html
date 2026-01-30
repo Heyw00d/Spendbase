@@ -2823,6 +2823,31 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
         {/* Tab Content */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
+            {/* Card Image */}
+            {(() => {
+              const slug = card.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+              return (
+                <div className={`rounded-xl overflow-hidden ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+                  <div className="p-4 sm:p-6">
+                    <h2 className={`text-lg sm:text-xl font-bold mb-4 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                      💳 {card.name} Card
+                    </h2>
+                    <div className="rounded-xl overflow-hidden shadow-2xl">
+                      <img 
+                        src={`/og-images/${slug}.png`}
+                        alt={`${card.name} crypto debit card`}
+                        className="w-full"
+                        loading="lazy"
+                      />
+                    </div>
+                    <p className={`text-xs mt-3 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                      Have a photo of this card? <a href="https://x.com/spendbasecards" target="_blank" className="text-lime-400 hover:underline">Share it with us on X</a> and we'll feature it here.
+                    </p>
+                  </div>
+                </div>
+              );
+            })()}
+
             {/* SEO Overview Paragraph */}
             {cardSEOContent[card.name]?.overview && (
               <div className={`p-4 sm:p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
