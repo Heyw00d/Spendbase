@@ -91,7 +91,8 @@
 - **Founder:** Martin Köppelmann (Twitter: @koaboramiddag)
 - **Email:** hello@gnosispay.com
 - **Twitter:** @gaboramiddag
-- **Notes:** Self-custody, EU focus
+- **Contact:** Ari Eiberman — ari.eiberman@gnosis.io (Chris's direct contact)
+- **Notes:** Self-custody, EU focus. Ari is also behind @AriEiberman / Stablecards — tests all crypto cards, LATAM focused. High-value contact.
 
 ### MetaMask / Consensys
 - **Website:** metamask.io
