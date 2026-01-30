@@ -338,6 +338,7 @@ const allCards = [
   { id: 207, name: 'Offgrid', logo: 'https://logo.clearbit.com/offgrid.cash', xHandle: 'offgridcash', showFrontTags: true, bg: 'from-gray-800 to-gray-950', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: '0%', cashbackToken: 'N/A', fxFee: '0%', annualFee: 'TBD', features: ['No KYC required', 'ZK-proof privacy', 'Dynamic virtual cards', 'Apple/Google Pay'], perks: ['Privacy-first', '$4K/mo limit', 'No data tracking'], website: 'https://offgrid.cash', comingSoon: true, waitlistUrl: 'https://offgrid.cash', platforms: 'both' },
   { id: 208, name: 'Keyflo', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/6dcbea33-4090-41a4-fe62-9b9b83bc3500/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/6dcbea33-4090-41a4-fe62-9b9b83bc3500/public', xHandle: 'keyfloapp', showFrontTags: true, bg: 'from-indigo-500 to-purple-600', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: 'TBD', annualFee: 'TBD', features: ['Crypto spending', 'Self-custody', 'Mobile app', 'Virtual cards'], perks: ['New entrant', 'Wallet-first', 'Coming 2026'], website: 'https://keyflo.app', comingSoon: true, waitlistUrl: 'https://keyflo.app', platforms: 'both' },
   { id: 210, name: 'Stealf', logo: 'https://logo.clearbit.com/stealf.xyz', xHandle: 'stealf_finance', showFrontTags: true, bg: 'from-emerald-600 to-teal-800', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['europe', 'global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: 'TBD', annualFee: 'TBD', features: ['Privacy wallet', 'USDC spending', 'SEPA transfers', 'Arcium encryption'], perks: ['Two-wallet system', 'Self-custody + compliance', 'Solana-powered'], website: 'https://stealf.xyz', comingSoon: true, waitlistUrl: 'https://stealf.xyz', platforms: 'both' },
+  { id: 211, name: 'Jupiter Card', logo: 'https://logo.clearbit.com/jup.ag', xHandle: 'jup_mobile', showFrontTags: true, bg: 'from-green-400 to-emerald-600', network: 'Credit Card Network', category: 'cryptoNative', archetype: 'exchange', custody: 'Custodial', chain: 'Solana', regions: ['global'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: '1.8%', annualFee: '$0', features: ['Credit card program', 'USDC deposits 1:1', 'Jupiter ID verification', 'Apple Pay & Google Pay'], perks: ['Credit card rails', 'Physical card May 2026', 'Jupiter ecosystem', 'Instant card freeze'], website: 'https://jup.ag/mobile', platforms: 'both' },
 ];
 
 const regionLabels = { global: 'Global', americas: 'Americas', europe: 'Europe', apac: 'Asia-Pacific', latam: 'Latin America', india: 'India', argentina: 'Argentina' };
@@ -4299,6 +4300,25 @@ BitPay is best for users who want a simple, established solution without bells a
     faq: [
       { q: "Is Wayex Australian?", a: "Yes, Wayex is an Australian crypto exchange serving the local market." },
       { q: "Is Wayex available elsewhere?", a: "Wayex primarily serves Australia. Check their website for other region availability." }
+    ]
+  },
+  'Jupiter Card': {
+    seoTitle: "Jupiter Card Review 2026: Solana Credit Card by Jupiter Exchange | Spendbase",
+    metaDescription: "Jupiter Card is a credit card from Jupiter Exchange. USDC deposits at 1:1, no annual fee, 1.8% FX fee. Apple Pay & Google Pay. Physical card coming May 2026 →",
+    overview: `The Jupiter Card is a crypto spending card from Jupiter Exchange, the largest DEX aggregator on Solana. Unlike most crypto cards that use prepaid or debit rails, Jupiter runs on a credit card program — meaning stronger merchant acceptance, smoother refunds, and fewer declined transactions.
+
+You fund the card with USDC at a 1:1 rate with no deposit fees. The card uses Jupiter ID for identity verification, which is separate from your Jupiter Mobile wallet — your wallet funds stay isolated and secure. The card is digital-first at launch, with Apple Pay and Google Pay support, and a physical card planned for May 2026.
+
+At 1.8% FX fee for non-USD payments (planned to be reduced), it's competitive but not the cheapest for international spending. There's no annual fee, which makes it accessible. The credit card rails are a genuine differentiator — many crypto prepaid cards suffer from merchant declines and clunky refund processes that Jupiter avoids by design.
+
+Best for Solana ecosystem users who want reliable real-world spending backed by Jupiter's infrastructure. The Jupiter ecosystem integration (JUP token, JupUSD stablecoin, Jupiter Mobile wallet) makes this a natural fit for existing Jupiter users.`,
+    pros: ["Credit card rails (fewer declines)", "No annual fee", "USDC deposits at 1:1", "Apple Pay & Google Pay", "Jupiter ecosystem integration"],
+    cons: ["1.8% FX fee on non-USD", "Digital only at launch", "KYC required", "Select countries only", "No cashback announced yet"],
+    faq: [
+      { q: "How is the Jupiter Card different from other crypto cards?", a: "Jupiter Card runs on credit card rails rather than prepaid/debit, which means better merchant acceptance, smoother refunds, and fewer declined transactions compared to most crypto cards." },
+      { q: "Is the Jupiter Card a credit card?", a: "It uses a credit card program for infrastructure and merchant acceptance, but you fund it with USDC deposits. It's not a traditional revolving credit line." },
+      { q: "When will the physical Jupiter Card be available?", a: "Jupiter plans to launch a physical card in May 2026. At launch, the card is digital-only with Apple Pay and Google Pay support." },
+      { q: "Is my Jupiter wallet connected to the card?", a: "No. Jupiter ID is separate from your Jupiter Mobile wallet. The card does not have access to your wallet funds — it only uses your identity verification and card balance." }
     ]
   }
 };
