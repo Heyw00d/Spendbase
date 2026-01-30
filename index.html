@@ -1624,7 +1624,7 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
     else if (custodyFilter === 'custodial') filtered = filtered.filter(c => c.custody === 'Custodial' || c.custody === 'Hybrid');
   }
   if (networkFilter !== 'all') filtered = filtered.filter(c => c.network.toLowerCase() === networkFilter);
-  if (regionFilter !== 'all') filtered = filtered.filter(c => c.regions?.includes(regionFilter));
+  if (regionFilter !== 'all') filtered = filtered.filter(c => c.regions?.includes(regionFilter) || c.regions?.includes('global'));
   if (archetypeFilter !== 'all') filtered = filtered.filter(c => c.archetype === archetypeFilter);
   if (platformFilter !== 'all') {
     if (platformFilter === 'ios') filtered = filtered.filter(c => c.platforms === 'ios' || c.platforms === 'both');
