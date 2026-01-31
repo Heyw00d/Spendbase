@@ -1455,7 +1455,10 @@ function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode,
     setMobileMenuOpen(false);
   };
 
+  const viewPaths = { cards: '/', wizard: '/find-my-card', ratings: '/scores', learn: '/learn', blog: '/blog', rewards: '/rewards' };
   const handleNavClick = (view) => {
+    const path = viewPaths[view] || '/';
+    window.history.pushState(null, '', path);
     setActiveView(view);
     setMobileMenuOpen(false);
   };
@@ -2732,15 +2735,7 @@ function RatingsPage({ darkMode, ratings, userRatedCards, onRate }) {
                       {card.hasUserRated ? (
                         <span className="text-xs text-lime-400">✓ Voted</span>
                       ) : (
-                        <button
-                          onClick={() => {
-                            const event = new CustomEvent('navigate', { detail: 'cards' });
-                            window.dispatchEvent(event);
-                          }}
-                          className="text-xs px-3 py-1.5 rounded-lg bg-lime-400 text-gray-900 font-medium hover:bg-lime-300 transition"
-                        >
-                          Rate
-                        </button>
+                        <StarRating rating={0} onRate={(r) => onRate && onRate(card.id, r)} size="sm" interactive={true} darkMode={darkMode} />
                       )}
                     </td>
                   </tr>
@@ -4965,9 +4960,13 @@ function Spendbase() {
       );
     };
 
+    const pathToView = { '/': 'cards', '/find-my-card': 'wizard', '/scores': 'ratings', '/learn': 'learn', '/blog': 'blog', '/rewards': 'rewards' };
+
     const handleRouteChange = () => {
+      const pathname = window.location.pathname;
+      
       // Check path first: /card/slug/ 
-      const pathMatch = window.location.pathname.match(/^\/card\/([^/]+)/);
+      const pathMatch = pathname.match(/^\/card\/([^/]+)/);
       if (pathMatch) {
         const card = findCardBySlug(pathMatch[1]);
         if (card) {
@@ -4975,6 +4974,14 @@ function Spendbase() {
           setActiveView('cardDetail');
           return;
         }
+      }
+
+      // Check view paths: /blog, /scores, /learn, etc.
+      const viewFromPath = pathToView[pathname];
+      if (viewFromPath) {
+        setSelectedCard(null);
+        setActiveView(viewFromPath);
+        return;
       }
       
       // Fallback: hash routing (#card/slug) for backward compat
@@ -4991,7 +4998,7 @@ function Spendbase() {
         }
       }
       
-      if (window.location.pathname === '/' && (hash === '' || hash === '#')) {
+      if (pathname === '/' && (hash === '' || hash === '#')) {
         setSelectedCard(null);
         if (activeView === 'cardDetail') setActiveView('cards');
       }
