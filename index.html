@@ -194,6 +194,11 @@ const SPENDBASE_API = {
   endpoint: 'https://script.google.com/macros/s/AKfycbwF2uTFxGqrJvPnwgwQJ54b6mwZCeZ6B9SXJrZq2hmaqb90IKUOazuXXZXsBgy0lE2CfQ/exec'
 };
 
+// Email validation
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+}
+
 // Form submission helper (Google Apps Script requires no-cors mode)
 async function submitToAPI(type, data) {
   try {
@@ -1890,7 +1895,7 @@ function VideoRewardsPage({ darkMode, onNavigateToDemo }) {
   const [rewardsLoading, setRewardsLoading] = useState(false);
 
   const handleRewardsSignup = async () => {
-    if (!rewardsEmail) return;
+    if (!rewardsEmail || !isValidEmail(rewardsEmail)) return;
     setRewardsLoading(true);
     await submitToAPI('subscribe', { email: rewardsEmail, source: 'video-rewards' });
     setRewardsLoading(false);
@@ -1964,7 +1969,7 @@ function VideoRewardsPage({ darkMode, onNavigateToDemo }) {
                 />
                 <button 
                   onClick={handleRewardsSignup}
-                  disabled={rewardsLoading || !rewardsEmail}
+                  disabled={rewardsLoading || !rewardsEmail || !isValidEmail(rewardsEmail)}
                   className="px-6 py-3 bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 font-bold rounded-lg text-sm whitespace-nowrap hover:opacity-90 transition disabled:opacity-50"
                 >
                   {rewardsLoading ? '...' : 'Notify Me'}
@@ -2127,7 +2132,7 @@ function SubscribeModal({ open, onClose, darkMode }) {
   if (!open) return null;
 
   const handleSubmit = async () => {
-    if (!formData.email) return;
+    if (!formData.email || !isValidEmail(formData.email)) return;
     setLoading(true);
     await submitToAPI('subscribe', { ...formData, source: 'modal' });
     setLoading(false);
@@ -2165,7 +2170,7 @@ function SubscribeModal({ open, onClose, darkMode }) {
               <input type="email" placeholder="Email" value={formData.email} onChange={e => setFormData(p => ({...p, email: e.target.value}))} className={`w-full px-4 py-3 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`} />
               <select value={formData.country} onChange={e => setFormData(p => ({...p, country: e.target.value}))} className={`w-full px-4 py-3 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`}><option value="">Country</option><option value="US">US</option><option value="UK">UK</option><option value="EU">EU</option><option value="Other">Other</option></select>
               <select value={formData.monthlySpend} onChange={e => setFormData(p => ({...p, monthlySpend: e.target.value}))} className={`w-full px-4 py-3 rounded-lg ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`}><option value="">Monthly spend</option><option value="<500">Less than $500</option><option value="500-5000">$500-$5,000</option><option value="5000+">$5,000+</option></select>
-              <button onClick={handleSubmit} disabled={loading || !formData.email} className="w-full py-3 bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 font-bold rounded-lg hover:shadow-lg hover:shadow-lime-500/30 transition-all disabled:opacity-50">{loading ? 'Subscribing...' : 'Subscribe for Free'}</button>
+              <button onClick={handleSubmit} disabled={loading || !formData.email || !isValidEmail(formData.email)} className="w-full py-3 bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 font-bold rounded-lg hover:shadow-lg hover:shadow-lime-500/30 transition-all disabled:opacity-50">{loading ? 'Subscribing...' : 'Subscribe for Free'}</button>
               <p className={`text-xs text-center ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>No spam. Unsubscribe anytime.</p>
               <button onClick={onClose} className="w-full py-2 text-gray-500 text-sm hover:text-gray-400 transition-colors">Maybe later</button>
             </div>
@@ -2424,7 +2429,7 @@ function FooterNewsletter({ darkMode }) {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    if (!email) return;
+    if (!email || !isValidEmail(email)) return;
     setLoading(true);
     await submitToAPI('subscribe', { email, source: 'footer' });
     setLoading(false);
@@ -2455,7 +2460,7 @@ function FooterNewsletter({ darkMode }) {
         />
         <button
           onClick={handleSubmit}
-          disabled={loading || !email}
+          disabled={loading || !email || !isValidEmail(email)}
           className="px-5 py-2.5 bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 font-bold rounded-lg text-sm whitespace-nowrap hover:shadow-lg hover:shadow-lime-500/20 transition-all disabled:opacity-50"
         >
           {loading ? '...' : 'Subscribe'}
