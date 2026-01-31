@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080, height=1080">
+<title>Spendbase Card Showcase V2</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0f;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1200px;
+  }
+
+  /* ── Background layers ── */
+  .bg-gradient {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+  }
+  .bg-gradient.active { opacity: 1; }
+
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.012) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.012) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 0;
+  }
+
+  .particles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 1;
+  }
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,.35), transparent 70%);
+    animation: float-particle linear infinite;
+    opacity: 0;
+  }
+  @keyframes float-particle {
+    0%   { transform: translateY(100px) scale(.5); opacity: 0; }
+    15%  { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { transform: translateY(-1100px) scale(1.2); opacity: 0; }
+  }
+
+  /* Ambient glow blobs */
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: 0;
+    transition: background 1s ease, opacity 1s ease;
+  }
+  .glow-1 { width: 500px; height: 500px; top: 15%; left: 10%; opacity: 0.5; }
+  .glow-2 { width: 400px; height: 400px; bottom: 10%; right: 5%; opacity: 0.4; }
+  .glow-3 { width: 350px; height: 350px; top: 50%; left: 55%; opacity: 0.3; }
+
+  /* ── Card scene ── */
+  .card-scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .card-wrapper {
+    position: absolute;
+    z-index: 2;
+    transform-style: preserve-3d;
+    opacity: 0;
+    transform: translateY(350px) rotateX(15deg) rotateY(-5deg) scale(.85);
+    filter: blur(12px);
+  }
+
+  /* ── Card ── */
+  .card {
+    width: 520px;
+    height: 328px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 25px 60px rgba(0,0,0,.6),
+      0 0 80px rgba(99,60,200,.12),
+      inset 0 1px 0 rgba(255,255,255,.06),
+      inset 0 -1px 0 rgba(0,0,0,.3);
+    transform-style: preserve-3d;
+  }
+
+  /* Holographic edge border */
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, rgba(168,85,247,.3), rgba(56,130,240,.2), rgba(168,85,247,.1), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* Light sweep */
+  .light-sweep {
+    position: absolute;
+    top: -50%;
+    left: -80%;
+    width: 80%;
+    height: 200%;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255,255,255,.04) 42%,
+      rgba(255,255,255,.1) 48%,
+      rgba(255,255,255,.04) 54%,
+      transparent 66%
+    );
+    pointer-events: none;
+    z-index: 4;
+    transform: translateX(0%);
+  }
+
+  /* Holographic foil overlay */
+  .holo-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background:
+      repeating-linear-gradient(
+        120deg,
+        rgba(168,85,247,.02) 0px,
+        rgba(56,182,255,.02) 4px,
+        rgba(168,85,247,.02) 8px
+      );
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* Card content */
+  .card-content {
+    position: relative;
+    z-index: 2;
+    padding: 28px 32px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .brand-logo {
+    height: 28px;
+    max-width: 180px;
+    object-fit: contain;
+    object-position: left center;
+  }
+
+  .brand-name-fallback {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(168,85,247,.2);
+    display: none;
+  }
+
+  .contactless {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    opacity: .5;
+  }
+  .contactless span {
+    position: absolute;
+    border: 2px solid rgba(255,255,255,.5);
+    border-radius: 50%;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    transform: rotate(-45deg);
+  }
+  .contactless span:nth-child(1) { width: 12px; height: 12px; bottom: 2px; left: 10px; }
+  .contactless span:nth-child(2) { width: 20px; height: 20px; bottom: 2px; left: 6px; }
+  .contactless span:nth-child(3) { width: 28px; height: 28px; bottom: 2px; left: 2px; }
+
+  /* Dark text contactless for Gnosis */
+  .dark-text .contactless span {
+    border-color: rgba(0,0,0,.4);
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+  }
+
+  .chip {
+    width: 52px;
+    height: 40px;
+    border-radius: 8px;
+    background: linear-gradient(145deg, #d4a853, #c49b3a, #b8892e, #d4a853);
+    position: relative;
+    margin-top: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.2);
+  }
+  .chip::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1.5px solid rgba(0,0,0,.15);
+    border-radius: 3px;
+  }
+  .chip::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 6px;
+    right: 6px;
+    height: 1.5px;
+    background: rgba(0,0,0,.12);
+    transform: translateY(-50%);
+  }
+  .chip-lines {
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 50%;
+    width: 1.5px;
+    background: rgba(0,0,0,.12);
+    transform: translateX(-50%);
+  }
+
+  .card-number {
+    font-size: 21px;
+    letter-spacing: 5px;
+    color: rgba(255,255,255,.65);
+    font-weight: 400;
+    margin-top: 8px;
+  }
+  .dark-text .card-number {
+    color: rgba(0,0,0,.5);
+  }
+
+  .card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .cashback-badge {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.9);
+    background: rgba(255,255,255,.08);
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.1);
+  }
+  .dark-text .cashback-badge {
+    color: rgba(0,0,0,.85);
+    background: rgba(0,0,0,.08);
+    border-color: rgba(0,0,0,.12);
+  }
+
+  /* Visa logo */
+  .visa-logo {
+    font-size: 28px;
+    font-weight: 700;
+    font-style: italic;
+    color: rgba(255,255,255,.7);
+    letter-spacing: 2px;
+  }
+  .dark-text .visa-logo {
+    color: rgba(0,0,0,.6);
+  }
+
+  /* Mastercard logo */
+  .mastercard-logo {
+    display: flex;
+    gap: 0;
+  }
+  .mastercard-logo .mc-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    opacity: .7;
+  }
+  .mastercard-logo .mc-circle:first-child {
+    background: #eb001b;
+  }
+  .mastercard-logo .mc-circle:last-child {
+    background: #f79e1b;
+    margin-left: -12px;
+  }
+
+  /* Gnosis special: lime border glow */
+  .card.gnosis-card {
+    box-shadow:
+      0 25px 60px rgba(0,0,0,.6),
+      0 0 80px rgba(163,230,53,.15),
+      inset 0 1px 0 rgba(255,255,255,.06),
+      inset 0 -1px 0 rgba(0,0,0,.3);
+  }
+  .card.gnosis-card::before {
+    background: linear-gradient(135deg, rgba(163,230,53,.4), rgba(132,204,22,.3), rgba(163,230,53,.15), transparent);
+  }
+
+  /* Phantom holographic card */
+  .card.phantom-card {
+    box-shadow:
+      0 25px 60px rgba(0,0,0,.6),
+      0 0 60px rgba(168,85,247,.15),
+      0 0 60px rgba(56,200,200,.1),
+      inset 0 1px 0 rgba(255,255,255,.08),
+      inset 0 -1px 0 rgba(0,0,0,.3);
+  }
+  .phantom-holo {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0.4;
+  }
+
+  /* ── End frame ── */
+  .end-frame {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    background: linear-gradient(145deg, #0a0f1e 0%, #0d1a2a 40%, #0a1628 100%);
+  }
+
+  .end-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .end-frame::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: -80px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(15,118,110,0.25) 0%, transparent 70%);
+  }
+
+  .end-left {
+    position: absolute;
+    left: 70px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    max-width: 520px;
+  }
+
+  .end-logo-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 32px;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .end-logo-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #0F766E, #14B8A6);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 800;
+    color: white;
+    box-shadow: 0 4px 12px rgba(15,118,110,0.4);
+  }
+
+  .end-logo-text {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.5px;
+  }
+
+  .end-title {
+    font-size: 58px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .end-title .accent {
+    background: linear-gradient(90deg, #14B8A6, #5EEAD4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .end-subtitle {
+    font-size: 24px;
+    color: rgba(255,255,255,.6);
+    font-weight: 400;
+    margin-bottom: 12px;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .end-url {
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(255,255,255,.35);
+    letter-spacing: 0.5px;
+    margin-top: 8px;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .end-stats {
+    display: flex;
+    gap: 36px;
+    margin-top: 36px;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .stat-num {
+    font-size: 34px;
+    font-weight: 800;
+    color: #5EEAD4;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: rgba(255,255,255,.5);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 4px;
+  }
+
+  /* End frame card fan */
+  .end-right {
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 420px;
+    height: 480px;
+  }
+
+  .end-mini-card {
+    position: absolute;
+    width: 300px;
+    height: 190px;
+    border-radius: 18px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border: 1px solid rgba(255,255,255,.08);
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  .end-mini-card .mini-chip {
+    width: 36px;
+    height: 26px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 5px;
+    opacity: 0.85;
+  }
+
+  .end-mini-card .mini-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .end-mini-card .mini-dots {
+    font-size: 13px;
+    color: rgba(255,255,255,.6);
+    letter-spacing: 2px;
+  }
+
+  .end-mini-card .mini-network {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255,255,255,.7);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Positioned fan cards */
+  .end-mini-card:nth-child(1) {
+    /* Ether.fi - dark purple */
+    background: linear-gradient(135deg, #1e1b4b, #3b0764);
+    transform: rotate(-12deg) translateY(40px);
+    top: 30px;
+    left: 0px;
+    z-index: 1;
+  }
+  .end-mini-card:nth-child(2) {
+    /* Ready - violet */
+    background: linear-gradient(135deg, #7c3aed, #581c87);
+    transform: rotate(0deg) translateY(40px);
+    top: 120px;
+    left: 40px;
+    z-index: 2;
+  }
+  .end-mini-card:nth-child(3) {
+    /* Phantom - holographic purple/teal */
+    background: linear-gradient(135deg, #7c3aed, #0d9488, #ec4899);
+    transform: rotate(12deg) translateY(40px);
+    top: 220px;
+    left: 70px;
+    z-index: 3;
+  }
+
+  .end-s-badge {
+    position: absolute;
+    bottom: 40px;
+    right: 10px;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #0F766E, #14B8A6);
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    font-weight: 800;
+    color: white;
+    z-index: 10;
+    box-shadow: 0 6px 20px rgba(15,118,110,0.5);
+    opacity: 0;
+    transform: scale(0.5);
+  }
+</style>
+</head>
+<body>
+
+<!-- Background layers -->
+<div class="bg-gradient active" id="bg-0" style="background: radial-gradient(ellipse at 40% 40%, rgba(30,27,75,.6) 0%, #0a0a0f 70%);"></div>
+<div class="bg-gradient" id="bg-1" style="background: radial-gradient(ellipse at 40% 40%, rgba(124,58,237,.3) 0%, #0a0a0f 70%);"></div>
+<div class="bg-gradient" id="bg-2" style="background: radial-gradient(ellipse at 40% 40%, rgba(23,37,84,.4) 0%, #0a0a0f 70%);"></div>
+<div class="bg-gradient" id="bg-3" style="background: radial-gradient(ellipse at 40% 40%, rgba(132,204,22,.15) 0%, #0a0a0f 70%);"></div>
+<div class="bg-gradient" id="bg-4" style="background: radial-gradient(ellipse at 40% 40%, rgba(168,85,247,.15) 0%, rgba(13,148,136,.1) 30%, #0a0a0f 70%);"></div>
+<div class="bg-gradient" id="bg-5" style="background: #0a0a0f;"></div>
+
+<div class="grid-bg"></div>
+<div class="particles" id="particles"></div>
+<div class="glow glow-1" id="glow1"></div>
+<div class="glow glow-2" id="glow2"></div>
+<div class="glow glow-3" id="glow3"></div>
+
+<!-- Card scene -->
+<div class="card-scene" id="cardScene"></div>
+
+<!-- End frame (OG image style) -->
+<div class="end-frame" id="endFrame">
+  <div class="end-left">
+    <div class="end-logo-row" id="endLogo">
+      <div class="end-logo-icon">S</div>
+      <span class="end-logo-text">Spendbase</span>
+    </div>
+    <div class="end-title" id="endTitle">Compare <span class="accent">100+ Crypto Cards</span> in Seconds</div>
+    <div class="end-subtitle" id="endSubtitle">Find the best crypto debit card</div>
+    <div class="end-url" id="endUrl">spendbase.cards</div>
+    <div class="end-stats" id="endStats">
+      <div>
+        <div class="stat-num">100+</div>
+        <div class="stat-label">Cards Ranked</div>
+      </div>
+      <div>
+        <div class="stat-num">15%</div>
+        <div class="stat-label">Max Cashback</div>
+      </div>
+      <div>
+        <div class="stat-num">Free</div>
+        <div class="stat-label">Forever</div>
+      </div>
+    </div>
+  </div>
+  <div class="end-right" id="endRight">
+    <div class="end-mini-card">
+      <div class="mini-chip"></div>
+      <div class="mini-bottom">
+        <span class="mini-dots">•••• 4289</span>
+        <span class="mini-network">Visa</span>
+      </div>
+    </div>
+    <div class="end-mini-card">
+      <div class="mini-chip"></div>
+      <div class="mini-bottom">
+        <span class="mini-dots">•••• 7103</span>
+        <span class="mini-network">Mastercard</span>
+      </div>
+    </div>
+    <div class="end-mini-card">
+      <div class="mini-chip"></div>
+      <div class="mini-bottom">
+        <span class="mini-dots">•••• 5521</span>
+        <span class="mini-network">Visa</span>
+      </div>
+    </div>
+    <div class="end-s-badge" id="endBadge">S</div>
+  </div>
+</div>
+
+<script>
+// ── Card data ──
+const cards = [
+  {
+    brand: 'ETHER.FI CASH',
+    wordmark: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/c0a1aadf-eb8b-48a1-f5b2-26ad5c819f00/public',
+    network: 'visa',
+    cashback: '4.08% ETHFI',
+    surface: 'linear-gradient(135deg, #1e1b4b 0%, #2d1a5e 50%, #3b0764 100%)',
+    bgIndex: 0,
+    glowColor: 'rgba(59,7,100,.35)',
+    darkText: false,
+  },
+  {
+    brand: 'READY',
+    wordmark: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/a7aa5395-2ba3-4391-ebe0-12c023986e00/public',
+    network: 'mastercard',
+    cashback: '0.5-3% STRK',
+    surface: 'linear-gradient(135deg, #7c3aed 0%, #6a28c9 50%, #581c87 100%)',
+    bgIndex: 1,
+    glowColor: 'rgba(124,58,237,.3)',
+    darkText: false,
+  },
+  {
+    brand: 'CRYPTO.COM',
+    wordmark: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/fa583429-3106-4762-639f-91dd7b61e000/public',
+    network: 'visa',
+    cashback: '1-8% CRO',
+    surface: 'linear-gradient(135deg, #020617 0%, #0c1a3e 50%, #172554 100%)',
+    bgIndex: 2,
+    glowColor: 'rgba(23,37,84,.4)',
+    darkText: false,
+  },
+  {
+    brand: 'GNOSIS PAY',
+    wordmark: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/8434b949-5767-41e1-857b-2ddbf2efdb00/public',
+    network: 'visa',
+    cashback: '1-5% GNO',
+    surface: 'linear-gradient(135deg, #a3e635 0%, #93d529 50%, #84cc16 100%)',
+    bgIndex: 3,
+    glowColor: 'rgba(163,230,53,.2)',
+    darkText: true,
+    className: 'gnosis-card',
+  },
+  {
+    brand: 'PHANTOM CASH',
+    wordmark: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/c86440c7-dbdc-4025-d22f-178f370ba900/public',
+    network: 'visa',
+    cashback: '2% CASH',
+    surface: 'linear-gradient(135deg, #4c1d95 0%, #0d9488 50%, #be185d 100%)',
+    bgIndex: 4,
+    glowColor: 'rgba(168,85,247,.2)',
+    darkText: false,
+    className: 'phantom-card',
+    holographic: true,
+  }
+];
+
+const CARD_DURATION = 4200;
+const END_CARD_DURATION = 5000;
+const TOTAL_DURATION = cards.length * CARD_DURATION + END_CARD_DURATION;
+
+// ── Create particles ──
+const particleContainer = document.getElementById('particles');
+for (let i = 0; i < 25; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random() * 6 + 2;
+  p.style.width = size + 'px';
+  p.style.height = size + 'px';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.top = Math.random() * 100 + '%';
+  p.style.animationDuration = (Math.random() * 8 + 6) + 's';
+  p.style.animationDelay = (Math.random() * 8) + 's';
+  particleContainer.appendChild(p);
+}
+
+// ── Build card elements ──
+const cardScene = document.getElementById('cardScene');
+const cardElements = [];
+
+cards.forEach((c, i) => {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'card-wrapper';
+  wrapper.id = `card-${i}`;
+
+  const networkHTML = c.network === 'visa'
+    ? `<div class="visa-logo">VISA</div>`
+    : `<div class="mastercard-logo"><div class="mc-circle"></div><div class="mc-circle"></div></div>`;
+
+  const holoHTML = c.holographic
+    ? `<div class="phantom-holo" id="phantomHolo"></div>`
+    : '';
+
+  const textColorClass = c.darkText ? 'dark-text' : '';
+  const fallbackColor = c.darkText ? 'color: rgba(0,0,0,.85)' : 'color: #fff';
+
+  wrapper.innerHTML = `
+    <div class="card ${c.className || ''}" style="background: ${c.surface};">
+      <div class="holo-overlay"></div>
+      ${holoHTML}
+      <div class="light-sweep" id="sweep-${i}"></div>
+      <div class="card-content ${textColorClass}">
+        <div class="card-top">
+          <div>
+            <img class="brand-logo" id="logo-${i}" src="${c.wordmark}" alt="${c.brand}" 
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                 crossorigin="anonymous">
+            <div class="brand-name-fallback" style="${fallbackColor}">${c.brand}</div>
+          </div>
+          <div class="contactless">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div>
+          <div class="chip"><div class="chip-lines"></div></div>
+          <div class="card-number">••••  ••••  ••••  ••••</div>
+        </div>
+        <div class="card-bottom">
+          <div class="cashback-badge">${c.cashback}</div>
+          ${networkHTML}
+        </div>
+      </div>
+    </div>
+  `;
+
+  cardScene.appendChild(wrapper);
+  cardElements.push(wrapper);
+});
+
+// ── Easing functions ──
+function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+function easeInCubic(t) { return t * t * t; }
+function easeOutBack(t) { const c1 = 1.70158; const c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); }
+
+function setGlowColors(color) {
+  document.getElementById('glow1').style.background = color;
+  document.getElementById('glow2').style.background = color;
+  document.getElementById('glow3').style.background = color;
+}
+
+function animateCard(wrapper, progress, sweepEl) {
+  let ty = 0, rx = 0, ry = 0, s = 1, opacity = 0, blur = 0;
+
+  if (progress < 0.18) {
+    const t = progress / 0.18;
+    const e = easeOutCubic(t);
+    ty = 350 * (1 - e);
+    rx = 15 * (1 - e);
+    ry = -5 * (1 - e);
+    s = 0.85 + 0.15 * e;
+    opacity = e;
+    blur = 12 * (1 - e);
+  } else if (progress < 0.78) {
+    const t = (progress - 0.18) / 0.6;
+    const floatPhase = t * Math.PI * 2;
+    ty = -10 + Math.sin(floatPhase) * 8;
+    rx = Math.sin(floatPhase * 0.8) * 4;
+    ry = Math.cos(floatPhase * 0.6) * 6;
+    s = 1 + Math.sin(floatPhase * 0.5) * 0.01;
+    opacity = 1;
+    blur = 0;
+  } else {
+    const t = (progress - 0.78) / 0.22;
+    const e = easeInCubic(t);
+    ty = -80 * e;
+    rx = -8 * e;
+    s = 1 - 0.08 * e;
+    opacity = 1 - e;
+    blur = 8 * e;
+  }
+
+  wrapper.style.transform = `translateY(${ty}px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${s})`;
+  wrapper.style.opacity = opacity;
+  wrapper.style.filter = `blur(${blur}px)`;
+
+  if (sweepEl) {
+    if (progress > 0.2 && progress < 0.65) {
+      const sweepT = (progress - 0.2) / 0.45;
+      sweepEl.style.transform = `translateX(${sweepT * 350}%)`;
+    } else {
+      sweepEl.style.transform = `translateX(0%)`;
+    }
+  }
+}
+
+function animateEndFrame(progress) {
+  const endFrame = document.getElementById('endFrame');
+  const logo = document.getElementById('endLogo');
+  const title = document.getElementById('endTitle');
+  const subtitle = document.getElementById('endSubtitle');
+  const url = document.getElementById('endUrl');
+  const stats = document.getElementById('endStats');
+  const badge = document.getElementById('endBadge');
+  const miniCards = document.querySelectorAll('.end-mini-card');
+
+  if (progress <= 0) {
+    endFrame.style.opacity = 0;
+    return;
+  }
+
+  endFrame.style.opacity = Math.min(1, progress * 5);
+
+  const fadeIn = (el, start, duration, yOffset = 30) => {
+    const t = Math.max(0, Math.min(1, (progress - start) / duration));
+    const e = easeOutCubic(t);
+    el.style.opacity = e;
+    el.style.transform = `translateY(${yOffset * (1 - e)}px)`;
+  };
+
+  // Staggered animations
+  fadeIn(logo, 0.05, 0.2, 20);
+  fadeIn(title, 0.12, 0.22, 30);
+  fadeIn(subtitle, 0.22, 0.2, 20);
+  fadeIn(url, 0.28, 0.2, 20);
+  fadeIn(stats, 0.34, 0.22, 20);
+
+  // Fan cards with rotation preserved
+  miniCards.forEach((card, i) => {
+    const start = 0.08 + i * 0.08;
+    const t = Math.max(0, Math.min(1, (progress - start) / 0.25));
+    const e = easeOutBack(t);
+    const rotations = [-12, 0, 12];
+    card.style.opacity = e;
+    card.style.transform = `rotate(${rotations[i]}deg) translateY(${40 * (1 - e)}px)`;
+  });
+
+  // S badge pop
+  const badgeT = Math.max(0, Math.min(1, (progress - 0.4) / 0.2));
+  const badgeE = easeOutBack(badgeT);
+  badge.style.opacity = badgeE;
+  badge.style.transform = `scale(${0.5 + 0.5 * badgeE})`;
+}
+
+function updatePhantomHolo(time) {
+  const holo = document.getElementById('phantomHolo');
+  if (!holo) return;
+  const t = time / 1000;
+  const hue1 = (t * 40) % 360;
+  const hue2 = (hue1 + 120) % 360;
+  const hue3 = (hue1 + 240) % 360;
+  holo.style.background = `linear-gradient(${t * 20}deg, 
+    hsla(${hue1}, 80%, 60%, 0.15), 
+    hsla(${hue2}, 70%, 50%, 0.1), 
+    hsla(${hue3}, 80%, 60%, 0.15))`;
+}
+
+// Render a single frame at a given elapsed time (ms)
+window.renderFrame = function(elapsed) {
+  const cardIndex = Math.min(Math.floor(elapsed / CARD_DURATION), cards.length);
+  const isEndCard = cardIndex >= cards.length;
+
+  // Update backgrounds
+  for (let i = 0; i <= 5; i++) {
+    const bg = document.getElementById(`bg-${i}`);
+    if (isEndCard) {
+      bg.classList.toggle('active', i === 5);
+    } else {
+      bg.classList.toggle('active', i === cards[cardIndex].bgIndex);
+    }
+  }
+
+  // Update glow colors
+  if (!isEndCard) {
+    setGlowColors(cards[cardIndex].glowColor);
+  } else {
+    setGlowColors('rgba(15,118,110,.15)');
+  }
+
+  // Animate cards
+  cardElements.forEach((wrapper, i) => {
+    const cardStart = i * CARD_DURATION;
+    const cardElapsed = elapsed - cardStart;
+    const progress = cardElapsed / CARD_DURATION;
+    const sweepEl = document.getElementById(`sweep-${i}`);
+
+    if (progress < -0.05 || progress > 1.05) {
+      wrapper.style.opacity = 0;
+    } else {
+      animateCard(wrapper, Math.max(0, Math.min(1, progress)), sweepEl);
+    }
+  });
+
+  // Animate end frame
+  const endStart = cards.length * CARD_DURATION;
+  const endProgress = (elapsed - endStart) / END_CARD_DURATION;
+  animateEndFrame(endProgress);
+
+  // Hide particles and grid during end frame
+  const particlesEl = document.getElementById('particles');
+  const gridEl = document.querySelector('.grid-bg');
+  if (endProgress > 0.1) {
+    particlesEl.style.opacity = Math.max(0, 1 - endProgress * 3);
+    gridEl.style.opacity = Math.max(0, 1 - endProgress * 3);
+  } else {
+    particlesEl.style.opacity = 1;
+    gridEl.style.opacity = 1;
+  }
+
+  updatePhantomHolo(elapsed);
+};
+
+// Auto-play loop for browser preview
+let startTime = null;
+function animate(timestamp) {
+  if (!startTime) startTime = timestamp;
+  const elapsed = timestamp - startTime;
+  if (elapsed > TOTAL_DURATION) {
+    startTime = timestamp;
+    window.renderFrame(0);
+  } else {
+    window.renderFrame(elapsed);
+  }
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>

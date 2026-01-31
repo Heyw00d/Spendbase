@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080, height=1080">
+<title>Spendbase Card Showcase</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0f;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1200px;
+  }
+
+  /* ── Background layers ── */
+  .bg-gradient {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+  }
+  .bg-gradient.active { opacity: 1; }
+
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.012) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.012) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 0;
+  }
+
+  .particles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 1;
+  }
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,.35), transparent 70%);
+    animation: float-particle linear infinite;
+    opacity: 0;
+  }
+  @keyframes float-particle {
+    0%   { transform: translateY(100px) scale(.5); opacity: 0; }
+    15%  { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { transform: translateY(-1100px) scale(1.2); opacity: 0; }
+  }
+
+  /* Ambient glow blobs */
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: 0;
+    transition: background 1s ease, opacity 1s ease;
+  }
+  .glow-1 { width: 500px; height: 500px; top: 15%; left: 10%; opacity: 0.5; }
+  .glow-2 { width: 400px; height: 400px; bottom: 10%; right: 5%; opacity: 0.4; }
+  .glow-3 { width: 350px; height: 350px; top: 50%; left: 55%; opacity: 0.3; }
+
+  /* ── Card scene ── */
+  .card-scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+
+  .card-wrapper {
+    position: absolute;
+    z-index: 2;
+    transform-style: preserve-3d;
+    opacity: 0;
+    transform: translateY(350px) rotateX(15deg) rotateY(-5deg) scale(.85);
+    filter: blur(12px);
+  }
+
+  /* ── Card ── */
+  .card {
+    width: 520px;
+    height: 328px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 25px 60px rgba(0,0,0,.6),
+      0 0 80px rgba(99,60,200,.12),
+      inset 0 1px 0 rgba(255,255,255,.06),
+      inset 0 -1px 0 rgba(0,0,0,.3);
+    transform-style: preserve-3d;
+    transition: background 0.6s ease;
+  }
+
+  /* Holographic edge border */
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, rgba(168,85,247,.3), rgba(56,130,240,.2), rgba(168,85,247,.1), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* Light sweep */
+  .light-sweep {
+    position: absolute;
+    top: -50%;
+    left: -80%;
+    width: 80%;
+    height: 200%;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255,255,255,.04) 42%,
+      rgba(255,255,255,.1) 48%,
+      rgba(255,255,255,.04) 54%,
+      transparent 66%
+    );
+    pointer-events: none;
+    z-index: 4;
+    transform: translateX(0%);
+  }
+
+  /* Holographic foil overlay */
+  .holo-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background:
+      repeating-linear-gradient(
+        120deg,
+        rgba(168,85,247,.02) 0px,
+        rgba(56,182,255,.02) 4px,
+        rgba(168,85,247,.02) 8px
+      );
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* Card content */
+  .card-content {
+    position: relative;
+    z-index: 2;
+    padding: 32px 36px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #fff;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .brand-name {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(168,85,247,.2);
+  }
+
+  .contactless {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    opacity: .5;
+  }
+  .contactless span {
+    position: absolute;
+    border: 2px solid rgba(255,255,255,.5);
+    border-radius: 50%;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    transform: rotate(-45deg);
+  }
+  .contactless span:nth-child(1) { width: 12px; height: 12px; bottom: 2px; left: 10px; }
+  .contactless span:nth-child(2) { width: 20px; height: 20px; bottom: 2px; left: 6px; }
+  .contactless span:nth-child(3) { width: 28px; height: 28px; bottom: 2px; left: 2px; }
+
+  .chip {
+    width: 52px;
+    height: 40px;
+    border-radius: 8px;
+    background: linear-gradient(145deg, #d4a853, #c49b3a, #b8892e, #d4a853);
+    position: relative;
+    margin-top: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.2);
+  }
+  .chip::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1.5px solid rgba(0,0,0,.15);
+    border-radius: 3px;
+  }
+  .chip::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 6px;
+    right: 6px;
+    height: 1.5px;
+    background: rgba(0,0,0,.12);
+    transform: translateY(-50%);
+  }
+  .chip-lines {
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 50%;
+    width: 1.5px;
+    background: rgba(0,0,0,.12);
+    transform: translateX(-50%);
+  }
+
+  .card-number {
+    font-size: 21px;
+    letter-spacing: 5px;
+    color: rgba(255,255,255,.65);
+    font-weight: 400;
+    margin-top: 8px;
+  }
+
+  .card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .cashback-badge {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.9);
+    background: rgba(255,255,255,.08);
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.1);
+  }
+
+  /* Visa logo */
+  .visa-logo {
+    font-size: 28px;
+    font-weight: 700;
+    font-style: italic;
+    color: rgba(255,255,255,.7);
+    letter-spacing: 2px;
+  }
+
+  /* Mastercard logo */
+  .mastercard-logo {
+    display: flex;
+    gap: 0;
+  }
+  .mastercard-logo .mc-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    opacity: .7;
+  }
+  .mastercard-logo .mc-circle:first-child {
+    background: #eb001b;
+  }
+  .mastercard-logo .mc-circle:last-child {
+    background: #f79e1b;
+    margin-left: -12px;
+  }
+
+  /* ── End card ── */
+  .end-card {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .end-card .end-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,.15), transparent 70%);
+    filter: blur(60px);
+  }
+
+  .end-card h1 {
+    font-size: 56px;
+    font-weight: 800;
+    color: #fff;
+    text-align: center;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .end-card .subtitle {
+    font-size: 26px;
+    color: rgba(255,255,255,.5);
+    margin-top: 16px;
+    font-weight: 400;
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .end-card .end-url {
+    font-size: 32px;
+    font-weight: 600;
+    color: rgba(168,85,247,.9);
+    margin-top: 40px;
+    letter-spacing: 1px;
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(20px);
+    text-shadow: 0 0 40px rgba(168,85,247,.4);
+  }
+
+  .end-card .end-divider {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(168,85,247,.6), rgba(56,130,240,.6));
+    border-radius: 2px;
+    margin-top: 24px;
+    z-index: 1;
+    opacity: 0;
+  }
+
+  /* Gnosis special: lime border glow */
+  .card.gnosis-card {
+    box-shadow:
+      0 25px 60px rgba(0,0,0,.6),
+      0 0 80px rgba(163,230,53,.15),
+      inset 0 1px 0 rgba(255,255,255,.06),
+      inset 0 -1px 0 rgba(0,0,0,.3);
+  }
+  .card.gnosis-card::before {
+    background: linear-gradient(135deg, rgba(163,230,53,.4), rgba(132,204,22,.3), rgba(163,230,53,.15), transparent);
+  }
+
+  /* Phantom holographic card */
+  .card.phantom-card {
+    box-shadow:
+      0 25px 60px rgba(0,0,0,.6),
+      0 0 60px rgba(168,85,247,.15),
+      0 0 60px rgba(56,200,200,.1),
+      inset 0 1px 0 rgba(255,255,255,.08),
+      inset 0 -1px 0 rgba(0,0,0,.3);
+  }
+  .phantom-holo {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+
+<!-- Background layers (one per card + end) -->
+<div class="bg-gradient active" id="bg-0" style="background: linear-gradient(135deg, #1e1b4b 0%, #3b0764 100%);"></div>
+<div class="bg-gradient" id="bg-1" style="background: linear-gradient(135deg, #7c3aed 0%, #581c87 100%);"></div>
+<div class="bg-gradient" id="bg-2" style="background: linear-gradient(135deg, #020617 0%, #172554 100%);"></div>
+<div class="bg-gradient" id="bg-3" style="background: linear-gradient(135deg, #3d6b0f 0%, #2d5a08 50%, #1a3a04 100%);"></div>
+<div class="bg-gradient" id="bg-4" style="background: linear-gradient(135deg, #1a0a2e 0%, #0a1a2a 50%, #1a0a1e 100%);"></div>
+<div class="bg-gradient" id="bg-5" style="background: linear-gradient(135deg, #0a0a0f 0%, #0a0a0f 100%);"></div>
+
+<div class="grid-bg"></div>
+<div class="particles" id="particles"></div>
+<div class="glow glow-1" id="glow1"></div>
+<div class="glow glow-2" id="glow2"></div>
+<div class="glow glow-3" id="glow3"></div>
+
+<!-- Card scene -->
+<div class="card-scene" id="cardScene">
+  <!-- Cards will be injected by JS -->
+</div>
+
+<!-- End card -->
+<div class="end-card" id="endCard">
+  <div class="end-glow"></div>
+  <h1 id="endTitle">Compare 100+<br>Crypto Cards</h1>
+  <div class="subtitle" id="endSubtitle">Find your perfect card</div>
+  <div class="end-divider" id="endDivider"></div>
+  <div class="end-url" id="endUrl">spendbase.cards</div>
+</div>
+
+<script>
+// ── Card data ──
+const cards = [
+  {
+    brand: 'ETHER.FI CASH',
+    network: 'visa',
+    cashback: '4.08% ETHFI',
+    surface: 'linear-gradient(135deg, #1a1035 0%, #1e1245 30%, #251550 60%, #18102e 100%)',
+    bgIndex: 0,
+    glowColor: 'rgba(99,60,200,.25)',
+  },
+  {
+    brand: 'READY',
+    network: 'mastercard',
+    cashback: '0.5-3% STRK',
+    surface: 'linear-gradient(135deg, #2a1550 0%, #351a60 30%, #2e1855 60%, #221040 100%)',
+    bgIndex: 1,
+    glowColor: 'rgba(124,58,237,.3)',
+  },
+  {
+    brand: 'CRYPTO.COM',
+    network: 'visa',
+    cashback: '1-8% CRO',
+    surface: 'linear-gradient(135deg, #0a0e20 0%, #0e1530 30%, #111a38 60%, #080c1c 100%)',
+    bgIndex: 2,
+    glowColor: 'rgba(30,60,180,.25)',
+  },
+  {
+    brand: 'GNOSIS PAY',
+    network: 'visa',
+    cashback: '1-5% GNO',
+    surface: 'linear-gradient(135deg, #0f1a0a 0%, #152210 30%, #1a2a15 60%, #0d160a 100%)',
+    bgIndex: 3,
+    glowColor: 'rgba(163,230,53,.2)',
+    className: 'gnosis-card',
+  },
+  {
+    brand: 'PHANTOM CASH',
+    network: 'visa',
+    cashback: '2% CASH',
+    surface: 'linear-gradient(135deg, #1a1030 0%, #0f1a28 30%, #1a1025 60%, #101820 100%)',
+    bgIndex: 4,
+    glowColor: 'rgba(168,85,247,.2)',
+    className: 'phantom-card',
+    holographic: true,
+  }
+];
+
+const CARD_DURATION = 4200; // ms per card (slowed down)
+const TRANSITION_DURATION = 800; // crossfade overlap
+const END_CARD_DURATION = 4500;
+const TOTAL_DURATION = cards.length * CARD_DURATION + END_CARD_DURATION;
+
+// ── Create particles ──
+const particleContainer = document.getElementById('particles');
+for (let i = 0; i < 25; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random() * 6 + 2;
+  p.style.width = size + 'px';
+  p.style.height = size + 'px';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.top = Math.random() * 100 + '%';
+  p.style.animationDuration = (Math.random() * 8 + 6) + 's';
+  p.style.animationDelay = (Math.random() * 8) + 's';
+  particleContainer.appendChild(p);
+}
+
+// ── Build card elements ──
+const cardScene = document.getElementById('cardScene');
+const cardElements = [];
+
+cards.forEach((c, i) => {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'card-wrapper';
+  wrapper.id = `card-${i}`;
+
+  const networkHTML = c.network === 'visa'
+    ? `<div class="visa-logo">VISA</div>`
+    : `<div class="mastercard-logo"><div class="mc-circle"></div><div class="mc-circle"></div></div>`;
+
+  const holoHTML = c.holographic
+    ? `<div class="phantom-holo" id="phantomHolo"></div>`
+    : '';
+
+  wrapper.innerHTML = `
+    <div class="card ${c.className || ''}" style="background: ${c.surface};">
+      <div class="holo-overlay"></div>
+      ${holoHTML}
+      <div class="light-sweep" id="sweep-${i}"></div>
+      <div class="card-content">
+        <div class="card-top">
+          <div class="brand-name">${c.brand}</div>
+          <div class="contactless">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div>
+          <div class="chip"><div class="chip-lines"></div></div>
+          <div class="card-number">••••  ••••  ••••  ••••</div>
+        </div>
+        <div class="card-bottom">
+          <div class="cashback-badge">${c.cashback}</div>
+          ${networkHTML}
+        </div>
+      </div>
+    </div>
+  `;
+
+  cardScene.appendChild(wrapper);
+  cardElements.push(wrapper);
+});
+
+// ── Animation engine ──
+
+// Easing functions
+function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+function easeInCubic(t) { return t * t * t; }
+function easeInOutCubic(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3) / 2; }
+
+function setGlowColors(color) {
+  document.getElementById('glow1').style.background = color;
+  document.getElementById('glow2').style.background = color;
+  document.getElementById('glow3').style.background = color;
+}
+
+function animateCard(wrapper, progress, sweepEl) {
+  let ty = 0, rx = 0, ry = 0, s = 1, opacity = 0, blur = 0;
+
+  if (progress < 0.18) {
+    const t = progress / 0.18;
+    const e = easeOutCubic(t);
+    ty = 350 * (1 - e);
+    rx = 15 * (1 - e);
+    ry = -5 * (1 - e);
+    s = 0.85 + 0.15 * e;
+    opacity = e;
+    blur = 12 * (1 - e);
+  } else if (progress < 0.78) {
+    const t = (progress - 0.18) / 0.6;
+    const floatPhase = t * Math.PI * 2;
+    ty = -10 + Math.sin(floatPhase) * 8;
+    rx = Math.sin(floatPhase * 0.8) * 4;
+    ry = Math.cos(floatPhase * 0.6) * 6;
+    s = 1 + Math.sin(floatPhase * 0.5) * 0.01;
+    opacity = 1;
+    blur = 0;
+  } else {
+    const t = (progress - 0.78) / 0.22;
+    const e = easeInCubic(t);
+    ty = -80 * e;
+    rx = -8 * e;
+    s = 1 - 0.08 * e;
+    opacity = 1 - e;
+    blur = 8 * e;
+  }
+
+  wrapper.style.transform = `translateY(${ty}px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${s})`;
+  wrapper.style.opacity = opacity;
+  wrapper.style.filter = `blur(${blur}px)`;
+
+  if (sweepEl) {
+    if (progress > 0.2 && progress < 0.65) {
+      const sweepT = (progress - 0.2) / 0.45;
+      sweepEl.style.transform = `translateX(${sweepT * 350}%)`;
+    } else {
+      sweepEl.style.transform = `translateX(0%)`;
+    }
+  }
+}
+
+function animateEndCard(progress) {
+  const endCard = document.getElementById('endCard');
+  const title = document.getElementById('endTitle');
+  const subtitle = document.getElementById('endSubtitle');
+  const divider = document.getElementById('endDivider');
+  const url = document.getElementById('endUrl');
+
+  if (progress <= 0) {
+    endCard.style.opacity = 0;
+    return;
+  }
+
+  endCard.style.opacity = 1;
+
+  const fadeIn = (el, start, duration) => {
+    const t = Math.max(0, Math.min(1, (progress - start) / duration));
+    const e = easeOutCubic(t);
+    el.style.opacity = e;
+    el.style.transform = `translateY(${30 * (1 - e)}px)`;
+  };
+
+  fadeIn(title, 0.05, 0.25);
+  fadeIn(subtitle, 0.18, 0.25);
+  fadeIn(divider, 0.28, 0.2);
+  fadeIn(url, 0.35, 0.25);
+}
+
+function updatePhantomHolo(time) {
+  const holo = document.getElementById('phantomHolo');
+  if (!holo) return;
+  const t = time / 1000;
+  const hue1 = (t * 40) % 360;
+  const hue2 = (hue1 + 120) % 360;
+  const hue3 = (hue1 + 240) % 360;
+  holo.style.background = `linear-gradient(${t * 20}deg, 
+    hsla(${hue1}, 80%, 60%, 0.15), 
+    hsla(${hue2}, 70%, 50%, 0.1), 
+    hsla(${hue3}, 80%, 60%, 0.15))`;
+}
+
+// Render a single frame at a given elapsed time (ms)
+window.renderFrame = function(elapsed) {
+  const cardIndex = Math.min(Math.floor(elapsed / CARD_DURATION), cards.length);
+  const isEndCard = cardIndex >= cards.length;
+
+  // Update backgrounds
+  for (let i = 0; i <= 5; i++) {
+    const bg = document.getElementById(`bg-${i}`);
+    if (isEndCard) {
+      bg.classList.toggle('active', i === 5);
+    } else {
+      bg.classList.toggle('active', i === cards[cardIndex].bgIndex);
+    }
+  }
+
+  // Update glow colors
+  if (!isEndCard) {
+    setGlowColors(cards[cardIndex].glowColor);
+  } else {
+    setGlowColors('rgba(99,60,200,.12)');
+  }
+
+  // Animate cards
+  cardElements.forEach((wrapper, i) => {
+    const cardStart = i * CARD_DURATION;
+    const cardElapsed = elapsed - cardStart;
+    const progress = cardElapsed / CARD_DURATION;
+    const sweepEl = document.getElementById(`sweep-${i}`);
+
+    if (progress < -0.05 || progress > 1.05) {
+      wrapper.style.opacity = 0;
+    } else {
+      animateCard(wrapper, Math.max(0, Math.min(1, progress)), sweepEl);
+    }
+  });
+
+  // Animate end card
+  const endStart = cards.length * CARD_DURATION;
+  const endProgress = (elapsed - endStart) / END_CARD_DURATION;
+  animateEndCard(endProgress);
+
+  updatePhantomHolo(elapsed);
+};
+
+// Auto-play for browser preview
+let startTime = null;
+function animate(timestamp) {
+  if (!startTime) startTime = timestamp;
+  const elapsed = timestamp - startTime;
+  if (elapsed > TOTAL_DURATION) {
+    startTime = timestamp;
+    window.renderFrame(0);
+  } else {
+    window.renderFrame(elapsed);
+  }
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080, height=1080">
+<title>Spendbase Card Animation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0f;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1200px;
+  }
+
+  /* ── Background particles ── */
+  .particles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139,92,246,.35), transparent 70%);
+    animation: float-particle linear infinite;
+    opacity: 0;
+  }
+  @keyframes float-particle {
+    0%   { transform: translateY(100px) scale(.5); opacity: 0; }
+    15%  { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { transform: translateY(-1100px) scale(1.2); opacity: 0; }
+  }
+
+  /* Ambient glow blobs */
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0;
+    animation: glow-pulse 8s ease-in-out infinite;
+  }
+  .glow-1 { width: 500px; height: 500px; background: rgba(99,60,200,.18); top: 15%; left: 10%; animation-delay: 0s; }
+  .glow-2 { width: 400px; height: 400px; background: rgba(56,130,240,.12); bottom: 10%; right: 5%; animation-delay: 2.5s; }
+  .glow-3 { width: 350px; height: 350px; background: rgba(168,85,247,.10); top: 50%; left: 55%; animation-delay: 4.5s; }
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0; transform: scale(.9); }
+    50%      { opacity: 1; transform: scale(1.1); }
+  }
+
+  /* ── Card wrapper (handles entrance + tilt) ── */
+  .card-wrapper {
+    position: relative;
+    z-index: 2;
+    animation: card-entrance 8s cubic-bezier(.22,1,.36,1) infinite;
+    transform-style: preserve-3d;
+  }
+  @keyframes card-entrance {
+    0%   { transform: translateY(350px) rotateX(15deg) rotateY(-5deg) scale(.85); opacity: 0; filter: blur(12px); }
+    18%  { transform: translateY(0)    rotateX(0deg)  rotateY(0deg)  scale(1);    opacity: 1; filter: blur(0); }
+    28%  { transform: translateY(-10px) rotateX(-4deg) rotateY(6deg)  scale(1);    opacity: 1; filter: blur(0); }
+    42%  { transform: translateY(-15px) rotateX(5deg)  rotateY(-8deg) scale(1.01); opacity: 1; filter: blur(0); }
+    56%  { transform: translateY(-8px)  rotateX(-3deg) rotateY(4deg)  scale(1);    opacity: 1; filter: blur(0); }
+    72%  { transform: translateY(-12px) rotateX(2deg)  rotateY(-3deg) scale(1);    opacity: 1; filter: blur(0); }
+    85%  { transform: translateY(0)     rotateX(0deg)  rotateY(0deg)  scale(1);    opacity: 1; filter: blur(0); }
+    95%  { transform: translateY(80px)  rotateX(8deg)  rotateY(0deg)  scale(.92);  opacity: 0; filter: blur(6px); }
+    100% { transform: translateY(350px) rotateX(15deg) rotateY(-5deg) scale(.85);  opacity: 0; filter: blur(12px); }
+  }
+
+  /* ── Card ── */
+  .card {
+    width: 520px;
+    height: 328px;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16162a 30%, #1e1e3a 60%, #141428 100%);
+    box-shadow:
+      0 25px 60px rgba(0,0,0,.6),
+      0 0 80px rgba(99,60,200,.12),
+      inset 0 1px 0 rgba(255,255,255,.06),
+      inset 0 -1px 0 rgba(0,0,0,.3);
+    transform-style: preserve-3d;
+  }
+
+  /* Holographic edge border */
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, rgba(168,85,247,.3), rgba(56,130,240,.2), rgba(168,85,247,.1), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Light sweep reflection */
+  .card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 80%;
+    height: 200%;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255,255,255,.04) 42%,
+      rgba(255,255,255,.08) 48%,
+      rgba(255,255,255,.04) 54%,
+      transparent 66%
+    );
+    animation: light-sweep 8s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes light-sweep {
+    0%, 15%  { transform: translateX(0); }
+    45%, 55% { transform: translateX(280%); }
+    100%     { transform: translateX(0); }
+  }
+
+  /* Holographic foil overlay */
+  .holo-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background:
+      repeating-linear-gradient(
+        120deg,
+        rgba(168,85,247,.02) 0px,
+        rgba(56,182,255,.02) 4px,
+        rgba(168,85,247,.02) 8px
+      );
+    mix-blend-mode: screen;
+    pointer-events: none;
+    animation: holo-shift 8s linear infinite;
+  }
+  @keyframes holo-shift {
+    0%   { background-position: 0 0; }
+    100% { background-position: 200px 100px; }
+  }
+
+  /* Card content layout */
+  .card-content {
+    position: relative;
+    z-index: 1;
+    padding: 32px 36px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #fff;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .brand-name {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(168,85,247,.2);
+  }
+
+  /* Contactless icon */
+  .contactless {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    opacity: .5;
+  }
+  .contactless span {
+    position: absolute;
+    border: 2px solid rgba(255,255,255,.5);
+    border-radius: 50%;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    transform: rotate(-45deg);
+  }
+  .contactless span:nth-child(1) { width: 12px; height: 12px; bottom: 2px; left: 10px; }
+  .contactless span:nth-child(2) { width: 20px; height: 20px; bottom: 2px; left: 6px; }
+  .contactless span:nth-child(3) { width: 28px; height: 28px; bottom: 2px; left: 2px; }
+
+  /* EMV Chip */
+  .chip {
+    width: 52px;
+    height: 40px;
+    border-radius: 8px;
+    background: linear-gradient(145deg, #d4a853, #c49b3a, #b8892e, #d4a853);
+    position: relative;
+    margin-top: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.2);
+  }
+  .chip::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1.5px solid rgba(0,0,0,.15);
+    border-radius: 3px;
+  }
+  .chip::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 6px;
+    right: 6px;
+    height: 1.5px;
+    background: rgba(0,0,0,.12);
+    transform: translateY(-50%);
+  }
+  .chip-lines {
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 50%;
+    width: 1.5px;
+    background: rgba(0,0,0,.12);
+    transform: translateX(-50%);
+  }
+
+  .card-number {
+    font-size: 21px;
+    letter-spacing: 5px;
+    color: rgba(255,255,255,.65);
+    font-weight: 400;
+    margin-top: 8px;
+  }
+
+  .card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .card-subtitle {
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.35);
+    font-weight: 500;
+  }
+
+  /* Generic card network logo */
+  .network-logo {
+    display: flex;
+    gap: 0;
+  }
+  .network-logo .circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    opacity: .6;
+  }
+  .network-logo .circle:first-child {
+    background: rgba(168,85,247,.7);
+  }
+  .network-logo .circle:last-child {
+    background: rgba(56,130,240,.6);
+    margin-left: -12px;
+  }
+
+  /* ── Text overlays ── */
+  .text-overlay {
+    position: absolute;
+    z-index: 3;
+    text-align: center;
+    width: 100%;
+    left: 0;
+  }
+
+  .headline {
+    bottom: 195px;
+    font-size: 38px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+    opacity: 0;
+    animation: text-fade 8s ease-in-out infinite;
+    text-shadow: 0 2px 30px rgba(0,0,0,.5);
+  }
+  @keyframes text-fade {
+    0%, 50%  { opacity: 0; transform: translateY(15px); }
+    60%, 78% { opacity: 1; transform: translateY(0); }
+    88%, 100%{ opacity: 0; transform: translateY(-10px); }
+  }
+
+  .url {
+    bottom: 145px;
+    font-size: 24px;
+    font-weight: 500;
+    color: rgba(168,85,247,.85);
+    letter-spacing: 1px;
+    opacity: 0;
+    animation: url-fade 8s ease-in-out infinite;
+    text-shadow: 0 0 30px rgba(168,85,247,.3);
+  }
+  @keyframes url-fade {
+    0%, 58%  { opacity: 0; transform: translateY(15px); }
+    68%, 78% { opacity: 1; transform: translateY(0); }
+    88%, 100%{ opacity: 0; transform: translateY(-10px); }
+  }
+
+  /* ── Subtle grid background ── */
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.012) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.012) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="grid-bg"></div>
+<div class="particles" id="particles"></div>
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+<div class="glow glow-3"></div>
+
+<!-- Card -->
+<div class="card-wrapper">
+  <div class="card">
+    <div class="holo-overlay"></div>
+    <div class="card-content">
+      <div class="card-top">
+        <div class="brand-name">Spendbase</div>
+        <div class="contactless">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+      <div>
+        <div class="chip">
+          <div class="chip-lines"></div>
+        </div>
+        <div class="card-number">••••  ••••  ••••  ••••</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-subtitle">Crypto Card Comparison</div>
+        <div class="network-logo">
+          <div class="circle"></div>
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Text overlays -->
+<div class="text-overlay headline">Compare 100+ Crypto Cards</div>
+<div class="text-overlay url">spendbase.cards</div>
+
+<script>
+  // Generate floating particles
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 6 + 2;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.style.animationDuration = (Math.random() * 8 + 6) + 's';
+    p.style.animationDelay = (Math.random() * 8) + 's';
+    container.appendChild(p);
+  }
+</script>
+</body>
+</html>

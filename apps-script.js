@@ -4,8 +4,12 @@
 // ============================================
 
 // CONFIG - Update these
-const HENRY_EMAIL = 'henry@yourdomain.com'; // Your email for notifications
+const HENRY_EMAIL = 'henry@spendbase.cards';
 const FROM_NAME = 'Spendbase';
+
+// SendFox API Config
+const SENDFOX_API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5MzciLCJqdGkiOiI0ODgyMmYzNDg4Nzg0N2MzMjliODRiMjg3NGVmMWQ1OGNiNzNlZDNmOGY1NDA1NzNlMThlNzQ3Y2Y1ZmJiNjNiZmUxMzZiNWY2ZWFjNTE1MyIsImlhdCI6MTc2OTg3ODM3NS45NDcwMzgsIm5iZiI6MTc2OTg3ODM3NS45NDcwNCwiZXhwIjo0OTI1NTUxOTc1LjkzNjgwNCwic3ViIjoiMTg5MTI1Iiwic2NvcGVzIjpbXX0.YWh8lWzunIs459LCEkpUffZI2ho4HGUTQU49Ix1t65q28ifrhaRSzdazNKajOe82jprg0SMpnt7Y7RblYSEEUwqcT9tI_5oio4ja5yH7QwmVAnvE7OLRPC-wJSkjRtIBRqKSrm7qem77VtereGF51hivF_uUziugAMh6HbvrlhZFoic-S_pRn7VbowtRzofONxhRIbq05fPi6NZtpfIi72Pl7-ANKaMeyvB2F1QbjQudHa62VJEzfCWTpI52IcdSTDZlLtdmcCrmaVZu6Xh05BWtw4Dk3zBRF0hpWCvjIDVKabvIFVhRUYLQ9dNxRGdYi93_-CpLYYDX0eaYXURfoLq3jDJeBCR0d5c2q7kx-S55vUAUFzUbjZhfppO_l19qMWcOHZLm2qw6sX9re98qO_wjr2kBD3imtD7ZOgGr266ZlE-UZ2S2bs3UNsxU4IsJxeB_mP8Q_pc8oXOkwB_Rg-swA2XT7TbSr6lmg4p9BgzuVg9YsabFrObuoW5BS3ApBziM9vd53y-_oEUAkX9Dg2mlr9ws1iTb_DSHGAnkaFTdnL_ufTtHkfv4P-pqGx3a-iLzI4m9sia_rXTSLEUvAcDwnoFfGuhGS_dnigUelu6CvQjeU3247sTK_AGDKjxt5SFaOaVU_GF05hv7URWFtodb-FCoIPWidoMJBGjy4Js';
+const SENDFOX_LIST_ID = 624051; // "Site subscribers" list
 
 // Sheet names (will be created as tabs)
 const SHEETS = {
@@ -57,7 +61,15 @@ function doGet(e) {
 // SUBSCRIBE - Newsletter signup
 // ============================================
 function handleSubscribe(data) {
-  const sheet = getOrCreateSheet(SHEETS.subscribers, ['Email', 'Name', 'Country', 'Monthly Spend', 'Timestamp', 'Source']);
+  const sheet = getOrCreateSheet(SHEETS.subscribers, ['Email', 'Name', 'Country', 'Monthly Spend', 'Timestamp', 'Source', 'SendFox']);
+  
+  // Add to SendFox
+  let sendfoxResult = 'pending';
+  try {
+    sendfoxResult = addToSendFox(data);
+  } catch (e) {
+    sendfoxResult = 'error: ' + e.message;
+  }
   
   // Add to sheet
   sheet.appendRow([
@@ -66,13 +78,58 @@ function handleSubscribe(data) {
     data.country || '',
     data.monthlySpend || '',
     new Date().toISOString(),
-    data.source || 'website'
+    data.source || 'website',
+    sendfoxResult
   ]);
   
-  // Send welcome email
+  // Send welcome email via Gmail (as backup / immediate welcome)
   sendWelcomeEmail(data.email, data.name);
   
   return 'Subscribed successfully';
+}
+
+// ============================================
+// SENDFOX INTEGRATION
+// ============================================
+function addToSendFox(data) {
+  const nameParts = (data.name || '').trim().split(/\s+/);
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
+  
+  const payload = {
+    email: data.email,
+    first_name: firstName,
+    last_name: lastName,
+    lists: [SENDFOX_LIST_ID]
+  };
+  
+  // Add custom fields for segmentation
+  if (data.country || data.monthlySpend) {
+    payload.contact_fields = [];
+    if (data.country) payload.contact_fields.push({ name: 'country', value: data.country });
+    if (data.monthlySpend) payload.contact_fields.push({ name: 'monthly_spend', value: data.monthlySpend });
+    if (data.source) payload.contact_fields.push({ name: 'source', value: data.source });
+  }
+  
+  const options = {
+    method: 'post',
+    contentType: 'application/json',
+    headers: {
+      'Authorization': 'Bearer ' + SENDFOX_API_TOKEN
+    },
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true
+  };
+  
+  const response = UrlFetchApp.fetch('https://api.sendfox.com/contacts', options);
+  const code = response.getResponseCode();
+  const body = JSON.parse(response.getContentText());
+  
+  if (code === 200) {
+    return 'ok (id: ' + body.id + ')';
+  } else {
+    return 'error: ' + (body.message || code);
+  }
 }
 
 // ============================================

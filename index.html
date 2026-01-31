@@ -1864,6 +1864,18 @@ function LearnSection({ darkMode }) {
 }
 
 function VideoRewardsPage({ darkMode, onNavigateToDemo }) {
+  const [rewardsEmail, setRewardsEmail] = useState('');
+  const [rewardsSubmitted, setRewardsSubmitted] = useState(false);
+  const [rewardsLoading, setRewardsLoading] = useState(false);
+
+  const handleRewardsSignup = async () => {
+    if (!rewardsEmail) return;
+    setRewardsLoading(true);
+    await submitToAPI('subscribe', { email: rewardsEmail, source: 'video-rewards' });
+    setRewardsLoading(false);
+    setRewardsSubmitted(true);
+  };
+
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center">
@@ -1912,17 +1924,33 @@ function VideoRewardsPage({ darkMode, onNavigateToDemo }) {
 
         {/* Email Signup */}
         <div className={`rounded-2xl p-6 max-w-md w-full mb-8 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-sm'}`}>
-          <p className={`font-medium mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Get notified when we launch</p>
-          <div className="flex gap-2">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className={`flex-1 px-4 py-3 rounded-lg text-sm focus:outline-none focus:border-purple-500 ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`}
-            />
-            <button className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium rounded-lg text-sm whitespace-nowrap hover:opacity-90 transition">
-              Notify Me
-            </button>
-          </div>
+          {rewardsSubmitted ? (
+            <div className="text-center">
+              <p className="text-lime-400 font-medium">You're on the list!</p>
+              <p className={`text-sm mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>We'll notify you when Video Rewards launches.</p>
+            </div>
+          ) : (
+            <>
+              <p className={`font-medium mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Get notified when we launch</p>
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={rewardsEmail}
+                  onChange={e => setRewardsEmail(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleRewardsSignup()}
+                  className={`flex-1 px-4 py-3 rounded-lg text-sm focus:outline-none focus:border-lime-500 ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-200 text-gray-900'}`}
+                />
+                <button 
+                  onClick={handleRewardsSignup}
+                  disabled={rewardsLoading || !rewardsEmail}
+                  className="px-6 py-3 bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 font-bold rounded-lg text-sm whitespace-nowrap hover:opacity-90 transition disabled:opacity-50"
+                >
+                  {rewardsLoading ? '...' : 'Notify Me'}
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
         {/* See Demo Link */}
@@ -2369,6 +2397,54 @@ function AdvertiseModal({ open, onClose, darkMode }) {
 // ============================================
 // COMPARE DRAWER COMPONENT
 // ============================================
+function FooterNewsletter({ darkMode }) {
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!email) return;
+    setLoading(true);
+    await submitToAPI('subscribe', { email, source: 'footer' });
+    setLoading(false);
+    setSubmitted(true);
+  };
+
+  if (submitted) {
+    return (
+      <div className="text-center py-3">
+        <p className="text-lime-400 font-medium text-sm">Subscribed! Check your inbox.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <p className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+        Get weekly crypto card deals, new launches & exclusive offers
+      </p>
+      <div className="flex gap-2 w-full max-w-md">
+        <input
+          type="email"
+          placeholder="your@email.com"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && handleSubmit()}
+          className={`flex-1 px-4 py-2.5 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-lime-500/50 ${darkMode ? 'bg-gray-800 border border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400'}`}
+        />
+        <button
+          onClick={handleSubmit}
+          disabled={loading || !email}
+          className="px-5 py-2.5 bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 font-bold rounded-lg text-sm whitespace-nowrap hover:shadow-lg hover:shadow-lime-500/20 transition-all disabled:opacity-50"
+        >
+          {loading ? '...' : 'Subscribe'}
+        </button>
+      </div>
+      <p className={`text-xs ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>No spam. Unsubscribe anytime.</p>
+    </div>
+  );
+}
+
 function CompareDrawer({ compareList, onRemove, onCompare, onClear, darkMode }) {
   if (compareList.length === 0) return null;
 
@@ -5136,6 +5212,8 @@ function Spendbase() {
       <footer className={`border-t py-8 ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col gap-6">
+            {/* Newsletter Signup */}
+            <FooterNewsletter darkMode={darkMode} />
             {/* Social CTA */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a href="https://x.com/spendbasecards" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${darkMode ? 'bg-gray-800 hover:bg-gray-700 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-900'}`}>
