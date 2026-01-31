@@ -262,6 +262,7 @@ Quick question: What crypto card do you use today (if any)? Just hit reply — I
   GmailApp.sendEmail(email, subject, plainBody, {
     htmlBody: htmlBody,
     name: FROM_NAME,
+    from: HENRY_EMAIL,
     replyTo: HENRY_EMAIL
   });
 }
