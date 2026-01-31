@@ -16,6 +16,16 @@
 
 ## 📋 TO DO — This Week
 
+### G2 Listing (Priority: HIGH)
+- [ ] Create Spendbase product listing on G2 (sell.g2.com/create-a-profile)
+- [ ] Claim profile once approved (1-3 business days)
+- [ ] Add screenshots, description, logo
+- [ ] Invite early users/contacts to leave reviews
+
+### Card Page UI Improvements (Priority: HIGH)
+- [ ] Make rating widget larger on individual card pages so users can easily rate
+- [ ] Remove header emoji icons on each card page
+
 ### Email Backend (Priority: HIGH)
 - [ ] Create Google Sheet "Spendbase Emails"
 - [ ] Add Apps Script code (see `apps-script.js`)

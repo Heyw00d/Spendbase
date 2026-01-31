@@ -2908,7 +2908,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
                 <div className={`rounded-xl overflow-hidden ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
                   <div className="p-4 sm:p-6">
                     <h2 className={`text-lg sm:text-xl font-bold mb-4 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                      💳 {card.name} Card
+                      {card.name} Card
                     </h2>
                     <div className="rounded-xl overflow-hidden shadow-2xl">
                       <img 
@@ -2996,7 +2996,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
 
             {/* Features */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>✨ Features</h2>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Features</h2>
               <div className="flex flex-wrap gap-2">
                 {card.features?.map((f, i) => (
                   <span key={i} className={`px-3 py-1.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>{f}</span>
@@ -3037,7 +3037,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
             {card.token?.live && tokenMarketData[card.token.ticker] && (
               <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>📈 Token Market Data</h2>
+                  <h2 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Token Market Data</h2>
                   <a 
                     href={`https://coinmarketcap.com/currencies/${card.token.cmc}/`}
                     target="_blank"
@@ -3123,7 +3123,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className={`text-lg font-bold mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>🤖 Ask AI About {card.name}</h3>
+                  <h3 className={`text-lg font-bold mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Ask AI About {card.name}</h3>
                   <p className={`text-sm mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                     Get instant, detailed information about this card's features, fees, rewards, and how it compares to alternatives.
                   </p>
@@ -3159,7 +3159,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
           <div className="space-y-6">
             {/* Score Breakdown */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>📊 Score Breakdown</h2>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Score Breakdown</h2>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <ScoreBadge value={ratingsData.ios} label="iOS App Store" />
                 <ScoreBadge value={ratingsData.android} label="Google Play" />
@@ -3169,24 +3169,28 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
               </div>
             </div>
 
-            {/* Rate This Card */}
-            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Rate This Card</h2>
+            {/* Rate This Card — Large CTA */}
+            <div className={`p-8 rounded-xl text-center ${darkMode ? 'bg-gradient-to-b from-gray-900 to-gray-950 border border-gray-700' : 'bg-gradient-to-b from-white to-gray-50 border border-gray-200 shadow-lg'}`}>
+              <h2 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Rate {card.name}</h2>
               {userRating > 0 ? (
-                <div className="flex items-center gap-3">
-                  <span className="text-lime-400">✓ You rated this card</span>
-                  <div className="flex">
+                <div className="flex flex-col items-center gap-3">
+                  <span className="text-lime-400 text-lg font-medium">Thanks for rating!</span>
+                  <div className="flex gap-1">
                     {[1,2,3,4,5].map(i => (
-                      <svg key={i} className="w-5 h-5" viewBox="0 0 24 24" fill={i <= userRating ? '#FBBF24' : '#374151'}>
+                      <svg key={i} className="w-10 h-10" viewBox="0 0 24 24" fill={i <= userRating ? '#FBBF24' : '#374151'}>
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                       </svg>
                     ))}
                   </div>
+                  <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{cardRating.count} total rating{cardRating.count !== 1 ? 's' : ''}</p>
                 </div>
               ) : (
-                <div>
-                  <p className={`text-sm mb-3 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Have you used this card? Share your experience!</p>
-                  <StarRating rating={0} onRate={(r) => onRate && onRate(card.id, r)} size="lg" interactive={true} darkMode={darkMode} />
+                <div className="flex flex-col items-center">
+                  <p className={`text-base mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Have you used {card.name}? Tap a star to rate it.</p>
+                  <div className="transform scale-150 mb-4">
+                    <StarRating rating={0} onRate={(r) => onRate && onRate(card.id, r)} size="lg" interactive={true} darkMode={darkMode} />
+                  </div>
+                  <p className={`text-xs mt-2 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>{cardRating.count > 0 ? `${cardRating.count} rating${cardRating.count !== 1 ? 's' : ''} so far` : 'Be the first to rate this card'}</p>
                 </div>
               )}
             </div>
@@ -3243,7 +3247,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
           <div className="space-y-6">
             {/* Regions */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>🌍 Available Regions</h2>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Available Regions</h2>
               <div className="flex flex-wrap gap-2">
                 {card.regions?.map((r, i) => (
                   <span key={i} className={`px-3 py-1.5 rounded-lg text-sm ${darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
@@ -3270,7 +3274,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
 
             {/* Card Details */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
-              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>💳 Card Details</h2>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Card Details</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className={`p-4 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
                   <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Card Network</p>
