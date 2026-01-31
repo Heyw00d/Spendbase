@@ -684,7 +684,17 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
             {/* Ratings and Visa/Mastercard row - centered vertically */}
             <div className="flex items-center justify-between my-auto relative z-10">
               <div className="flex items-center gap-2">
-                {cardRating.count > 0 && <StarDisplay rating={cardRating.average} count={cardRating.count} />}
+                {hasUserRated ? (
+                  <div className="flex items-center gap-1">
+                    <div className="flex">{[1,2,3,4,5].map(i => <svg key={i} className="w-3.5 h-3.5" viewBox="0 0 24 24" fill={i <= userRating ? '#FBBF24' : '#374151'}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>)}</div>
+                    <span className="text-lime-400 text-[10px]">Rated</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                    <StarRating rating={cardRating.average} onRate={(r) => onRate && onRate(card.id, r)} size="sm" interactive={true} />
+                    <span className="text-gray-500 text-[10px]">{cardRating.count > 0 ? cardRating.count : 'Rate'}</span>
+                  </div>
+                )}
               </div>
               {card.network === 'Visa' ? <VisaLogo /> : <MastercardLogo />}
             </div>
