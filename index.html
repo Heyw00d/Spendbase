@@ -224,13 +224,21 @@ function SpendbaseLogo({ className = "" }) {
     <svg viewBox="0 0 40 40" className={className}>
       <defs>
         <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#0F766E"/>
-          <stop offset="100%" stopColor="#14B8A6"/>
+          <stop offset="0%" stopColor="#1a1a2e"/>
+          <stop offset="100%" stopColor="#16213e"/>
+        </linearGradient>
+        <linearGradient id="logoSGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#00d4ff"/>
+          <stop offset="100%" stopColor="#7b2cbf"/>
+        </linearGradient>
+        <linearGradient id="logoBorderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#00d4ff"/>
+          <stop offset="50%" stopColor="transparent"/>
+          <stop offset="100%" stopColor="#7b2cbf"/>
         </linearGradient>
       </defs>
-      <rect x="0" y="0" width="40" height="40" rx="8" fill="url(#logoGradient)"/>
-      {/* Shark fin S swoosh */}
-      <path d="M11 27 C13 22 17 18 23 16 C18 19 19 23 20 25 C22 21 26 18 29 17 C25 21 24 25 23 28 C20 26 16 28 13 30 C12 29 11 28 11 27 Z" fill="white" opacity="0.95"/>
+      <rect x="1" y="1" width="38" height="38" rx="9" fill="url(#logoGradient)" stroke="url(#logoBorderGrad)" strokeWidth="1.5"/>
+      <text x="20" y="28" textAnchor="middle" fontSize="24" fontWeight="800" fontFamily="-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif" fill="url(#logoSGradient)">S</text>
     </svg>
   );
 }
@@ -1458,19 +1466,28 @@ function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode,
         <div className="flex items-center justify-between gap-4">
           {/* Logo - navigates to home */}
           <button onClick={goHome} className="flex-shrink-0 flex items-center gap-2">
-            <svg viewBox="0 0 36 36" className="h-8 md:h-9 w-8 md:w-9">
+            <svg viewBox="0 0 40 40" className="h-8 md:h-9 w-8 md:w-9">
               <defs>
-                <linearGradient id="headerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#0F766E"/>
-                  <stop offset="100%" stopColor="#14B8A6"/>
+                <linearGradient id="headerLogoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#1a1a2e"/>
+                  <stop offset="100%" stopColor="#16213e"/>
+                </linearGradient>
+                <linearGradient id="headerLogoS" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#00d4ff"/>
+                  <stop offset="100%" stopColor="#7b2cbf"/>
+                </linearGradient>
+                <linearGradient id="headerLogoBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#00d4ff"/>
+                  <stop offset="50%" stopColor="transparent"/>
+                  <stop offset="100%" stopColor="#7b2cbf"/>
                 </linearGradient>
               </defs>
-              <rect width="36" height="36" rx="8" fill="url(#headerLogoGrad)"/>
-              <text x="18" y="25" textAnchor="middle" fill="white" fontSize="22" fontWeight="800" fontFamily="-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif">S</text>
+              <rect x="1" y="1" width="38" height="38" rx="9" fill="url(#headerLogoBg)" stroke="url(#headerLogoBorder)" strokeWidth="1.5"/>
+              <text x="20" y="28" textAnchor="middle" fontSize="24" fontWeight="800" fontFamily="-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif" fill="url(#headerLogoS)">S</text>
             </svg>
             <div className="flex items-baseline">
               <span className={`text-lg md:text-xl font-bold tracking-tight ${darkMode ? 'text-white' : 'text-gray-900'}`}>Spendbase</span>
-              <span className="text-lg md:text-xl font-bold tracking-tight text-teal-500">.cards</span>
+              <span className="text-lg md:text-xl font-bold tracking-tight text-cyan-400">.cards</span>
             </div>
           </button>
 
