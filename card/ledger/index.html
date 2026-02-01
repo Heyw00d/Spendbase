@@ -25,10 +25,10 @@
   <meta name="twitter:site" content="@spendbase">
 
   <!-- Redirect real users to the SPA -->
-  <script>window.location.replace('https://spendbase.cards/#card/ledger');</script>
-  <noscript><meta http-equiv="refresh" content="0;url=https://spendbase.cards/#card/ledger"></noscript>
+  <script>fetch('/index.html').then(function(r){return r.text()}).then(function(h){document.open();document.write(h);document.close()});</script>
+  <noscript><meta http-equiv="refresh" content="0;url=https://spendbase.cards/"></noscript>
 </head>
 <body>
-  <p>Redirecting to <a href="https://spendbase.cards/#card/ledger">Ledger on Spendbase</a>...</p>
+  <p>Redirecting to <a href="https://spendbase.cards/card/ledger/">Ledger on Spendbase</a>...</p>
 </body>
 </html>

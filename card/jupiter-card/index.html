@@ -25,12 +25,12 @@
   <meta name="twitter:site" content="@spendbase">
 
   <!-- Redirect real users to the SPA -->
-  <script>window.location.replace('https://spendbase.cards/#card/jupiter-card');</script>
-  <noscript><meta http-equiv="refresh" content="0;url=https://spendbase.cards/#card/jupiter-card"></noscript>
+  <script>fetch('/index.html').then(function(r){return r.text()}).then(function(h){document.open();document.write(h);document.close()});</script>
+  <noscript><meta http-equiv="refresh" content="0;url=https://spendbase.cards/"></noscript>
 </head>
 <body>
   <h1>Jupiter Card — Crypto Card Review</h1>
   <p>Jupiter Card is a credit card from Jupiter Exchange on Solana. USDC deposits at 1:1, no annual fee, 1.8% FX fee. Digital-first with Apple Pay & Google Pay. Physical card coming May 2026.</p>
-  <p><a href="https://spendbase.cards/#card/jupiter-card">View full review on Spendbase →</a></p>
+  <p><a href="https://spendbase.cards/card/jupiter-card/">View full review on Spendbase →</a></p>
 </body>
 </html>
