@@ -122,6 +122,20 @@
   <url><loc>https://spendbase.cards/card/keyflo/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://spendbase.cards/card/mute-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://spendbase.cards/card/stealf/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/jupiter-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/volet/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/kucoin-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/gate-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/coinjar-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/zebec-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/xportal-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/spritz-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/fizen-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/cardano-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/karmacard/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/veil/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/amp-pay/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/sling-money/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 
   <!-- Card Pages -->
   <url>
