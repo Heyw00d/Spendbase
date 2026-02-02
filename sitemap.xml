@@ -1,120 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Homepage -->
   <url>
     <loc>https://spendbase.cards/</loc>
-    <lastmod>2026-01-30</lastmod>
+    <lastmod>2026-02-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+  
+  <!-- Section Pages -->
   <url>
     <loc>https://spendbase.cards/learn</loc>
-    <lastmod>2026-01-30</lastmod>
+    <lastmod>2026-02-02</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://spendbase.cards/rewards</loc>
-    <lastmod>2026-01-30</lastmod>
+    <lastmod>2026-02-02</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://spendbase.cards/find-my-card</loc>
-    <lastmod>2026-01-30</lastmod>
+    <lastmod>2026-02-02</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://spendbase.cards/scores</loc>
-    <lastmod>2026-01-30</lastmod>
+    <lastmod>2026-02-02</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://spendbase.cards/privacy</loc>
-    <lastmod>2026-01-30</lastmod>
+    <lastmod>2026-02-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://spendbase.cards/terms</loc>
-    <lastmod>2026-01-30</lastmod>
+    <lastmod>2026-02-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
-  <url><loc>https://spendbase.cards/card/crypto-com/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/coinbase/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/metamask-card/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/ether-fi-cash/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/gnosis-pay/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/nexo/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/plutus/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/bybit/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/krak-card/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/fold/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/whitebit-nova/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/uphold/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/bitpay/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/binance-card/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/solayer-emerald/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/kast-k-card/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/kast-x-card/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/kast-founders/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/ready/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/avici/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/phantom-card/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/solflare/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/holyheld/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/kosh/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/bleap/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/redotpay/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/tria/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/kontigo/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/orbitx-neo/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/orbitx-lux/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/gemini/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/bitget-card/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/bitget-premier/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/coca/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/brighty/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/cypher/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/wayex/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/bitpanda/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/zypto/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/ledger/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/tuyo/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/oobit/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/deblock/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/tapx/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/fiat24/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/thorwallet/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/safepal/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/ur/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/imtoken/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/tokenpocket/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/solcard/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/tangem/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/exa/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/xapo/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/avalanche-card/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/hana-wallet/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/offramp/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/kaze/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/swype-fun/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/bit2me/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://spendbase.cards/card/verse-v-card/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/kolo/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/revolut/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/cash-app/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/wirex/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/nubank/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://spendbase.cards/card/exodus-pay/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://spendbase.cards/card/moto/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://spendbase.cards/card/backpack-card/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://spendbase.cards/card/offgrid/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://spendbase.cards/card/keyflo/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://spendbase.cards/card/stealf/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://spendbase.cards/card/jupiter-card/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://spendbase.cards/card/volet/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://spendbase.cards/card/valeo/</loc><lastmod>2026-01-30</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+
+  <!-- Card Detail Pages -->
+  <url><loc>https://spendbase.cards/card/cryptocom/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/coinbase/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/metamask-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/etherfi-cash/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/gnosis-pay/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/nexo/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/plutus/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/bybit/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/krak-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/fold/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/whitebit-nova/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/uphold/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/bitpay/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/binance-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/okx-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/solayer-emerald/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/kast-k-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/kast-x-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/kast-founders/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/ready/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/avici/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/phantom-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/solflare/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/holyheld/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/kosh/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/bleap/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/redotpay/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/tria/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/kontigo/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/orbitx-neo/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/orbitx-lux/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/gemini/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/bitget-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/bitget-premier/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/coca/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/brighty/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/cypher/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/wayex/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/bitpanda/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/zypto/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/ledger/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/tuyo/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/oobit/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/deblock/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/tapx/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/fiat24/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/thorwallet/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/safepal/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/ur/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/imtoken/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/tokenpocket/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/solcard/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/tangem/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/exa/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/xapo/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/avalanche-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/hana-wallet/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/offramp/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/kaze/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/swypefun/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/bit2me/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/verse-v-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/kolo/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/bonkx/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/revolut/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/cash-app/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/wirex/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/nubank/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/exodus-pay/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/moto/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/backpack-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/offgrid/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/keyflo/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/mute-card/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/card/stealf/</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>
