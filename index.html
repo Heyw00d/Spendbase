@@ -1528,14 +1528,14 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
 
   let filtered = allCards;
 
-  // Exclude Coming Soon cards from all views except the Coming Soon tab OR when searching
-  if (categoryFilter !== 'comingSoon' && !searchTerm) {
-    filtered = filtered.filter(c => !c.comingSoon);
-  }
-
   // Search filter (uses desktop searchTerm or mobile mobileSearch)
   const [mobileSearchState, setMobileSearchState] = useState('');
   const effectiveSearch = searchTerm || mobileSearchState;
+
+  // Exclude Coming Soon cards from all views except the Coming Soon tab OR when searching
+  if (categoryFilter !== 'comingSoon' && !effectiveSearch) {
+    filtered = filtered.filter(c => !c.comingSoon);
+  }
   if (effectiveSearch) {
     const term = effectiveSearch.toLowerCase();
     filtered = filtered.filter(c =>
