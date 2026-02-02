@@ -1234,6 +1234,457 @@ function CardWizard({ darkMode, onViewCard }) {
 // ============================================
 // PRIVACY POLICY PAGE
 // ============================================
+// ==================== INTEL PAGE ====================
+const cardIntelData = [
+  { name: "Crypto.com", issuer: "Self-Issued", wallet: "Custom custodial", launch: "2018-10", users: "100M+", funding: null, fundingNum: 0, valuation: "~$5B (2021)", investors: "Valar Ventures, DTCP", network: "Visa", custody: "Custodial", walletType: "Exchange" },
+  { name: "Binance Card", issuer: "Contis", wallet: "Custom custodial", launch: "2020-07", users: "200M+", funding: null, fundingNum: 0, valuation: null, investors: null, network: "Visa", custody: "Custodial", walletType: "Exchange" },
+  { name: "Coinbase Card", issuer: "Marqeta", wallet: "Custom custodial", launch: "2019-04", users: "110M+", funding: "Public", fundingNum: 0, valuation: "~$50B+ market cap", investors: "Public company", network: "Visa", custody: "Custodial", walletType: "Exchange" },
+  { name: "Bybit Card", issuer: "Moorwand", wallet: "Custom custodial", launch: "2023-03", users: "60-70M", funding: null, fundingNum: 0, valuation: null, investors: null, network: "Mastercard", custody: "Custodial", walletType: "Exchange" },
+  { name: "Nexo Card", issuer: "DiPocket", wallet: "Custom custodial", launch: "2022-04", users: "7M+", funding: null, fundingNum: 0, valuation: null, investors: "Bootstrapped", network: "Mastercard", custody: "Custodial", walletType: "Custom" },
+  { name: "BitPay Card", issuer: "Undisclosed", wallet: "Custom custodial", launch: "2016-05", users: null, funding: null, fundingNum: 0, valuation: null, investors: "Founders Fund, Index Ventures", network: "Mastercard", custody: "Custodial", walletType: "Custom" },
+  { name: "Wirex", issuer: "Self-Issued", wallet: "Hybrid custodial + non-custodial", launch: "2015", users: "7M+", funding: "$20M+", fundingNum: 20, valuation: null, investors: "SBI Group, Stellar Development Foundation", network: "Visa/Mastercard", custody: "Hybrid", walletType: "Custom" },
+  { name: "Gemini Credit Card", issuer: "WebBank", wallet: "Custom custodial", launch: "2021-01", users: "13M+", funding: null, fundingNum: 0, valuation: "$4.3B (2021)", investors: "Morgan Creek Digital", network: "Mastercard", custody: "Custodial", walletType: "Exchange" },
+  { name: "Revolut", issuer: "Self-Issued", wallet: "Custom custodial", launch: "2015-07", users: "65M+", funding: "$1.7B+", fundingNum: 1700, valuation: "$75B", investors: "Coatue, NVIDIA, Fidelity, SoftBank, Tiger Global", network: "Visa/Mastercard", custody: "Custodial", walletType: "Custom" },
+  { name: "Plutus", issuer: "Contis", wallet: "Non-custodial DeFi wallet", launch: "2018", users: null, funding: null, fundingNum: 0, valuation: null, investors: "Crowdfunded", network: "Visa", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Gnosis Pay", issuer: "Monavate", wallet: "Safe Smart Account", launch: "2023-07", users: null, funding: null, fundingNum: 0, valuation: null, investors: "GnosisDAO", network: "Visa", custody: "Non-Custodial", walletType: "Smart Contract" },
+  { name: "KAST", issuer: "Undisclosed", wallet: "Custodial wallet (Bridge/Stripe)", launch: "2024", users: null, funding: "$10M", fundingNum: 10, valuation: null, investors: "HSG, Peak XV Partners", network: "Visa", custody: "Custodial", walletType: "Custom" },
+  { name: "Ether.fi Cash", issuer: "Undisclosed", wallet: "Smart contract wallet on Scroll", launch: "2024-09", users: null, funding: "$32.3M", fundingNum: 32.3, valuation: null, investors: "Bullish Capital, CoinFund, SV Angel", network: "Visa", custody: "Non-Custodial", walletType: "Smart Contract" },
+  { name: "Phantom Card", issuer: "Lead Bank", wallet: "Phantom self-custodial wallet", launch: "2025-12", users: "15-17M MAU", funding: "$150M", fundingNum: 150, valuation: "$3B", investors: "Sequoia, Paradigm, a16z", network: "Visa", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Solayer Emerald", issuer: "Undisclosed", wallet: "Self-custodial SVM wallet", launch: "2025-04", users: null, funding: "$12-20M", fundingNum: 12, valuation: "$80M", investors: "Polychain, Big Brain Holdings", network: "Visa", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Fold", issuer: "Sutton Bank", wallet: "Custodial (BitGo)", launch: "2020-11", users: "600K+", funding: "$60.1M", fundingNum: 60.1, valuation: "Public (NASDAQ: FLD)", investors: "Bessemer, Craft Ventures", network: "Visa", custody: "Custodial", walletType: "Custom" },
+  { name: "Redotpay", issuer: "Undisclosed", wallet: "Custodial proprietary", launch: "2023-11", users: "6M+", funding: "$147M+", fundingNum: 147, valuation: "$1B+ (Unicorn)", investors: "Lightspeed, HongShan, DST Global, Accel, Coinbase Ventures", network: "Visa", custody: "Custodial", walletType: "Custom" },
+  { name: "Xapo", issuer: "Self-Issued", wallet: "Custodial bank", launch: "2014-04", users: null, funding: "$40M", fundingNum: 40, valuation: null, investors: "Benchmark, Pantera Capital, Fortress", network: "Mastercard", custody: "Custodial", walletType: "Custom" },
+  { name: "Uphold", issuer: "Undisclosed", wallet: "Custodial multi-asset", launch: "2020-03", users: "6M+", funding: "$73.4M", fundingNum: 73.4, valuation: null, investors: "Private rounds", network: "Mastercard", custody: "Custodial", walletType: "Custom" },
+  { name: "Holyheld", issuer: "Unlimit", wallet: "Non-custodial (BRRR protocol)", launch: "2023-04", users: null, funding: "Undisclosed", fundingNum: 0, valuation: null, investors: "Toyota Ventures, Polygon", network: "Mastercard", custody: "Non-Custodial", walletType: "Smart Contract" },
+  { name: "Fiat24", issuer: "Self-Issued", wallet: "Non-custodial dApp", launch: "2023-06", users: null, funding: null, fundingNum: 0, valuation: null, investors: "SafePal", network: "Visa/Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Bleap", issuer: "Unlimit", wallet: "Self-custodial wallet", launch: "2025-Q1", users: null, funding: "$2.3M", fundingNum: 2.3, valuation: null, investors: "Ethereal Ventures, Maven11, Alliance DAO, Robot Ventures", network: "Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Ready (Argent)", issuer: "Kulipa", wallet: "Smart contract wallet on Starknet", launch: "2025-03", users: null, funding: "$56M", fundingNum: 56, valuation: null, investors: "Fabric Ventures, Paradigm, Index Ventures, Jump Crypto", network: "Mastercard", custody: "Non-Custodial", walletType: "Smart Contract" },
+  { name: "Swype.fun (BrahmaFi)", issuer: "Undisclosed", wallet: "Non-custodial (Aave/Euler)", launch: "2025-07", users: null, funding: "$6.7M", fundingNum: 6.7, valuation: null, investors: "Framework Ventures, Cherry Ventures, Maven 11, Safe", network: "Unknown", custody: "Non-Custodial", walletType: "Smart Contract" },
+  { name: "Cypher", issuer: "Undisclosed", wallet: "Non-custodial multi-chain", launch: "2023", users: null, funding: "$4.3M", fundingNum: 4.3, valuation: null, investors: "Y Combinator", network: "Visa", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Tria", issuer: "Third National", wallet: "Self-custodial AI wallet", launch: "2025", users: "150K+", funding: "$12M", fundingNum: 12, valuation: null, investors: "Polygon Ventures, Aptos Labs, G1 Ventures", network: "Visa", custody: "Non-Custodial", walletType: "MPC" },
+  { name: "Offramp", issuer: "Rain", wallet: "Self-custodial top-up", launch: "2024-01", users: null, funding: "$600K", fundingNum: 0.6, valuation: null, investors: "Orange DAO, Iterative", network: "Visa", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "SolCard", issuer: "Undisclosed", wallet: "Custodial Solana wallet", launch: "2024-Q1", users: null, funding: null, fundingNum: 0, valuation: null, investors: null, network: "Visa", custody: "Custodial", walletType: "Custom" },
+  { name: "Solflare", issuer: "Undisclosed", wallet: "Self-custodial Solana", launch: "2025-11", users: null, funding: "$3.4M", fundingNum: 3.4, valuation: null, investors: "Alliance, CMS Holdings, Delphi Digital", network: "Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Hana Wallet", issuer: "Immersve", wallet: "Non-custodial multi-chain", launch: "2025-09", users: null, funding: "$4M", fundingNum: 4, valuation: null, investors: "SushiSwap builders, Alliance, Orange DAO", network: "Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "MetaMask Card", issuer: "Monavate", wallet: "MetaMask self-custody wallet", launch: "2024-08", users: "30M+ MAU", funding: null, fundingNum: 0, valuation: "$7B (2022)", investors: "ParaFi, Temasek, SoftBank, Microsoft", network: "Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Ledger CL Card", issuer: "Baanx", wallet: "Ledger hardware wallet", launch: "2022-11", users: "7.5M+ devices", funding: null, fundingNum: 0, valuation: "$1.5B (2023)", investors: "10T Holdings, Cathay Innovation", network: "Visa", custody: "Non-Custodial", walletType: "Hardware" },
+  { name: "SafePal Card", issuer: "Fiat24", wallet: "SafePal hardware + software", launch: "2024-06", users: null, funding: null, fundingNum: 0, valuation: null, investors: "Binance Labs", network: "Visa/Mastercard", custody: "Non-Custodial", walletType: "Hardware" },
+  { name: "Tangem Pay", issuer: "Rain", wallet: "Tangem NFC hardware wallet", launch: "2025-11", users: null, funding: null, fundingNum: 0, valuation: null, investors: "Shima Capital", network: "Visa", custody: "Non-Custodial", walletType: "Hardware" },
+  { name: "TokenPocket TP Card", issuer: "Fiat24", wallet: "TokenPocket self-custody", launch: "2024-09", users: "25M+", funding: null, fundingNum: 0, valuation: null, investors: null, network: "Visa/Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "imToken Card", issuer: "Fiat24", wallet: "imToken self-custody", launch: "2025-01", users: "15M+", funding: null, fundingNum: 0, valuation: null, investors: "IDG Capital, Breyer Capital", network: "Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Bitpanda Card", issuer: "Contis", wallet: "Bitpanda custodial exchange", launch: "2021-01", users: "7M+", funding: null, fundingNum: 0, valuation: "$4.1B (2021)", investors: "Valar Ventures (Peter Thiel), Speedinvest", network: "Visa", custody: "Custodial", walletType: "Exchange" },
+  { name: "OKX Card", issuer: "Monavate", wallet: "OKX self-custody wallet", launch: "2026-01", users: "50M+", funding: null, fundingNum: 0, valuation: null, investors: "Self-funded", network: "Mastercard", custody: "Non-Custodial", walletType: "Exchange" },
+  { name: "Bitget Card", issuer: "Fiat24", wallet: "Bitget custodial + self-custody", launch: "2024-11", users: "100M+", funding: null, fundingNum: 0, valuation: "~$464M", investors: "Self-funded", network: "Visa/Mastercard", custody: "Non-Custodial", walletType: "Exchange" },
+  { name: "KuCard (KuCoin)", issuer: "Undisclosed", wallet: "KuCoin custodial exchange", launch: "2023-11", users: "30M+", funding: null, fundingNum: 0, valuation: null, investors: "IDG Capital, Matrix Partners", network: "Visa", custody: "Custodial", walletType: "Exchange" },
+  { name: "Gate Card", issuer: "Self-Issued", wallet: "Gate.io custodial exchange", launch: "2023-03", users: "12M+", funding: null, fundingNum: 0, valuation: null, investors: null, network: "Visa", custody: "Custodial", walletType: "Exchange" },
+  { name: "WhiteBIT Nova", issuer: "Wallester", wallet: "WhiteBIT custodial exchange", launch: "2024-12", users: "8M+", funding: null, fundingNum: 0, valuation: null, investors: null, network: "Visa", custody: "Custodial", walletType: "Exchange" },
+  { name: "Krak Card (Kraken)", issuer: "Monavate", wallet: "Krak neobank custodial", launch: "2025-11", users: "13M+", funding: "$800M", fundingNum: 800, valuation: "$20B", investors: "Apollo, Jane Street, DRW, Tribe Capital", network: "Mastercard", custody: "Custodial", walletType: "Exchange" },
+  { name: "CoinJar Card", issuer: "EML Payments", wallet: "CoinJar custodial exchange", launch: "2021-08", users: "600K", funding: null, fundingNum: 0, valuation: null, investors: "Blackbird Ventures", network: "Mastercard", custody: "Custodial", walletType: "Exchange" },
+  { name: "Wayex", issuer: "Lead Bank", wallet: "Wayex custodial", launch: "2021", users: "40K+", funding: null, fundingNum: 0, valuation: null, investors: null, network: "Visa", custody: "Custodial", walletType: "Custom" },
+  { name: "Nubank", issuer: "Self-Issued", wallet: "Custom in-house", launch: "2014-04", users: "114M", funding: "Public", fundingNum: 0, valuation: "$42.5B market cap", investors: "Sequoia, Tiger Global, Berkshire Hathaway", network: "Mastercard", custody: "Custodial", walletType: "Custom" },
+  { name: "Cash App", issuer: "Marqeta", wallet: "Custom in-house (Block)", launch: "2013-10", users: "57M MAU", funding: "Public", fundingNum: 0, valuation: "~$45B (Block)", investors: "Public company", network: "Visa", custody: "Custodial", walletType: "Custom" },
+  { name: "Brighty", issuer: "Undisclosed", wallet: "Custom custodial", launch: "2022", users: null, funding: "$10M", fundingNum: 10, valuation: null, investors: "Futurecraft Ventures", network: "Visa", custody: "Custodial", walletType: "Custom" },
+  { name: "COCA", issuer: "Wirex", wallet: "MPC wallet (non-custodial)", launch: "2024-01", users: null, funding: null, fundingNum: 0, valuation: null, investors: null, network: "Mastercard", custody: "Non-Custodial", walletType: "MPC" },
+  { name: "Deblock", issuer: "Undisclosed", wallet: "Custom self-custody on-chain", launch: "2024-04", users: "300K+", funding: "$59.7M", fundingNum: 59.7, valuation: null, investors: "Speedinvest, CommerzVentures, Latitude", network: "Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Kontigo", issuer: "Undisclosed", wallet: "Self-custodial USDC wallet", launch: "2025", users: "1M+", funding: "$20M", fundingNum: 20, valuation: null, investors: "Y Combinator (W25)", network: "Visa", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "OrbitX", issuer: "Undisclosed", wallet: "Self-custodial multi-chain", launch: "2024", users: null, funding: null, fundingNum: 0, valuation: null, investors: null, network: "Visa", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Oobit", issuer: "Undisclosed", wallet: "Custom wallet app", launch: "2022", users: null, funding: "$25M", fundingNum: 25, valuation: null, investors: "Tether (lead)", network: "Visa/Mastercard", custody: "Custodial", walletType: "Custom" },
+  { name: "Moto", issuer: "Undisclosed", wallet: "DeFi on Solana", launch: "2026", users: null, funding: "$1.8M", fundingNum: 1.8, valuation: null, investors: "Cyber Fund, Eterna Capital", network: "Visa", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Tuyo", issuer: "Rain", wallet: "Self-custodial USDC on Base", launch: "2025", users: null, funding: null, fundingNum: 0, valuation: null, investors: null, network: "Visa", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Zebec Card", issuer: "Mobilum", wallet: "Non-custodial Zebec Protocol", launch: "2023-12", users: null, funding: "$15M", fundingNum: 15, valuation: null, investors: "500 Global, Animoca Ventures", network: "Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Fizen Card", issuer: "Undisclosed", wallet: "Fizen self-custody Super App", launch: "2022", users: null, funding: "$1.18M", fundingNum: 1.18, valuation: null, investors: "Sotatek, VNext, Tomochain", network: "Unknown", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Cardano Card", issuer: "Wirex", wallet: "Wirex (custodial → non-custodial)", launch: "2025-11", users: null, funding: null, fundingNum: 0, valuation: null, investors: "EMURGO, Wirex", network: "Visa", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Spritz Card", issuer: "Undisclosed", wallet: "Non-custodial (fund from own wallet)", launch: "2023-05", users: null, funding: "$2.5M", fundingNum: 2.5, valuation: null, investors: "LedgerPrime, OrangeDAO, DCG Genesis", network: "Visa", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "xPortal Card", issuer: "Twispay", wallet: "xPortal non-custodial (MultiversX)", launch: "2023", users: "2.5M+", funding: "$19M+", fundingNum: 19, valuation: null, investors: "MultiversX ecosystem", network: "Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Jupiter Card", issuer: "Baystack", wallet: "Jupiter/Sanctum (Solana)", launch: "2024-Q4", users: null, funding: null, fundingNum: 0, valuation: null, investors: "Sanctum, Jupiter Exchange", network: "Unknown", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Exa", issuer: "Undisclosed", wallet: "Smart wallet on Optimism", launch: "2025-03", users: null, funding: "$5M", fundingNum: 5, valuation: null, investors: "Exactly Protocol investors", network: "Visa", custody: "Non-Custodial", walletType: "Smart Contract" },
+  { name: "Avici", issuer: "Third National", wallet: "Smart wallet (passkey, Solana)", launch: "2025-09", users: null, funding: "$4.5M", fundingNum: 4.5, valuation: null, investors: "Community sale (fair launch)", network: "Visa", custody: "Non-Custodial", walletType: "Smart Contract" },
+  { name: "Kolo", issuer: "Third National", wallet: "Hybrid custody", launch: "2024-10", users: "~10M", funding: null, fundingNum: 0, valuation: null, investors: null, network: "Visa/Mastercard", custody: "Hybrid", walletType: "Custom" },
+  { name: "Exodus Pay", issuer: "Baanx", wallet: "Exodus self-custodial (Solana)", launch: "2025-05", users: "6M+", funding: "$75M+", fundingNum: 75, valuation: "Public (NYSE: EXOD)", investors: "Public; Galaxy Digital", network: "Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Bit2Me", issuer: "Pecunpay", wallet: "Custodial platform", launch: "2021-11", users: "1M+", funding: "$88.1M", fundingNum: 88.1, valuation: null, investors: "Tether, Telefónica, Investcorp", network: "Mastercard", custody: "Custodial", walletType: "Custom" },
+  { name: "Verse V-Card", issuer: "Undisclosed", wallet: "Bitcoin.com self-custody", launch: "2024-08", users: "50M+ wallets", funding: null, fundingNum: 0, valuation: null, investors: null, network: "Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Avalanche Card", issuer: "Rain", wallet: "Portal MPC wallet", launch: "2024-10", users: null, funding: null, fundingNum: 0, valuation: null, investors: "Avalanche Foundation", network: "Visa", custody: "Non-Custodial", walletType: "MPC" },
+  { name: "THORWallet", issuer: "Fiat24", wallet: "Non-custodial DeFi (THORChain)", launch: "2024-02", users: null, funding: null, fundingNum: 0, valuation: null, investors: null, network: "Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "UR", issuer: "Fiat24", wallet: "Custom on-chain deposits", launch: "2025", users: null, funding: null, fundingNum: 0, valuation: null, investors: null, network: "Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Volet", issuer: "Undisclosed", wallet: "Centralized e-wallet", launch: "2014", users: null, funding: null, fundingNum: 0, valuation: null, investors: null, network: "Visa/Mastercard", custody: "Custodial", walletType: "Custom" },
+  { name: "Zypto", issuer: "Undisclosed", wallet: "Zypto App wallet", launch: "2024", users: null, funding: null, fundingNum: 0, valuation: null, investors: null, network: "Visa/Mastercard", custody: "Non-Custodial", walletType: "Custom" },
+  { name: "Kaze", issuer: "Undisclosed", wallet: "Web3 payment platform", launch: "2024", users: null, funding: null, fundingNum: 0, valuation: null, investors: null, network: "Visa", custody: "Custodial", walletType: "Custom" },
+];
+
+function IntelPage({ darkMode, onAdvertise }) {
+  const [fundingSortKey, setFundingSortKey] = React.useState('fundingNum');
+  const [fundingSortDir, setFundingSortDir] = React.useState('desc');
+
+  // Issuer grouping
+  const issuerGroups = React.useMemo(() => {
+    const groups = {};
+    cardIntelData.forEach(c => {
+      const issuer = c.issuer;
+      if (!groups[issuer]) groups[issuer] = [];
+      groups[issuer].push(c.name);
+    });
+    // Sort by count descending
+    return Object.entries(groups).sort((a, b) => b[1].length - a[1].length);
+  }, []);
+
+  const issuerColors = {
+    'Undisclosed': { bg: 'bg-gray-600/20', text: 'text-gray-400', border: 'border-gray-600/30' },
+    'Fiat24': { bg: 'bg-violet-500/20', text: 'text-violet-400', border: 'border-violet-500/30' },
+    'Self-Issued': { bg: 'bg-amber-500/20', text: 'text-amber-400', border: 'border-amber-500/30' },
+    'Monavate': { bg: 'bg-cyan-500/20', text: 'text-cyan-400', border: 'border-cyan-500/30' },
+    'Rain': { bg: 'bg-emerald-500/20', text: 'text-emerald-400', border: 'border-emerald-500/30' },
+    'Contis': { bg: 'bg-blue-500/20', text: 'text-blue-400', border: 'border-blue-500/30' },
+    'Third National': { bg: 'bg-rose-500/20', text: 'text-rose-400', border: 'border-rose-500/30' },
+    'Baanx': { bg: 'bg-orange-500/20', text: 'text-orange-400', border: 'border-orange-500/30' },
+    'Lead Bank': { bg: 'bg-teal-500/20', text: 'text-teal-400', border: 'border-teal-500/30' },
+    'Marqeta': { bg: 'bg-pink-500/20', text: 'text-pink-400', border: 'border-pink-500/30' },
+    'Unlimit': { bg: 'bg-indigo-500/20', text: 'text-indigo-400', border: 'border-indigo-500/30' },
+    'Wirex': { bg: 'bg-lime-500/20', text: 'text-lime-400', border: 'border-lime-500/30' },
+  };
+  const issuerColorsLight = {
+    'Undisclosed': { bg: 'bg-gray-100', text: 'text-gray-600', border: 'border-gray-300' },
+    'Fiat24': { bg: 'bg-violet-50', text: 'text-violet-700', border: 'border-violet-200' },
+    'Self-Issued': { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
+    'Monavate': { bg: 'bg-cyan-50', text: 'text-cyan-700', border: 'border-cyan-200' },
+    'Rain': { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
+    'Contis': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+    'Third National': { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200' },
+    'Baanx': { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' },
+    'Lead Bank': { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200' },
+    'Marqeta': { bg: 'bg-pink-50', text: 'text-pink-700', border: 'border-pink-200' },
+    'Unlimit': { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200' },
+    'Wirex': { bg: 'bg-lime-50', text: 'text-lime-700', border: 'border-lime-200' },
+  };
+  const getIssuerColor = (issuer) => {
+    const colors = darkMode ? issuerColors : issuerColorsLight;
+    return colors[issuer] || (darkMode ? { bg: 'bg-sky-500/20', text: 'text-sky-400', border: 'border-sky-500/30' } : { bg: 'bg-sky-50', text: 'text-sky-700', border: 'border-sky-200' });
+  };
+
+  // Funding leaderboard
+  const fundedCards = React.useMemo(() => {
+    return cardIntelData
+      .filter(c => c.funding && c.fundingNum > 0)
+      .sort((a, b) => {
+        let aVal = a[fundingSortKey], bVal = b[fundingSortKey];
+        if (typeof aVal === 'string') aVal = aVal.toLowerCase();
+        if (typeof bVal === 'string') bVal = bVal.toLowerCase();
+        if (aVal == null) return 1;
+        if (bVal == null) return -1;
+        return fundingSortDir === 'desc' ? (bVal > aVal ? 1 : -1) : (aVal > bVal ? 1 : -1);
+      });
+  }, [fundingSortKey, fundingSortDir]);
+
+  const handleFundingSort = (key) => {
+    if (fundingSortKey === key) {
+      setFundingSortDir(d => d === 'desc' ? 'asc' : 'desc');
+    } else {
+      setFundingSortKey(key);
+      setFundingSortDir('desc');
+    }
+  };
+
+  // Custody breakdown
+  const custodyData = React.useMemo(() => {
+    const nc = cardIntelData.filter(c => c.custody === 'Non-Custodial');
+    const cu = cardIntelData.filter(c => c.custody === 'Custodial');
+    const hy = cardIntelData.filter(c => c.custody === 'Hybrid');
+    const total = nc.length + cu.length + hy.length;
+    return { nc, cu, hy, total };
+  }, []);
+
+  // Launch timeline
+  const timelineGroups = React.useMemo(() => {
+    const groups = {
+      '2013–2020': [],
+      '2021–2022': [],
+      '2023': [],
+      '2024': [],
+      '2025': [],
+      '2026': [],
+    };
+    cardIntelData.forEach(c => {
+      const y = parseInt(c.launch);
+      if (y <= 2020) groups['2013–2020'].push(c.name);
+      else if (y <= 2022) groups['2021–2022'].push(c.name);
+      else if (y === 2023 || c.launch.startsWith('2023')) groups['2023'].push(c.name);
+      else if (y === 2024 || c.launch.startsWith('2024')) groups['2024'].push(c.name);
+      else if (y === 2025 || c.launch.startsWith('2025')) groups['2025'].push(c.name);
+      else if (y >= 2026 || c.launch.startsWith('2026')) groups['2026'].push(c.name);
+    });
+    return Object.entries(groups);
+  }, []);
+
+  // Wallet infra
+  const walletGroups = React.useMemo(() => {
+    const groups = {
+      'Hardware Wallets': cardIntelData.filter(c => c.walletType === 'Hardware'),
+      'Smart Contract Wallets': cardIntelData.filter(c => c.walletType === 'Smart Contract'),
+      'MPC Wallets': cardIntelData.filter(c => c.walletType === 'MPC'),
+      'Exchange Wallets': cardIntelData.filter(c => c.walletType === 'Exchange'),
+      'Custom Wallets': cardIntelData.filter(c => c.walletType === 'Custom'),
+    };
+    return Object.entries(groups);
+  }, []);
+
+  const SortArrow = ({ active, dir }) => (
+    <span className={`ml-1 inline-block ${active ? (darkMode ? 'text-lime-400' : 'text-lime-600') : (darkMode ? 'text-gray-600' : 'text-gray-400')}`}>
+      {active && dir === 'asc' ? '↑' : '↓'}
+    </span>
+  );
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      {/* HERO */}
+      <section className="text-center py-12 md:py-20">
+        <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide mb-6 ${darkMode ? 'bg-lime-400/10 text-lime-400 border border-lime-400/20' : 'bg-lime-50 text-lime-700 border border-lime-200'}`}>
+          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd"/></svg>
+          RESEARCH · {cardIntelData.length} CARDS ANALYZED
+        </div>
+        <h1 className={`text-4xl md:text-6xl font-black tracking-tight mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+          Crypto Card <span className={`${darkMode ? 'text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-cyan-400' : 'text-transparent bg-clip-text bg-gradient-to-r from-lime-600 to-cyan-600'}`}>Industry Intel</span>
+        </h1>
+        <p className={`text-lg md:text-xl max-w-3xl mx-auto leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+          Deep infrastructure analysis of {cardIntelData.length}+ crypto debit cards — who issues them, how they're built, and who's funding them.
+        </p>
+        <div className={`flex flex-wrap justify-center gap-6 mt-10 text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+          <div className="flex items-center gap-2"><span className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{issuerGroups.length}</span> Card Issuers</div>
+          <div className={`w-px h-8 ${darkMode ? 'bg-gray-800' : 'bg-gray-300'}`}></div>
+          <div className="flex items-center gap-2"><span className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{fundedCards.length}</span> Funded Companies</div>
+          <div className={`w-px h-8 ${darkMode ? 'bg-gray-800' : 'bg-gray-300'}`}></div>
+          <div className="flex items-center gap-2"><span className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{custodyData.nc.length}</span> Non-Custodial</div>
+        </div>
+      </section>
+
+      {/* ISSUER INFRASTRUCTURE MAP */}
+      <section className="mb-16">
+        <h2 className={`text-2xl md:text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Card Issuer Infrastructure Map</h2>
+        <p className={`mb-8 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Who powers the rails behind every crypto card. Grouped by the licensed card issuer that enables each product.</p>
+        <div className="space-y-4">
+          {issuerGroups.map(([issuer, cards]) => {
+            const label = issuer === 'Undisclosed' ? 'Undisclosed' : issuer;
+            const colors = getIssuerColor(issuer);
+            const isUndisclosed = issuer === 'Undisclosed';
+            return (
+              <div key={issuer} className={`rounded-xl border p-4 md:p-5 ${darkMode ? (isUndisclosed ? 'bg-gray-900/50 border-gray-800' : 'bg-gray-900/80 border-gray-800') : (isUndisclosed ? 'bg-gray-50 border-gray-200' : 'bg-white border-gray-200')} ${isUndisclosed ? 'opacity-75' : ''}`}>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold border ${colors.bg} ${colors.text} ${colors.border}`}>
+                    {isUndisclosed && <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>}
+                    {label}
+                  </span>
+                  <span className={`text-xs font-medium px-2 py-0.5 rounded ${darkMode ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-500'}`}>{cards.length} card{cards.length !== 1 ? 's' : ''}</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {cards.map(card => (
+                    <span key={card} className={`inline-block px-3 py-1.5 rounded-lg text-sm font-medium ${darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
+                      {card}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* FUNDING LEADERBOARD */}
+      <section className="mb-16">
+        <h2 className={`text-2xl md:text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Funding Leaderboard</h2>
+        <p className={`mb-8 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Only cards with known funding shown. Sorted by total raised.</p>
+        <div className={`rounded-xl border overflow-hidden ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className={darkMode ? 'bg-gray-900' : 'bg-gray-50'}>
+                  {[
+                    { key: 'name', label: 'Card' },
+                    { key: 'fundingNum', label: 'Total Funding' },
+                    { key: 'valuation', label: 'Valuation' },
+                    { key: 'investors', label: 'Lead Investors' },
+                    { key: 'users', label: 'Users' },
+                  ].map(col => (
+                    <th key={col.key}
+                      onClick={() => handleFundingSort(col.key)}
+                      className={`px-4 py-3 text-left font-semibold cursor-pointer select-none whitespace-nowrap ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}
+                    >
+                      {col.label}<SortArrow active={fundingSortKey === col.key} dir={fundingSortDir} />
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className={`divide-y ${darkMode ? 'divide-gray-800' : 'divide-gray-100'}`}>
+                {fundedCards.map((c, i) => {
+                  const isUnicorn = c.valuation && (c.valuation.includes('$1B') || c.valuation.includes('$3B') || c.valuation.includes('$7B') || c.valuation.includes('$20B') || c.valuation.includes('$75B') || c.valuation.includes('Unicorn'));
+                  const isPublic = c.valuation && (c.valuation.includes('Public') || c.valuation.includes('NASDAQ') || c.valuation.includes('NYSE') || c.valuation.includes('market cap'));
+                  return (
+                    <tr key={c.name} className={`${darkMode ? 'hover:bg-gray-900/50' : 'hover:bg-gray-50'} transition`}>
+                      <td className={`px-4 py-3 font-medium whitespace-nowrap ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                        {c.name}
+                        {isUnicorn && <span className="ml-1.5" title="Unicorn ($1B+)">🦄</span>}
+                        {isPublic && <span className="ml-1.5" title="Public Company">📈</span>}
+                      </td>
+                      <td className={`px-4 py-3 font-bold whitespace-nowrap ${darkMode ? 'text-lime-400' : 'text-lime-600'}`}>
+                        {c.funding}
+                      </td>
+                      <td className={`px-4 py-3 whitespace-nowrap ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                        {c.valuation || '—'}
+                      </td>
+                      <td className={`px-4 py-3 max-w-xs truncate ${darkMode ? 'text-gray-400' : 'text-gray-600'}`} title={c.investors || ''}>
+                        {c.investors || '—'}
+                      </td>
+                      <td className={`px-4 py-3 whitespace-nowrap ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {c.users || '—'}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* CUSTODY BREAKDOWN */}
+      <section className="mb-16">
+        <h2 className={`text-2xl md:text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Custody Breakdown</h2>
+        <p className={`mb-8 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>The industry is trending toward self-custody. Users increasingly demand control of their keys.</p>
+
+        {/* Bar visualization */}
+        <div className={`rounded-xl border p-6 mb-6 ${darkMode ? 'bg-gray-900/80 border-gray-800' : 'bg-white border-gray-200'}`}>
+          <div className="flex items-end gap-8 justify-center h-48 mb-6">
+            {[
+              { label: 'Non-Custodial', count: custodyData.nc.length, color: darkMode ? 'from-lime-500 to-emerald-500' : 'from-lime-500 to-emerald-500', accent: darkMode ? 'text-lime-400' : 'text-lime-600' },
+              { label: 'Custodial', count: custodyData.cu.length, color: darkMode ? 'from-orange-500 to-red-500' : 'from-orange-400 to-red-400', accent: darkMode ? 'text-orange-400' : 'text-orange-600' },
+              { label: 'Hybrid', count: custodyData.hy.length, color: darkMode ? 'from-cyan-500 to-blue-500' : 'from-cyan-400 to-blue-400', accent: darkMode ? 'text-cyan-400' : 'text-cyan-600' },
+            ].map(item => (
+              <div key={item.label} className="flex flex-col items-center gap-2">
+                <span className={`text-3xl md:text-4xl font-black ${item.accent}`}>{item.count}</span>
+                <div
+                  className={`w-20 md:w-28 rounded-t-lg bg-gradient-to-t ${item.color}`}
+                  style={{ height: `${(item.count / custodyData.total) * 160}px`, minHeight: '12px' }}
+                ></div>
+                <span className={`text-xs font-medium mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{item.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Trend callout */}
+          <div className={`text-center py-3 px-4 rounded-lg ${darkMode ? 'bg-lime-400/10 border border-lime-400/20' : 'bg-lime-50 border border-lime-200'}`}>
+            <span className={`text-sm font-semibold ${darkMode ? 'text-lime-400' : 'text-lime-700'}`}>
+              🔑 {Math.round(custodyData.nc.length / custodyData.total * 100)}% of crypto cards are now non-custodial — self-custody is winning
+            </span>
+          </div>
+        </div>
+
+        {/* Card lists per category */}
+        <div className="grid md:grid-cols-3 gap-4">
+          {[
+            { title: 'Non-Custodial', cards: custodyData.nc, icon: '🔑', accent: darkMode ? 'border-lime-500/30' : 'border-lime-300' },
+            { title: 'Custodial', cards: custodyData.cu, icon: '🏦', accent: darkMode ? 'border-orange-500/30' : 'border-orange-300' },
+            { title: 'Hybrid', cards: custodyData.hy, icon: '🔀', accent: darkMode ? 'border-cyan-500/30' : 'border-cyan-300' },
+          ].map(group => (
+            <div key={group.title} className={`rounded-xl border p-4 ${darkMode ? 'bg-gray-900/80 border-gray-800' : 'bg-white border-gray-200'} border-t-2 ${group.accent}`}>
+              <h3 className={`font-semibold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{group.icon} {group.title} ({group.cards.length})</h3>
+              <div className="flex flex-wrap gap-1.5">
+                {group.cards.map(c => (
+                  <span key={c.name} className={`text-xs px-2 py-1 rounded ${darkMode ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-600'}`}>{c.name}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* LAUNCH TIMELINE */}
+      <section className="mb-16">
+        <h2 className={`text-2xl md:text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Launch Timeline</h2>
+        <p className={`mb-8 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>The crypto card space is accelerating. 2024–2025 saw an explosion of new entrants.</p>
+
+        <div className="space-y-4">
+          {timelineGroups.map(([period, cards]) => {
+            const maxCards = Math.max(...timelineGroups.map(g => g[1].length));
+            const barWidth = cards.length > 0 ? Math.max((cards.length / maxCards) * 100, 8) : 0;
+            const is2425 = period === '2024' || period === '2025';
+            return (
+              <div key={period} className={`rounded-xl border p-4 ${darkMode ? 'bg-gray-900/80 border-gray-800' : 'bg-white border-gray-200'} ${is2425 ? (darkMode ? 'ring-1 ring-lime-400/30' : 'ring-1 ring-lime-300') : ''}`}>
+                <div className="flex items-center gap-4 mb-3">
+                  <span className={`text-lg font-bold w-24 flex-shrink-0 ${is2425 ? (darkMode ? 'text-lime-400' : 'text-lime-600') : (darkMode ? 'text-white' : 'text-gray-900')}`}>{period}</span>
+                  <div className="flex-1 relative">
+                    <div className={`h-8 rounded-full ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                      <div
+                        className={`h-full rounded-full bg-gradient-to-r ${is2425 ? 'from-lime-500 to-cyan-500' : (darkMode ? 'from-gray-600 to-gray-500' : 'from-gray-300 to-gray-400')}`}
+                        style={{ width: `${barWidth}%`, transition: 'width 0.5s ease' }}
+                      ></div>
+                    </div>
+                  </div>
+                  <span className={`text-2xl font-black w-12 text-right ${is2425 ? (darkMode ? 'text-lime-400' : 'text-lime-600') : (darkMode ? 'text-white' : 'text-gray-900')}`}>{cards.length}</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {cards.map(name => (
+                    <span key={name} className={`text-xs px-2 py-1 rounded ${darkMode ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-600'}`}>{name}</span>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* WALLET INFRASTRUCTURE */}
+      <section className="mb-16">
+        <h2 className={`text-2xl md:text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Wallet Infrastructure</h2>
+        <p className={`mb-8 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>How cards custody and manage user funds — from hardware wallets to smart contracts.</p>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {walletGroups.map(([type, cards]) => {
+            const icons = {
+              'Hardware Wallets': '🔒',
+              'Smart Contract Wallets': '📜',
+              'MPC Wallets': '🔐',
+              'Exchange Wallets': '🏛️',
+              'Custom Wallets': '⚙️',
+            };
+            const descriptions = {
+              'Hardware Wallets': 'Physical device security (Ledger, SafePal, Tangem)',
+              'Smart Contract Wallets': 'On-chain programmable accounts (Safe, Starknet, Scroll)',
+              'MPC Wallets': 'Multi-party computation — no single point of failure',
+              'Exchange Wallets': 'Centralized exchange custody (Binance, Coinbase, Kraken)',
+              'Custom Wallets': 'Proprietary or specialized wallet solutions',
+            };
+            return (
+              <div key={type} className={`rounded-xl border p-5 ${darkMode ? 'bg-gray-900/80 border-gray-800' : 'bg-white border-gray-200'}`}>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xl">{icons[type]}</span>
+                  <h3 className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{type}</h3>
+                  <span className={`ml-auto text-xs font-medium px-2 py-0.5 rounded ${darkMode ? 'bg-gray-800 text-gray-400' : 'bg-gray-100 text-gray-500'}`}>{cards.length}</span>
+                </div>
+                <p className={`text-xs mb-3 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>{descriptions[type]}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {cards.map(c => (
+                    <span key={c.name} className={`text-xs px-2 py-1 rounded ${darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>{c.name}</span>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className={`text-center py-12 rounded-2xl mb-8 ${darkMode ? 'bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 border border-gray-800' : 'bg-gradient-to-br from-gray-50 via-white to-gray-50 border border-gray-200'}`}>
+        <h2 className={`text-2xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Want your card listed?</h2>
+        <p className={`mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Get your crypto card in front of thousands of users researching their next card.</p>
+        <button
+          onClick={onAdvertise}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm bg-gradient-to-r from-lime-500 to-cyan-500 text-gray-900 hover:from-lime-400 hover:to-cyan-400 transition shadow-lg"
+        >
+          Advertise with us
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </button>
+      </section>
+    </div>
+  );
+}
+
 function PrivacyPolicy({ darkMode }) {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
@@ -1456,7 +1907,7 @@ function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, se
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
-            {['cards','wizard','ratings','learn','rewards'].map(v => (
+            {['cards','wizard','ratings','intel','learn','rewards'].map(v => (
               <button
                 key={v}
                 onClick={() => handleNavClick(v)}
@@ -1466,7 +1917,7 @@ function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, se
                     : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')
                 }`}
             >
-              {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'ratings' ? 'Scores' : v.charAt(0).toUpperCase()+v.slice(1)}
+              {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'ratings' ? 'Scores' : v === 'intel' ? 'Intel' : v.charAt(0).toUpperCase()+v.slice(1)}
             </button>
           ))}
           </nav>
@@ -1507,7 +1958,7 @@ function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, se
         {mobileMenuOpen && (
           <div className={`lg:hidden mt-3 pb-3 border-t ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
             <nav className="flex flex-col gap-1 pt-3">
-              {['cards','wizard','learn','rewards'].map(v => (
+              {['cards','wizard','ratings','intel','learn','rewards'].map(v => (
                 <button
                   key={v}
                   onClick={() => handleNavClick(v)}
@@ -1517,7 +1968,7 @@ function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, se
                       : (darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50')
                   }`}
                 >
-                  {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'cards' ? 'All Cards' : v === 'learn' ? 'Learn' : v.charAt(0).toUpperCase()+v.slice(1)}
+                  {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'cards' ? 'All Cards' : v === 'ratings' ? 'Scores' : v === 'intel' ? 'Intel' : v === 'learn' ? 'Learn' : v.charAt(0).toUpperCase()+v.slice(1)}
                 </button>
               ))}
               {/* Mobile Subscribe button */}
@@ -5055,6 +5506,7 @@ const VIEW_TO_PATH = {
   rewards: '/rewards',
   wizard: '/find-my-card',
   ratings: '/scores',
+  intel: '/intel',
   privacy: '/privacy',
   terms: '/terms',
   demo: '/demo',
@@ -5095,6 +5547,7 @@ function updateSEO(view, cardName) {
     rewards: 'Video Rewards | Earn While Learning About Crypto Cards | Spendbase',
     wizard: 'Find My Perfect Crypto Card | Card Finder Quiz | Spendbase',
     ratings: 'Crypto Card Scores & Ratings | Community Reviews | Spendbase',
+    intel: 'Crypto Card Industry Intel | Infrastructure, Funding & Custody Analysis | Spendbase',
     privacy: 'Privacy Policy | Spendbase',
     terms: 'Terms of Service | Spendbase',
     demo: 'Video Demo | Spendbase',
@@ -5105,6 +5558,7 @@ function updateSEO(view, cardName) {
     rewards: 'Earn rewards by watching educational videos about crypto cards and decentralized finance.',
     wizard: 'Take our 60-second quiz to find the perfect crypto debit card for your spending style.',
     ratings: 'Community scores and ratings for crypto debit cards. See which cards users love most.',
+    intel: 'Deep infrastructure analysis of 80+ crypto debit cards — who issues them, how they\'re built, and who\'s funding them.',
     privacy: 'Spendbase privacy policy — how we handle your data.',
     terms: 'Spendbase terms of service.',
     demo: 'Watch a video demo of Spendbase features.',
@@ -5309,6 +5763,7 @@ function Spendbase() {
          activeView === 'wizard' ? <CardWizard darkMode={darkMode} /> :
          activeView === 'ratings' ? <RatingsPage darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} /> :
          activeView === 'learn' ? <LearnSection darkMode={darkMode} /> :
+         activeView === 'intel' ? <IntelPage darkMode={darkMode} onAdvertise={() => setShowAdvertise(true)} /> :
          activeView === 'privacy' ? <PrivacyPolicy darkMode={darkMode} /> :
          activeView === 'terms' ? <TermsOfService darkMode={darkMode} /> :
          activeView === 'demo' ? <VideoDemoPage darkMode={darkMode} onBack={() => navigateTo('rewards')} /> :
