@@ -4672,9 +4672,22 @@ const VIEW_TO_PATH = {
 const PATH_TO_VIEW = {};
 Object.entries(VIEW_TO_PATH).forEach(([view, path]) => { PATH_TO_VIEW[path] = view; });
 
+// SPA redirect: pick up path from 404.html redirect
+(function() {
+  var redirect = sessionStorage.getItem('spa-redirect');
+  if (redirect) {
+    sessionStorage.removeItem('spa-redirect');
+    if (redirect !== window.location.pathname) {
+      window.history.replaceState(null, '', redirect);
+    }
+  }
+})();
+
 function getViewFromPath(pathname) {
+  // Strip trailing slash for consistent matching
+  pathname = pathname.replace(/\/$/, '') || '/';
   if (PATH_TO_VIEW[pathname]) return { view: PATH_TO_VIEW[pathname] };
-  if (pathname.startsWith('/card/')) return { view: 'cardDetail', slug: pathname.replace('/card/', '') };
+  if (pathname.startsWith('/card/')) return { view: 'cardDetail', slug: pathname.replace('/card/', '').replace(/\/$/, '') };
   return { view: 'cards' }; // fallback
 }
 
