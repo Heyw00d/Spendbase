@@ -346,6 +346,8 @@ const allCards = [
   { id: 7, name: 'Wirex', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/bf2ac4c0-5dd7-489d-7a7a-38f351882b00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/9e1d4ec3-8818-483e-0c09-bc5f5b588300/public', brandLogoSize: 'h-10', xHandle: 'wirexapp', showFrontTags: true, bg: 'from-[#b8f5c8] to-[#d4fce0]', network: 'Visa', category: 'neobank', archetype: 'bank', custody: 'Hybrid', chain: 'Multi-chain', regions: ['europe', 'apac'], cashback: '0.5-8%', cashbackToken: 'WXT', fxFee: '0%', annualFee: '$0-$29.99/mo', settlement: 'Crypto', features: ['Direct crypto spend', '0% crypto loans', 'X-Accounts', '25% APY'], perks: ['685+ cryptos', '0% interest loans', 'Up to 8% cashback'], token: { ticker: 'WXT', live: true, cmc: 'wirex-token' }, website: 'https://www.wirexapp.com/', platforms: 'both' },
   // Nubank - Testing stablecoin card integration, USDC rewards available now
   { id: 8, name: 'Nubank', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/3ed27f45-12cf-401e-96a9-ecc81f7d4e00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/3ed27f45-12cf-401e-96a9-ecc81f7d4e00/public', showBrandName: true, brandNameText: 'Bank', xHandle: 'nubank', showFrontTags: true, bg: 'from-[#8A05BE] to-[#6a0491]', network: 'Mastercard', category: 'neobank', archetype: 'bank', custody: 'Custodial', chain: 'N/A', regions: ['latam', 'argentina'], cashback: '4% APY', cashbackToken: 'USDC', fxFee: 'Varies', annualFee: '$0', settlement: 'Fiat', features: ['USDC rewards', 'Stablecoin card testing', 'Crypto trading', '4% USDC yield'], perks: ['Largest LatAm bank', '100M+ users', 'Stablecoin card coming'], website: 'https://nubank.com.br', platforms: 'both' },
+  // Veil - Privacy-first omni-bank with Visa partnership, Dubai HQ
+  { id: 225, name: 'Veil', logo: 'https://logo.clearbit.com/veil.me', brandLogo: 'https://logo.clearbit.com/veil.me', xHandle: 'bankwithveil', showBrandName: true, brandNameText: 'Veil', showFrontTags: true, bg: 'from-[#0F172A] to-[#1E293B]', network: 'Visa', category: 'cryptoNative', archetype: 'neobank', custody: 'Custodial', chain: 'Multi-chain', regions: ['global', 'europe', 'apac'], cashback: 'TBD', cashbackToken: 'TBD', fxFee: 'TBD', annualFee: 'TBD', features: ['Privacy-first omni-bank', 'Virtual + physical Visa cards', 'Crypto-fiat multi-currency', 'AI financial agent', 'Merchant payment links', 'Token swaps'], perks: ['Visa partnership', 'Dubai regulated', 'Personal + business accounts', 'On-chain settlement'], website: 'https://veil.me', platforms: 'both' },
 
   // ============================================
   // COMING SOON - Cards on waitlist or launching soon
@@ -3616,6 +3618,22 @@ With a 2.9/5 Trustpilot rating from primarily LatAm reviewers, Nubank has mixed 
       { q: "What cryptocurrencies does Nubank support?", a: "Nubank supports major cryptocurrencies including Bitcoin, Ethereum, and USDC. The selection is more limited than dedicated crypto exchanges." }
     ]
   },
+  'Veil': {
+    seoTitle: "Veil Card Review 2026: Privacy-First Omni-Bank with Visa Cards | Spendbase",
+    metaDescription: "Veil is a privacy-first omni-bank from Dubai offering Visa debit cards, crypto-fiat multi-currency accounts, and an AI financial agent. See features →",
+    overview: `Veil is a privacy-focused omni-bank headquartered in Dubai, launched in January 2026 with a Visa partnership. It bridges the gap between crypto and traditional finance by offering virtual and physical Visa cards alongside multi-currency crypto-fiat accounts.
+
+The platform serves both personal and business users with features like an AI financial agent, merchant payment links, token swaps, and on-chain settlement. Veil positions itself as a full-stack financial platform rather than just a card issuer — think neobank meets crypto wallet with privacy at its core.
+
+As a newly launched platform, Veil has no verified app store ratings yet. The Visa partnership and Dubai regulatory framework lend credibility, but the product is still early. Best suited for privacy-conscious users in Europe, APAC, and the Middle East who want a single platform for crypto and fiat banking.`,
+    pros: ["Privacy-first architecture", "Official Visa partnership", "Dubai regulated — expanding to EU and Asia", "Both personal and business accounts"],
+    cons: ["Brand new — launched January 2026", "No verified app store ratings yet", "Cashback and fee details still TBD", "Limited track record compared to established neobanks"],
+    faq: [
+      { q: "Where is Veil available?", a: "Veil is headquartered in Dubai and available globally, with a focus on Europe, APAC, and the Middle East. Regional availability may vary as the platform expands." },
+      { q: "Is Veil custodial or non-custodial?", a: "Veil is a custodial platform, meaning they hold your funds similar to a traditional bank. This enables features like Visa card spending and fiat on/off-ramps." },
+      { q: "What makes Veil different from other crypto cards?", a: "Veil combines privacy-first banking with a full omni-bank experience — Visa cards, multi-currency accounts, AI financial agent, merchant tools, and on-chain settlement in one platform." }
+    ]
+  },
   'Fold': {
     seoTitle: "Fold Card Review 2026: Bitcoin Rewards Debit Card | Spendbase",
     metaDescription: "Fold Card offers Bitcoin cashback with gamified rewards. Spin the wheel for sats. See features and how it compares →",
@@ -4806,6 +4824,7 @@ const cardRatingsData = {
   'Cash App': { ios: 4.7, android: 4.6, trustpilot: 4.6, cryptonoshi: null, composite: 4.6, reviews: 400000 }, // Trustpilot 4.6 (Excellent)
   'Wirex': { ios: 3.7, android: 3.5, trustpilot: 1.3, cryptonoshi: 53, composite: 2.6, reviews: 10000 }, // Trustpilot 1.3 (Bad)
   'Nubank': { ios: 4.7, android: 4.6, trustpilot: 2.9, cryptonoshi: null, composite: 4.1, reviews: 350000 }, // Trustpilot 2.9 (Average)
+  'Veil': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 4.1, reviews: 0 },
   'N26': { ios: 4.5, android: 4.4, trustpilot: 4.0, cryptonoshi: null, composite: 4.3, reviews: 200000 }, // Trustpilot 4.0 (Great)
 
   // === MID TIER (3.5-4.0) - Average performers ===
