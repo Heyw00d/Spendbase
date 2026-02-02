@@ -365,6 +365,7 @@ const allCards = [
   { id: 218, name: 'Fizen Card', logo: 'https://www.google.com/s2/favicons?sz=128&domain=fizen.io', xHandle: 'FizenWallet', showFrontTags: true, bg: 'from-violet-600 to-purple-800', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: 'FiPoints', cashbackToken: 'FiPoints', fxFee: '0%', annualFee: '$9.99', features: ['Scan-to-Pay QR support', 'Travel perks & eSIM deals', 'USDT yield vault', 'Tether-backed'], perks: ['160+ countries', 'Non-custodial wallet', 'Backed by Tether'], website: 'https://fizen.io/card', platforms: 'both' },
   { id: 219, name: 'Cardano Card', logo: 'https://www.google.com/s2/favicons?sz=128&domain=cardanocard.io', xHandle: 'CardanoCard_', showFrontTags: true, bg: 'from-[#0033AD] to-[#002280]', network: 'Visa', category: 'cryptoNative', archetype: 'wallet', custody: 'Custodial', chain: 'Cardano', regions: ['global'], cashback: 'Up to 8%', cashbackToken: 'ADA', fxFee: 'Low', annualFee: 'TBD', features: ['ADA & multi-chain support', 'Apple Pay & Google Pay', 'Wirex partnership', 'Hotel discounts up to 65%'], perks: ['EMURGO backed', 'ADA cashback', 'Yield card coming Q2 2026'], token: { ticker: 'ADA', live: true, cmc: 'cardano' }, website: 'https://cardanocard.io', comingSoon: true, waitlistUrl: 'https://cardanocard.io', platforms: 'both' },
   { id: 220, name: 'CoinJar Card', logo: 'https://www.google.com/s2/favicons?sz=128&domain=coinjar.com', xHandle: 'CoinJar', showFrontTags: true, bg: 'from-[#4361EE] to-[#3a0ca3]', network: 'Mastercard', category: 'cryptoNative', archetype: 'exchange', custody: 'Custodial', chain: 'Exchange', regions: ['apac'], cashback: '1% (Rewards Points)', cashbackToken: 'CoinJar Points', fxFee: '2.99%', annualFee: '$0', features: ['Auto-convert at spend', 'Apple Pay & Google Pay', 'ATM withdrawals', 'CoinJar Rewards program'], perks: ['Award-winning AU exchange', 'Free card issuance', '1 point per $1 spent'], website: 'https://www.coinjar.com/au/card', platforms: 'both' },
+  { id: 221, name: 'Solid Card', logo: 'https://www.google.com/s2/favicons?sz=128&domain=solid.xyz', xHandle: 'solid_xyz', showFrontTags: true, bg: 'from-[#00C853] to-[#1B5E20]', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Multi-chain', regions: ['global'], cashback: '3%', cashbackToken: 'Crypto', fxFee: '0%', annualFee: '$0', features: ['Up to 14% yield on balance', 'SoUSD yield-bearing stablecoin', 'Apple Pay & Google Pay', 'Passkey signup — no seed phrase', 'Gasless transactions', 'Self-custodial Safe smart accounts'], perks: ['Earn while you spend', 'Non-custodial DeFi vault', 'Real-time notifications', 'Freeze/unfreeze anytime'], website: 'https://www.solid.xyz/card', platforms: 'both' },
 ];
 
 const blogPosts = [
@@ -4568,6 +4569,25 @@ Security is solid with multi-tier account protection and 24/7 live support. It's
       { q: "Is Volet available worldwide?", a: "Volet supports 150+ countries, though card availability and type may vary by region. Check their website for specific regional offerings." },
       { q: "Does Volet charge fees?", a: "Volet offers free P2P transfers between wallets. Card fees are low or free depending on the card type and region. Check their fee schedule for specifics." }
     ]
+  },
+  'Solid Card': {
+    seoTitle: "Solid Card Review 2026: Yield-Bearing Stablecoin Visa | Spendbase",
+    metaDescription: "Solid Card: 3% cashback, up to 14% yield on balance, non-custodial Visa. Spend stablecoins everywhere while earning DeFi yield →",
+    overview: `Solid is a stablecoin "super-app" that combines DeFi yield with everyday spending through a Visa debit card. The core proposition: your money earns up to 14% APY in the background while you spend it anywhere Visa is accepted.
+
+When you deposit USDC, Solid mints SoUSD — a yield-bearing stablecoin that represents shares in an institutional-grade DeFi vault. Your balance grows automatically through auto-compounding strategies, and you can spend directly from it via the Solid Card without manually selling or off-ramping.
+
+The card offers 3% crypto cashback on all purchases, works at 200M+ Visa merchants, and supports Apple Pay and Google Pay. Setup is via passkeys — no seed phrases, no gas fees, no bridging. Despite the simplicity, it's fully non-custodial using Safe smart accounts with MPC vault security.
+
+Solid abstracts away DeFi complexity while keeping you in control of your funds. It's targeting users who want better-than-bank yields and seamless crypto spending without the technical overhead of managing DeFi positions manually.`,
+    pros: ["3% crypto cashback", "Up to 14% yield on balance", "Non-custodial (Safe + MPC)", "No gas fees", "Passkey signup", "Apple & Google Pay", "Auto-compounding yield"],
+    cons: ["Virtual card only (no physical yet)", "Yield depends on DeFi market conditions", "New platform — limited track record", "SoUSD is not 1:1 pegged"],
+    faq: [
+      { q: "How does Solid Card earn yield?", a: "When you deposit USDC, Solid mints SoUSD — a yield-bearing token backed by curated DeFi strategies. Your balance grows automatically through auto-compounding, earning up to 14% APY." },
+      { q: "Is the Solid Card non-custodial?", a: "Yes. Solid uses Safe smart accounts with MPC vault security, giving you full self-custody of your funds while abstracting away seed phrases and gas fees." },
+      { q: "What cashback does Solid offer?", a: "Solid Card offers 3% crypto cashback on all purchases at 200M+ Visa merchants worldwide." },
+      { q: "Does Solid require KYC?", a: "Solid uses passkey-based signup for ease of use. Check their site for current verification requirements as they may vary by region." }
+    ]
   }
 };
 
@@ -4772,6 +4792,7 @@ const cardRatingsData = {
   'Fizen Card': { ios: 4.0, android: 3.9, trustpilot: null, cryptonoshi: null, composite: 3.9, reviews: 2000 },
   'Cardano Card': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 3.8, reviews: 200 },
   'CoinJar Card': { ios: 4.4, android: 4.2, trustpilot: 3.8, cryptonoshi: null, composite: 4.1, reviews: 20000 },
+  'Solid Card': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: null, reviews: 0 },
 };
 
 // Generate ratings using composite data where available, with smart fallbacks
