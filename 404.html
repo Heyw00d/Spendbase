@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Spendbase</title>
+  <script>
+    // GitHub Pages SPA redirect
+    // Stores the path in sessionStorage and redirects to index.html
+    // index.html picks it up and routes client-side
+    var path = window.location.pathname;
+    var search = window.location.search;
+    var hash = window.location.hash;
+    sessionStorage.setItem('spa-redirect', path + search + hash);
+    window.location.replace('/');
+  </script>
+</head>
+<body>
+  Redirecting...
+</body>
+</html>
