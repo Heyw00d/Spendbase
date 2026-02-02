@@ -4695,7 +4695,8 @@ Object.entries(VIEW_TO_PATH).forEach(([view, path]) => { PATH_TO_VIEW[path] = vi
   var redirect = sessionStorage.getItem('spa-redirect');
   if (redirect) {
     sessionStorage.removeItem('spa-redirect');
-    if (redirect !== window.location.pathname) {
+    // Only redirect if it's a valid card or known path, not the home page
+    if (redirect !== '/' && redirect !== window.location.pathname) {
       window.history.replaceState(null, '', redirect);
     }
   }
