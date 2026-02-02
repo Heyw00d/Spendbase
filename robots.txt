@@ -3,17 +3,6 @@
 
 User-agent: *
 Allow: /
-Allow: /learn
-Allow: /rewards
-Allow: /find-my-card
-Allow: /scores
-Allow: /card/
-Allow: /privacy
-Allow: /terms
-Allow: /demo
 
 # Sitemap location
 Sitemap: https://spendbase.cards/sitemap.xml
-
-# Crawl-delay (optional, be nice to servers)
-Crawl-delay: 1
