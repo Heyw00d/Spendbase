@@ -189,7 +189,7 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-const { useState, createContext, useContext } = React;
+const { useState, useEffect, useRef, useCallback, createContext, useContext } = React;
 
 // ============================================
 // API CONFIG - Google Apps Script endpoint
@@ -624,7 +624,7 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
               <div className="flex items-center gap-2">
                 {card.brandLogo ? (
                   <>
-                    <img src={card.brandLogo} alt={card.name} className={`${card.brandLogoSize || 'h-6'} object-contain`} style={card.invertLogo ? { filter: 'invert(1) brightness(2)' } : {}} onError={(e) => { e.target.style.display='none'; if(e.target.nextSibling) e.target.nextSibling.style.display='inline'; }} />
+                    <img loading="lazy" src={card.brandLogo} alt={card.name} className={`${card.brandLogoSize || 'h-6'} object-contain`} style={card.invertLogo ? { filter: 'invert(1) brightness(2)' } : {}} onError={(e) => { e.target.style.display='none'; if(e.target.nextSibling) e.target.nextSibling.style.display='inline'; }} />
                     {card.showBrandName && <span className="font-bold text-base" style={card.brandNameColor ? { color: card.brandNameColor } : {}}>{card.brandNameText || card.name}</span>}
                   </>
                 ) : (
@@ -638,7 +638,7 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
             </div>
             <div className="flex items-center justify-between mb-3 relative z-10">
               <ChipSVG />
-              <img src="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/7fd91b7b-f411-4d8c-f682-3f3ba62f5e00/public" alt="Contactless" className="w-7 h-7 opacity-30 mr-4" />
+              <img loading="lazy" src="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/7fd91b7b-f411-4d8c-f682-3f3ba62f5e00/public" alt="Contactless" className="w-7 h-7 opacity-30 mr-4" />
             </div>
             <div className="grid grid-cols-2 gap-2 mb-2 text-xs relative z-10">
               <div className="bg-black/20 rounded px-2 py-1"><span className="text-white/50">Cashback</span><p className="font-bold text-lime-400">{card.cashback}</p></div>
@@ -685,14 +685,14 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
                 {card.logo ? (
                   card.xHandle ? (
                     <a href={`https://x.com/${card.xHandle}`} target="_blank" rel="noopener noreferrer" onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.open(e.currentTarget.href, '_blank'); }} className="hover:scale-125 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all duration-200 cursor-pointer" title={`Follow @${card.xHandle} on X`}>
-                      <img src={card.logo} alt={card.name} className="h-6 object-contain" style={card.invertLogo ? { filter: 'invert(1) brightness(2)' } : {}} onError={(e) => e.target.style.display='none'} />
+                      <img loading="lazy" src={card.logo} alt={card.name} className="h-6 object-contain" style={card.invertLogo ? { filter: 'invert(1) brightness(2)' } : {}} onError={(e) => e.target.style.display='none'} />
                     </a>
                   ) : (
-                    <img src={card.logo} alt={card.name} className="h-6 object-contain" style={card.invertLogo ? { filter: 'invert(1) brightness(2)' } : {}} onError={(e) => e.target.style.display='none'} />
+                    <img loading="lazy" src={card.logo} alt={card.name} className="h-6 object-contain" style={card.invertLogo ? { filter: 'invert(1) brightness(2)' } : {}} onError={(e) => e.target.style.display='none'} />
                   )
                 ) : (
                   <>
-                    <img src={card.logo} alt="" className="w-6 h-6 rounded-full bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
+                    <img loading="lazy" src={card.logo} alt="" className="w-6 h-6 rounded-full bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
                     <span className="font-bold text-sm">{card.name}</span>
                   </>
                 )}
@@ -1541,6 +1541,8 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
   const [archetypeFilter, setArchetypeFilter] = useState('all');
   const [platformFilter, setPlatformFilter] = useState('all');
   const [ratingSort, setRatingSort] = useState('none'); // 'none', 'highest', 'lowest'
+  const [visibleCount, setVisibleCount] = useState(24);
+  const sentinelRef = useRef(null);
 
   let filtered = allCards;
 
@@ -1605,6 +1607,31 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
     staking: 'Cards with native tokens · Earn token rewards · Token-based cashback',
     comingSoon: 'Waitlist open · Launching soon · Get early access'
   };
+
+  // Reset visible count when any filter/search changes
+  useEffect(() => {
+    setVisibleCount(24);
+  }, [categoryFilter, custodyFilter, networkFilter, regionFilter, archetypeFilter, platformFilter, ratingSort, effectiveSearch]);
+
+  // Visible slice for progressive rendering
+  const visibleCards = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
+
+  // Intersection Observer for infinite scroll
+  const loadMore = useCallback(() => {
+    setVisibleCount(prev => Math.min(prev + 24, filtered.length));
+  }, [filtered.length]);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      (entries) => { if (entries[0].isIntersecting) loadMore(); },
+      { rootMargin: '200px' }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [loadMore]);
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:p-6">
@@ -1708,7 +1735,25 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
       </div>
 
       {/* CARDS GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">{filtered.map(card => <Card key={card.id} card={card} ratings={ratings} onRate={onRate} darkMode={darkMode} userRatedCards={userRatedCards} isInCompare={compareList?.some(c => c.id === card.id)} onCompareToggle={onCompareToggle} />)}</div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">{visibleCards.map(card => <Card key={card.id} card={card} ratings={ratings} onRate={onRate} darkMode={darkMode} userRatedCards={userRatedCards} isInCompare={compareList?.some(c => c.id === card.id)} onCompareToggle={onCompareToggle} />)}</div>
+
+      {/* Show More / Pagination */}
+      {filtered.length > 0 && (
+        <div className="mt-6 flex flex-col items-center gap-3">
+          <p className={`text-xs sm:text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+            Showing {Math.min(visibleCount, filtered.length)} of {filtered.length} cards
+          </p>
+          {hasMore && (
+            <button
+              onClick={loadMore}
+              className={`px-6 py-2.5 rounded-lg font-semibold text-sm transition-all ${darkMode ? 'bg-lime-400/15 text-lime-400 hover:bg-lime-400/25 border border-lime-400/30' : 'bg-lime-100 text-lime-700 hover:bg-lime-200 border border-lime-300'}`}
+            >
+              Show More Cards
+            </button>
+          )}
+          <div ref={sentinelRef} className="h-1" />
+        </div>
+      )}
 
       {/* STATS */}
       <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -2291,7 +2336,7 @@ function CompareDrawer({ compareList, onRemove, onCompare, onClear, darkMode }) 
         <div className="flex gap-3 overflow-x-auto pb-2">
           {compareList.map(card => (
             <div key={card.id} className={`flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
-              <img src={card.logo} alt="" className="w-6 h-6 rounded-full bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
+              <img loading="lazy" src={card.logo} alt="" className="w-6 h-6 rounded-full bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
               <span className={`text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{card.name}</span>
               <button onClick={() => onRemove(card.id)} className="text-gray-500 hover:text-red-400 ml-1">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -2337,7 +2382,7 @@ function CompareModal({ open, onClose, compareList, darkMode }) {
                 {compareList.map(card => (
                   <th key={card.id} className="p-3 text-center min-w-[150px]">
                     <div className="flex flex-col items-center gap-2">
-                      <img src={card.logo} alt="" className="w-12 h-12 rounded-full bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
+                      <img loading="lazy" src={card.logo} alt="" className="w-12 h-12 rounded-full bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
                       <span className={`font-bold text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{card.name}</span>
                     </div>
                   </th>
@@ -2597,7 +2642,7 @@ function RatingsPage({ darkMode, ratings, userRatedCards, onRate }) {
                   >
                     <td className="p-3">
                       <div className="flex items-center gap-3">
-                        <img src={card.logo} alt="" className="w-8 h-8 rounded-full bg-gray-800 object-cover" onError={(e) => e.target.style.display='none'} />
+                        <img loading="lazy" src={card.logo} alt="" className="w-8 h-8 rounded-full bg-gray-800 object-cover" onError={(e) => e.target.style.display='none'} />
                         <div>
                           <p className={`font-medium text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{card.name}</p>
                           <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
@@ -2761,7 +2806,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
           <div className={`p-4 sm:p-6 bg-gradient-to-r ${card.bg || 'from-gray-700 to-gray-800'}`}>
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
               <div className="flex items-center gap-3 sm:gap-4">
-                <img src={card.logo} alt={card.name} className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
+                <img loading="lazy" src={card.logo} alt={card.name} className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-white/10 object-cover" onError={(e) => e.target.style.display='none'} />
                 <div>
                   <h1 className="text-xl sm:text-2xl font-bold text-white">{card.name}</h1>
                   <div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-1">
