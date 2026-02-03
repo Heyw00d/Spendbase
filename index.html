@@ -1995,6 +1995,7 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
   const [archetypeFilter, setArchetypeFilter] = useState('all');
   const [platformFilter, setPlatformFilter] = useState('all');
   const [ratingSort, setRatingSort] = useState('none'); // 'none', 'highest', 'lowest'
+  const [rewardTypeFilter, setRewardTypeFilter] = useState('all'); // 'all', 'token', 'stable', 'other'
   const [visibleCount, setVisibleCount] = useState(24);
   const sentinelRef = useRef(null);
 
@@ -2041,6 +2042,20 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
     else if (platformFilter === 'both') filtered = filtered.filter(c => c.platforms === 'both');
   }
 
+  // Reward type filter
+  if (rewardTypeFilter !== 'all') {
+    const stableTokens = ['USDC', 'USDT', 'USD', 'CASH', 'Stablecoin'];
+    const isStable = (c) => stableTokens.some(s => c.cashbackToken?.toUpperCase().includes(s));
+    const isToken = (c) => c.token?.live && !isStable(c);
+    if (rewardTypeFilter === 'token') {
+      filtered = filtered.filter(c => isToken(c));
+    } else if (rewardTypeFilter === 'stable') {
+      filtered = filtered.filter(c => isStable(c));
+    } else if (rewardTypeFilter === 'other') {
+      filtered = filtered.filter(c => !isToken(c) && !isStable(c) && c.cashbackToken && c.cashbackToken !== 'TBD' && c.cashbackToken !== 'N/A');
+    }
+  }
+
   // Rating sort
   if (ratingSort !== 'none' && ratings) {
     filtered = [...filtered].sort((a, b) => {
@@ -2050,8 +2065,8 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
     });
   }
 
-  const clearFilters = () => { setCategoryFilter('all'); setCustodyFilter('all'); setNetworkFilter('all'); setRegionFilter('all'); setArchetypeFilter('all'); setPlatformFilter('all'); setRatingSort('none'); };
-  const hasActiveFilters = categoryFilter !== 'all' || custodyFilter !== 'all' || networkFilter !== 'all' || regionFilter !== 'all' || archetypeFilter !== 'all' || platformFilter !== 'all' || ratingSort !== 'none' || effectiveSearch;
+  const clearFilters = () => { setCategoryFilter('all'); setCustodyFilter('all'); setNetworkFilter('all'); setRegionFilter('all'); setArchetypeFilter('all'); setPlatformFilter('all'); setRewardTypeFilter('all'); setRatingSort('none'); };
+  const hasActiveFilters = categoryFilter !== 'all' || custodyFilter !== 'all' || networkFilter !== 'all' || regionFilter !== 'all' || archetypeFilter !== 'all' || platformFilter !== 'all' || rewardTypeFilter !== 'all' || ratingSort !== 'none' || effectiveSearch;
 
   // Category descriptions for the filter section
   const categoryDescriptions = {
@@ -2168,10 +2183,11 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
       {/* SECONDARY FILTERS - Hidden on mobile, visible on desktop */}
       <div className={`rounded-xl p-3 sm:p-4 mb-6 sm:mb-8 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}>
         {/* Mobile: Simple filter row */}
-        <div className="grid grid-cols-3 gap-2 sm:hidden mb-3">
+        <div className="grid grid-cols-4 gap-2 sm:hidden mb-3">
           <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'self',label:'Self'},{id:'custodial',label:'Cust.'}].map(f => <button key={f.id} onClick={() => setCustodyFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${custodyFilter === f.id ? 'bg-cyan-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
-          <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'visa',label:'Visa'},{id:'mastercard',label:'MC'}].map(f => <button key={f.id} onClick={() => setNetworkFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${networkFilter === f.id ? 'bg-purple-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
           <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'americas',label:'US'},{id:'europe',label:'EU'}].map(f => <button key={f.id} onClick={() => setRegionFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${regionFilter === f.id ? 'bg-orange-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
+          <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'token',label:'🪙'},{id:'stable',label:'💵'}].map(f => <button key={f.id} onClick={() => setRewardTypeFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${rewardTypeFilter === f.id ? 'bg-teal-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
+          <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'visa',label:'Visa'},{id:'mastercard',label:'MC'}].map(f => <button key={f.id} onClick={() => setNetworkFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${networkFilter === f.id ? 'bg-purple-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
         </div>
         {/* Desktop: Full filter grid */}
         <div className="hidden sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
@@ -2179,7 +2195,7 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
           <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Network</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'visa',label:'Visa'},{id:'mastercard',label:'MC'}].map(f => <button key={f.id} onClick={() => setNetworkFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${networkFilter === f.id ? 'bg-purple-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
           <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Region</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'americas',label:'US'},{id:'europe',label:'EU'},{id:'apac',label:'APAC'},{id:'global',label:'Global'}].map(f => <button key={f.id} onClick={() => setRegionFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${regionFilter === f.id ? 'bg-orange-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
           <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Type</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'exchange',label:'Exchange'},{id:'wallet',label:'Wallet'},{id:'defi',label:'DeFi'},{id:'stablecoin',label:'Stablecoin'}].map(f => <button key={f.id} onClick={() => setArchetypeFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${archetypeFilter === f.id ? 'bg-pink-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
-          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Platform</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'ios',label:'iOS'},{id:'android',label:'Android'},{id:'both',label:'Both'}].map(f => <button key={f.id} onClick={() => setPlatformFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${platformFilter === f.id ? 'bg-blue-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
+          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Rewards</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'token',label:'🪙 Token'},{id:'stable',label:'💵 Stable'},{id:'other',label:'Other'}].map(f => <button key={f.id} onClick={() => setRewardTypeFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${rewardTypeFilter === f.id ? 'bg-teal-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
           <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Sort by Rating</label><div className="flex flex-wrap gap-1">{[{id:'none',label:'Default'},{id:'highest',label:'★ Highest'},{id:'lowest',label:'★ Lowest'}].map(f => <button key={f.id} onClick={() => setRatingSort(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${ratingSort === f.id ? 'bg-yellow-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
         </div>
         <div className={`mt-3 pt-3 border-t flex justify-between items-center ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
