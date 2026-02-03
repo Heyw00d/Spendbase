@@ -5638,12 +5638,15 @@ function Sparkline({ data, width = 120, height = 32, positive }) {
 
 // Parse cashback rate to a numeric value
 function parseCashbackRate(str) {
-  if (!str) return 0;
+  if (!str || str === 'TBD' || str === 'N/A') return 0;
   // Handle ranges like "1-8%" or "Up to 15%" or "3-9%"
   const matches = str.match(/[\d.]+/g);
   if (!matches) return 0;
-  // Take the max value for "up to" or range
-  return Math.max(...matches.map(Number));
+  const nums = matches.map(Number);
+  // For ranges like "1-8%", use the low end (realistic rate most users get)
+  // For single values like "4.08%", use as-is
+  if (nums.length === 1) return nums[0];
+  return nums[0]; // Use base rate, not max
 }
 
 // ============================================
@@ -5710,16 +5713,26 @@ function RewardCalculatorPage({ darkMode }) {
         monthlyTokens = monthlyRewardUSD;
       }
 
-      // "Real Value" projection: if token trend continues for 12 months
-      // Use 12m change to project, or 6m annualized, or 3m annualized
-      let projectedAnnualMultiplier = 1;
-      if (!isStable) {
-        if (change12m !== null) projectedAnnualMultiplier = 1 + change12m / 100;
-        else if (change6m !== null) projectedAnnualMultiplier = Math.pow(1 + change6m / 100, 2);
-        else if (change3m !== null) projectedAnnualMultiplier = Math.pow(1 + change3m / 100, 4);
-      }
+      // "Real Value": what your rewards are actually worth today
+      // annualRewardUSD = straightforward cashback value at current token price
+      // realAnnualValue factors in token performance:
+      //   - If you earned tokens each month and held them, what would they be worth?
+      //   - Tokens earned early in the year appreciate/depreciate over time
+      //   - We use a simple average: tokens held ~6 months on average, so apply half the annual change
       const annualRewardUSD = monthlyRewardUSD * 12;
-      const realAnnualValue = annualRewardUSD * Math.max(projectedAnnualMultiplier, 0.01);
+      let realAnnualValue = annualRewardUSD;
+      let projectedAnnualMultiplier = 1;
+      if (!isStable && change12m !== null) {
+        // Average token is held ~6 months, so apply half the 12m trend
+        projectedAnnualMultiplier = 1 + (change12m / 100) * 0.5;
+        realAnnualValue = annualRewardUSD * Math.max(projectedAnnualMultiplier, 0.01);
+      } else if (!isStable && change6m !== null) {
+        projectedAnnualMultiplier = 1 + (change6m / 100) * 0.5;
+        realAnnualValue = annualRewardUSD * Math.max(projectedAnnualMultiplier, 0.01);
+      } else if (!isStable && change3m !== null) {
+        projectedAnnualMultiplier = 1 + (change3m / 100) * 0.5;
+        realAnnualValue = annualRewardUSD * Math.max(projectedAnnualMultiplier, 0.01);
+      }
 
       return {
         card, ticker, isStable, rate, monthlyRewardUSD, monthlyTokens,
