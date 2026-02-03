@@ -1,0 +1,16 @@
+<svg viewBox="0 0 220 48" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14B8A6"/>
+      <stop offset="100%" stop-color="#0F766E"/>
+    </linearGradient>
+  </defs>
+  <!-- Icon: Stylized card with S -->
+  <rect x="2" y="8" width="38" height="32" rx="6" fill="url(#logoGradDark)"/>
+  <!-- Card chip detail -->
+  <rect x="8" y="16" width="10" height="8" rx="1.5" fill="rgba(255,255,255,0.3)"/>
+  <!-- S swoosh on card -->
+  <path d="M18 34 C22 30 28 28 32 26 C26 28 24 31 26 33 C28 30 32 28 34 28" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.9"/>
+  <!-- Wordmark - white for dark mode -->
+  <text x="48" y="33" font-family="Inter, -apple-system, sans-serif" font-size="24" font-weight="700" fill="white">Spendbase</text>
+</svg>

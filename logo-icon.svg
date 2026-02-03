@@ -1,0 +1,14 @@
+<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14B8A6"/>
+      <stop offset="100%" stop-color="#0F766E"/>
+    </linearGradient>
+  </defs>
+  <!-- Card shape -->
+  <rect x="4" y="8" width="40" height="32" rx="6" fill="url(#iconGrad)"/>
+  <!-- Card chip -->
+  <rect x="10" y="16" width="12" height="9" rx="2" fill="rgba(255,255,255,0.3)"/>
+  <!-- S swoosh -->
+  <path d="M20 34 C24 29 31 27 36 25 C29 28 27 32 29 35 C32 31 36 28 40 27" stroke="white" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.95"/>
+</svg>
