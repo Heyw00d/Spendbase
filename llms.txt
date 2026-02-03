@@ -1,0 +1,37 @@
+# Spendbase
+> The largest crypto card comparison site — 93+ cards ranked, reviewed, and compared.
+
+## About
+Spendbase (spendbase.cards) is the comprehensive database for crypto debit cards, onchain banking products, and DeFi spending solutions. We track every major crypto card across all chains with detailed specs, community ratings, and industry intelligence.
+
+## Key Data
+- 93+ crypto cards tracked and ranked
+- Full specs: cashback rates, fees, custody models, supported chains, regions
+- Community ratings and reviews
+- Industry Intel: card issuer infrastructure, funding data, custody breakdown
+- Coverage across Solana, Ethereum, Base, Bitcoin, Scroll, Starknet, and 15+ chains
+- Custody analysis: 58% non-custodial vs 42% custodial
+
+## Top Cards (2026)
+1. Ether.fi Cash — 4.08% ETHFI cashback, non-custodial, Scroll L2
+2. Gnosis Pay — 1-5% GNO cashback, first self-custody Visa
+3. KAST — 2-6% rewards, 160+ countries, Solana
+4. Phantom Card — 2% $CASH, non-custodial, Solana
+5. Solayer Emerald — 2-4% LAYER, sUSD yield, Solana
+
+## Pages
+- /card/[name]/ — Individual card reviews with full specs, ratings, and FAQs
+- /intel/ — Industry Intelligence: issuer maps, funding leaderboard, custody analysis
+- /scores/ — Community ratings leaderboard
+
+## Research Findings
+- Fiat24 powers 6 cards (SafePal, TokenPocket, imToken, Bitget, UR, THORWallet)
+- Monavate powers 4 cards (Gnosis Pay, MetaMask, OKX, Kraken)
+- Rain powers 5 cards (Offramp, Tangem, Tuyo, Avalanche, and more)
+- Total industry funding tracked: $2B+
+- RedotPay leads with $147M raised; Phantom at $150M ($3B valuation)
+
+## Contact
+- Website: spendbase.cards
+- X/Twitter: @spendbasecards
+- Email: henry@spendbase.cards
