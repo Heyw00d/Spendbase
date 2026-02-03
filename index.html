@@ -2186,7 +2186,7 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
         <div className="grid grid-cols-4 gap-2 sm:hidden mb-3">
           <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'self',label:'Self'},{id:'custodial',label:'Cust.'}].map(f => <button key={f.id} onClick={() => setCustodyFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${custodyFilter === f.id ? 'bg-cyan-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
           <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'americas',label:'US'},{id:'europe',label:'EU'}].map(f => <button key={f.id} onClick={() => setRegionFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${regionFilter === f.id ? 'bg-orange-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
-          <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'token',label:'🪙'},{id:'stable',label:'💵'}].map(f => <button key={f.id} onClick={() => setRewardTypeFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${rewardTypeFilter === f.id ? 'bg-teal-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
+          <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'token',label:'Token'},{id:'stable',label:'Stable'}].map(f => <button key={f.id} onClick={() => setRewardTypeFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${rewardTypeFilter === f.id ? 'bg-teal-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
           <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'visa',label:'Visa'},{id:'mastercard',label:'MC'}].map(f => <button key={f.id} onClick={() => setNetworkFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${networkFilter === f.id ? 'bg-purple-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
         </div>
         {/* Desktop: Full filter grid */}
@@ -2195,7 +2195,7 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
           <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Network</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'visa',label:'Visa'},{id:'mastercard',label:'MC'}].map(f => <button key={f.id} onClick={() => setNetworkFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${networkFilter === f.id ? 'bg-purple-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
           <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Region</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'americas',label:'US'},{id:'europe',label:'EU'},{id:'apac',label:'APAC'},{id:'global',label:'Global'}].map(f => <button key={f.id} onClick={() => setRegionFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${regionFilter === f.id ? 'bg-orange-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
           <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Type</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'exchange',label:'Exchange'},{id:'wallet',label:'Wallet'},{id:'defi',label:'DeFi'},{id:'stablecoin',label:'Stablecoin'}].map(f => <button key={f.id} onClick={() => setArchetypeFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${archetypeFilter === f.id ? 'bg-pink-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
-          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Rewards</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'token',label:'🪙 Token'},{id:'stable',label:'💵 Stable'},{id:'other',label:'Other'}].map(f => <button key={f.id} onClick={() => setRewardTypeFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${rewardTypeFilter === f.id ? 'bg-teal-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
+          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Rewards</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'token',label:'Token'},{id:'stable',label:'Stable'},{id:'other',label:'Other'}].map(f => <button key={f.id} onClick={() => setRewardTypeFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${rewardTypeFilter === f.id ? 'bg-teal-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
           <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Sort by Rating</label><div className="flex flex-wrap gap-1">{[{id:'none',label:'Default'},{id:'highest',label:'★ Highest'},{id:'lowest',label:'★ Lowest'}].map(f => <button key={f.id} onClick={() => setRatingSort(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${ratingSort === f.id ? 'bg-yellow-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
         </div>
         <div className={`mt-3 pt-3 border-t flex justify-between items-center ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
@@ -5797,10 +5797,10 @@ function RewardCalculatorPage({ darkMode }) {
           See the <span className="text-teal-400 font-semibold">actual value</span> of crypto card cashback rewards.
         </p>
         <p className={`text-sm mt-2 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-          📊 Based on <strong>12 months</strong> of spending and <strong>holding all rewards</strong> (no selling)
+          Based on <strong>12 months</strong> of spending and <strong>holding all rewards</strong> (no selling)
         </p>
         <p className={`text-xs mt-3 px-4 py-2 rounded-lg ${darkMode ? 'bg-yellow-500/10 text-yellow-500/80 border border-yellow-500/20' : 'bg-yellow-50 text-yellow-700 border border-yellow-200'}`}>
-          ⚠️ <strong>Disclaimer:</strong> Rates shown are advertised maximums. Actual rates may be lower and often require staking, VIP status, or have monthly caps. Some rates are limited-time promos. Always verify current terms on the card's website.
+          <strong>Disclaimer:</strong> Rates shown are advertised maximums. Actual rates may be lower and often require staking, VIP status, or have monthly caps. Some rates are limited-time promos. Always verify current terms on the card's website.
         </p>
       </div>
 
@@ -5836,12 +5836,12 @@ function RewardCalculatorPage({ darkMode }) {
       <div className="flex gap-2 mb-6">
         <button onClick={() => setRewardType('token')}
           className={`flex-1 py-3 px-4 rounded-xl font-semibold text-sm transition ${rewardType === 'token' ? 'bg-teal-500/20 text-teal-400 border-2 border-teal-500/50' : (darkMode ? 'bg-gray-900 text-gray-400 border border-gray-800 hover:border-gray-700' : 'bg-gray-100 text-gray-500 border border-gray-200 hover:border-gray-300')}`}>
-          🪙 Token Rewards
+          Token Rewards
           <span className={`block text-xs font-normal mt-0.5 ${rewardType === 'token' ? 'text-teal-500/70' : 'text-gray-500'}`}>Earn native tokens (price varies)</span>
         </button>
         <button onClick={() => setRewardType('stable')}
           className={`flex-1 py-3 px-4 rounded-xl font-semibold text-sm transition ${rewardType === 'stable' ? 'bg-blue-500/20 text-blue-400 border-2 border-blue-500/50' : (darkMode ? 'bg-gray-900 text-gray-400 border border-gray-800 hover:border-gray-700' : 'bg-gray-100 text-gray-500 border border-gray-200 hover:border-gray-300')}`}>
-          💵 Stablecoin Rewards
+          Stablecoin Rewards
           <span className={`block text-xs font-normal mt-0.5 ${rewardType === 'stable' ? 'text-blue-500/70' : 'text-gray-500'}`}>Earn USDC/USD (stable value)</span>
         </button>
       </div>
@@ -5991,7 +5991,7 @@ function RewardCalculatorPage({ darkMode }) {
 
           {/* Disclaimer */}
           <div className={`mt-8 p-4 rounded-xl text-xs ${darkMode ? 'bg-yellow-500/10 border border-yellow-500/20 text-yellow-400/80' : 'bg-yellow-50 border border-yellow-200 text-yellow-700'}`}>
-            <strong>⚠️ Disclaimer:</strong> Token price projections are based on historical trends and do not guarantee future performance.
+            <strong>Disclaimer:</strong> Token price projections are based on historical trends and do not guarantee future performance.
             Tokens marked <span className="text-blue-400 font-medium">STABLE</span> (USDC, USDT, fiat) have minimal volatility.
             Volatile token rewards may be worth significantly more or less than headline rates suggest.
             This is not financial advice. Prices from CoinGecko.
