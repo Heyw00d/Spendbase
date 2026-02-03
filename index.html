@@ -1908,7 +1908,7 @@ function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, se
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
-            {['cards','wizard','ratings','intel','learn','rewards'].map(v => (
+            {['cards','wizard','calculator','ratings','intel','learn','rewards'].map(v => (
               <button
                 key={v}
                 onClick={() => handleNavClick(v)}
@@ -1918,7 +1918,7 @@ function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, se
                     : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')
                 }`}
             >
-              {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'ratings' ? 'Scores' : v === 'intel' ? 'Intel' : v.charAt(0).toUpperCase()+v.slice(1)}
+              {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'calculator' ? '💰 Calculator' : v === 'ratings' ? 'Scores' : v === 'intel' ? 'Intel' : v.charAt(0).toUpperCase()+v.slice(1)}
             </button>
           ))}
           </nav>
@@ -1959,7 +1959,7 @@ function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, se
         {mobileMenuOpen && (
           <div className={`lg:hidden mt-3 pb-3 border-t ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
             <nav className="flex flex-col gap-1 pt-3">
-              {['cards','wizard','ratings','intel','learn','rewards'].map(v => (
+              {['cards','wizard','calculator','ratings','intel','learn','rewards'].map(v => (
                 <button
                   key={v}
                   onClick={() => handleNavClick(v)}
@@ -1969,7 +1969,7 @@ function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, se
                       : (darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50')
                   }`}
                 >
-                  {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'cards' ? 'All Cards' : v === 'ratings' ? 'Scores' : v === 'intel' ? 'Intel' : v === 'learn' ? 'Learn' : v.charAt(0).toUpperCase()+v.slice(1)}
+                  {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'calculator' ? '💰 Calculator' : v === 'cards' ? 'All Cards' : v === 'ratings' ? 'Scores' : v === 'intel' ? 'Intel' : v === 'learn' ? 'Learn' : v.charAt(0).toUpperCase()+v.slice(1)}
                 </button>
               ))}
               {/* Mobile Subscribe button */}
@@ -3436,6 +3436,9 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
                 )}
               </div>
             </div>
+
+            {/* Live Token Reward Widget */}
+            <TokenRewardWidget card={card} darkMode={darkMode} />
 
             {/* Token Market Data */}
             {card.token?.live && tokenMarketData[card.token.ticker] && (
@@ -5516,6 +5519,528 @@ const mergeUserRatings = (baseRatings, userRatings) => {
   return merged;
 };
 
+// ============================================
+// COINGECKO PRICE SERVICE
+// ============================================
+const TOKEN_ID_MAP = {
+  'ETHFI': 'ether-fi', 'GNO': 'gnosis-gno', 'CRO': 'cronos', 'PLU': 'pluton',
+  'BNB': 'bnb', 'NEXO': 'nexo', 'BGB': 'bitget-token', 'LAYER': 'solayer',
+  'STRK': 'starknet-token', 'WBT': 'whitebit', 'JUP': 'jupiter-exchange-solana',
+  'AVICI': 'avici', 'OKB': 'okb', 'WXT': 'wirex-token', 'SFP': 'safepal',
+  'BONK': 'bonk', 'BEST': 'bitpanda-ecosystem-token', 'ZYPTO': 'zypto-token',
+  'OBT': 'oobit', 'TPT': 'tokenpocket',
+};
+
+const STABLE_TOKENS = ['USDC', 'USDT', 'USD', 'Fiat', 'EUR', 'CASH', 'N/A', 'BTC/Fiat', 'BTC/ETH/DOGE', 'XRP', 'Crypto', 'BTC/Sats', 'KAST Points', 'CoinJar Points', 'TBD', 'Reward Points'];
+
+const CoinGeckoService = {
+  CACHE_KEY: 'sb_token_prices',
+  HIST_CACHE_KEY: 'sb_token_hist',
+  CACHE_TTL: 5 * 60 * 1000, // 5 min
+
+  getCachedPrices() {
+    try {
+      const raw = localStorage.getItem(this.CACHE_KEY);
+      if (!raw) return null;
+      const { data, ts } = JSON.parse(raw);
+      if (Date.now() - ts < this.CACHE_TTL) return data;
+    } catch(e) {}
+    return null;
+  },
+
+  setCachedPrices(data) {
+    try { localStorage.setItem(this.CACHE_KEY, JSON.stringify({ data, ts: Date.now() })); } catch(e) {}
+  },
+
+  getCachedHistory() {
+    try {
+      const raw = localStorage.getItem(this.HIST_CACHE_KEY);
+      if (!raw) return null;
+      const { data, ts } = JSON.parse(raw);
+      if (Date.now() - ts < 30 * 60 * 1000) return data; // 30 min cache for historical
+    } catch(e) {}
+    return null;
+  },
+
+  setCachedHistory(data) {
+    try { localStorage.setItem(this.HIST_CACHE_KEY, JSON.stringify({ data, ts: Date.now() })); } catch(e) {}
+  },
+
+  async fetchPrices() {
+    const cached = this.getCachedPrices();
+    if (cached) return cached;
+    const ids = [...new Set(Object.values(TOKEN_ID_MAP))].join(',');
+    try {
+      const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`);
+      if (!res.ok) throw new Error('API error');
+      const data = await res.json();
+      this.setCachedPrices(data);
+      return data;
+    } catch(e) { console.warn('CoinGecko price fetch failed:', e); return null; }
+  },
+
+  async fetchHistory(tokenId) {
+    const allHist = this.getCachedHistory() || {};
+    if (allHist[tokenId]) return allHist[tokenId];
+    try {
+      const res = await fetch(`https://api.coingecko.com/api/v3/coins/${tokenId}/market_chart?vs_currency=usd&days=365`);
+      if (!res.ok) throw new Error('API error');
+      const data = await res.json();
+      allHist[tokenId] = data.prices; // [[ts, price], ...]
+      this.setCachedHistory(allHist);
+      return data.prices;
+    } catch(e) { console.warn('CoinGecko history fetch failed:', e); return null; }
+  },
+
+  getChangeFromHistory(prices, daysAgo) {
+    if (!prices || prices.length < 2) return null;
+    const now = prices[prices.length - 1];
+    const cutoff = Date.now() - daysAgo * 86400000;
+    const past = prices.find(p => p[0] >= cutoff) || prices[0];
+    if (!past || past[1] === 0) return null;
+    return ((now[1] - past[1]) / past[1]) * 100;
+  },
+
+  getTokenPrice(priceData, ticker) {
+    if (!priceData || !ticker) return null;
+    const id = TOKEN_ID_MAP[ticker];
+    if (!id || !priceData[id]) return null;
+    return { usd: priceData[id].usd, change24h: priceData[id].usd_24h_change };
+  }
+};
+
+// Hook: use token prices
+function useTokenPrices() {
+  const [prices, setPrices] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    CoinGeckoService.fetchPrices().then(data => { setPrices(data); setLoading(false); });
+  }, []);
+  return { prices, loading };
+}
+
+// Sparkline component
+function Sparkline({ data, width = 120, height = 32, positive }) {
+  if (!data || data.length < 2) return null;
+  const prices = data.map(d => d[1] || d);
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  const range = max - min || 1;
+  const step = width / (prices.length - 1);
+  const points = prices.map((p, i) => `${i * step},${height - ((p - min) / range) * (height - 4) - 2}`).join(' ');
+  const color = positive === undefined ? (prices[prices.length-1] >= prices[0] ? '#14B8A6' : '#EF4444') : (positive ? '#14B8A6' : '#EF4444');
+  return (
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="inline-block">
+      <polyline points={points} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// Parse cashback rate to a numeric value
+function parseCashbackRate(str) {
+  if (!str) return 0;
+  // Handle ranges like "1-8%" or "Up to 15%" or "3-9%"
+  const matches = str.match(/[\d.]+/g);
+  if (!matches) return 0;
+  // Take the max value for "up to" or range
+  return Math.max(...matches.map(Number));
+}
+
+// ============================================
+// REWARD CALCULATOR PAGE
+// ============================================
+function RewardCalculatorPage({ darkMode }) {
+  const [monthlySpend, setMonthlySpend] = useState(1000);
+  const [sortBy, setSortBy] = useState('realValue');
+  const { prices, loading: pricesLoading } = useTokenPrices();
+  const [historyData, setHistoryData] = useState({});
+  const [histLoading, setHistLoading] = useState(true);
+
+  // Fetch historical data for all tokens
+  useEffect(() => {
+    const fetchAll = async () => {
+      const ids = [...new Set(Object.values(TOKEN_ID_MAP))];
+      const cached = CoinGeckoService.getCachedHistory() || {};
+      const missing = ids.filter(id => !cached[id]);
+      // Fetch missing with rate limit (batch 3 at a time)
+      for (let i = 0; i < missing.length; i += 3) {
+        const batch = missing.slice(i, i + 3);
+        await Promise.all(batch.map(id => CoinGeckoService.fetchHistory(id)));
+        if (i + 3 < missing.length) await new Promise(r => setTimeout(r, 2100));
+      }
+      setHistoryData(CoinGeckoService.getCachedHistory() || {});
+      setHistLoading(false);
+    };
+    fetchAll();
+  }, []);
+
+  // Build reward data for each card
+  const rewardData = React.useMemo(() => {
+    return allCards.map(card => {
+      const ticker = card.token?.ticker || card.cashbackToken;
+      const isStable = STABLE_TOKENS.includes(ticker) || STABLE_TOKENS.includes(card.cashbackToken) || !card.token?.cmc;
+      const rate = parseCashbackRate(card.cashback);
+      const monthlyRewardUSD = (monthlySpend * rate) / 100;
+      const coingeckoId = card.token?.cmc || TOKEN_ID_MAP[ticker];
+      const tokenPrice = prices && coingeckoId && prices[coingeckoId] ? prices[coingeckoId] : null;
+
+      let monthlyTokens = 0;
+      let currentPrice = null;
+      let change24h = null;
+      let change3m = null;
+      let change6m = null;
+      let change12m = null;
+      let sparklineData = null;
+
+      if (tokenPrice && !isStable) {
+        currentPrice = tokenPrice.usd;
+        change24h = tokenPrice.usd_24h_change;
+        monthlyTokens = currentPrice > 0 ? monthlyRewardUSD / currentPrice : 0;
+        const hist = historyData[coingeckoId];
+        if (hist) {
+          change3m = CoinGeckoService.getChangeFromHistory(hist, 90);
+          change6m = CoinGeckoService.getChangeFromHistory(hist, 180);
+          change12m = CoinGeckoService.getChangeFromHistory(hist, 365);
+          // Downsample for sparkline
+          const step = Math.max(1, Math.floor(hist.length / 60));
+          sparklineData = hist.filter((_, i) => i % step === 0);
+        }
+      } else if (isStable) {
+        currentPrice = 1;
+        monthlyTokens = monthlyRewardUSD;
+      }
+
+      // "Real Value" projection: if token trend continues for 12 months
+      // Use 12m change to project, or 6m annualized, or 3m annualized
+      let projectedAnnualMultiplier = 1;
+      if (!isStable) {
+        if (change12m !== null) projectedAnnualMultiplier = 1 + change12m / 100;
+        else if (change6m !== null) projectedAnnualMultiplier = Math.pow(1 + change6m / 100, 2);
+        else if (change3m !== null) projectedAnnualMultiplier = Math.pow(1 + change3m / 100, 4);
+      }
+      const annualRewardUSD = monthlyRewardUSD * 12;
+      const realAnnualValue = annualRewardUSD * Math.max(projectedAnnualMultiplier, 0.01);
+
+      return {
+        card, ticker, isStable, rate, monthlyRewardUSD, monthlyTokens,
+        currentPrice, change24h, change3m, change6m, change12m,
+        sparklineData, projectedAnnualMultiplier, annualRewardUSD, realAnnualValue, coingeckoId
+      };
+    }).filter(d => d.rate > 0); // Only show cards with cashback
+  }, [prices, historyData, monthlySpend]);
+
+  // Sort
+  const sorted = React.useMemo(() => {
+    const arr = [...rewardData];
+    if (sortBy === 'realValue') arr.sort((a, b) => b.realAnnualValue - a.realAnnualValue);
+    else if (sortBy === 'rate') arr.sort((a, b) => b.rate - a.rate);
+    else if (sortBy === 'performance') arr.sort((a, b) => (b.change12m || 0) - (a.change12m || 0));
+    return arr;
+  }, [rewardData, sortBy]);
+
+  const formatPct = (v) => {
+    if (v === null || v === undefined) return '—';
+    const sign = v >= 0 ? '+' : '';
+    return `${sign}${v.toFixed(1)}%`;
+  };
+
+  const pctColor = (v, dm) => {
+    if (v === null || v === undefined) return dm ? 'text-gray-500' : 'text-gray-400';
+    return v >= 0 ? 'text-emerald-400' : 'text-red-400';
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      {/* Hero */}
+      <div className="text-center mb-8">
+        <h1 className={`text-3xl sm:text-4xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+          Real Reward Calculator
+        </h1>
+        <p className={`text-base sm:text-lg max-w-2xl mx-auto ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+          See the <span className="text-teal-400 font-semibold">actual value</span> of crypto card cashback rewards — adjusted for token price performance.
+          Not all "4% cashback" is created equal.
+        </p>
+      </div>
+
+      {/* Spend Input */}
+      <div className={`rounded-xl p-6 mb-8 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+        <label className={`block text-sm font-medium mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          How much do you spend per month?
+        </label>
+        <div className="flex items-center gap-4">
+          <input
+            type="range"
+            min={100}
+            max={10000}
+            step={100}
+            value={monthlySpend}
+            onChange={e => setMonthlySpend(Number(e.target.value))}
+            className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-teal-500"
+          />
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
+            <input
+              type="number"
+              value={monthlySpend}
+              onChange={e => setMonthlySpend(Math.max(0, Number(e.target.value)))}
+              className={`w-28 pl-7 pr-3 py-2 rounded-lg text-sm font-mono font-bold ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-300 text-gray-900'}`}
+            />
+          </div>
+        </div>
+        <div className="flex justify-between mt-2">
+          {[250, 500, 1000, 2500, 5000].map(v => (
+            <button key={v} onClick={() => setMonthlySpend(v)}
+              className={`text-xs px-2 py-1 rounded transition ${monthlySpend === v ? 'bg-teal-500/20 text-teal-400' : (darkMode ? 'text-gray-500 hover:text-gray-300' : 'text-gray-400 hover:text-gray-600')}`}>
+              ${v.toLocaleString()}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Sort Controls */}
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        <span className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Sort by:</span>
+        {[['realValue','Real Value'],['rate','Headline Rate'],['performance','Token Performance']].map(([k,label]) => (
+          <button key={k} onClick={() => setSortBy(k)}
+            className={`text-xs px-3 py-1.5 rounded-lg transition font-medium ${sortBy === k ? 'bg-teal-500/20 text-teal-400 border border-teal-500/30' : (darkMode ? 'bg-gray-800 text-gray-400 hover:text-white border border-gray-700' : 'bg-gray-100 text-gray-500 hover:text-gray-900 border border-gray-200')}`}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* Loading State */}
+      {pricesLoading && (
+        <div className={`text-center py-12 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+          <div className="inline-block w-6 h-6 border-2 border-teal-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+          <p>Fetching live token prices...</p>
+        </div>
+      )}
+
+      {/* Results Table */}
+      {!pricesLoading && (
+        <>
+          {/* Desktop Table */}
+          <div className="hidden md:block overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className={`text-xs uppercase tracking-wider ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                  <th className="text-left py-3 px-2">#</th>
+                  <th className="text-left py-3 px-2">Card</th>
+                  <th className="text-right py-3 px-2">Rate</th>
+                  <th className="text-left py-3 px-2">Token</th>
+                  <th className="text-right py-3 px-2">Price</th>
+                  <th className="text-right py-3 px-2">Mo. Reward</th>
+                  <th className="text-center py-3 px-2">Chart</th>
+                  <th className="text-right py-3 px-2">3M</th>
+                  <th className="text-right py-3 px-2">6M</th>
+                  <th className="text-right py-3 px-2">12M</th>
+                  <th className="text-right py-3 px-2 font-bold">Annual Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sorted.map((d, i) => (
+                  <tr key={d.card.id} className={`border-t transition-colors cursor-pointer hover:${darkMode ? 'bg-gray-800/50' : 'bg-gray-50'} ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}
+                    onClick={() => { const slug = d.card.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''); window.dispatchEvent(new CustomEvent('navigateToCard', { detail: d.card })); }}>
+                    <td className={`py-3 px-2 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{i+1}</td>
+                    <td className="py-3 px-2">
+                      <div className="flex items-center gap-2">
+                        <img src={d.card.logo} alt="" className="w-6 h-6 rounded-md object-contain" onError={e => e.target.style.display='none'} />
+                        <span className={`font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{d.card.name}</span>
+                      </div>
+                    </td>
+                    <td className="py-3 px-2 text-right">
+                      <span className="text-teal-400 font-semibold">{d.card.cashback}</span>
+                    </td>
+                    <td className="py-3 px-2">
+                      <div className="flex items-center gap-1.5">
+                        <span className={darkMode ? 'text-gray-300' : 'text-gray-700'}>{d.ticker}</span>
+                        {d.isStable && <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400">STABLE</span>}
+                      </div>
+                    </td>
+                    <td className={`py-3 px-2 text-right font-mono text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                      {d.currentPrice !== null ? (d.currentPrice < 0.01 ? `$${d.currentPrice.toFixed(6)}` : `$${d.currentPrice.toFixed(2)}`) : '—'}
+                    </td>
+                    <td className="py-3 px-2 text-right">
+                      <div>
+                        <span className={`font-mono font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                          ${d.monthlyRewardUSD.toFixed(2)}
+                        </span>
+                        {!d.isStable && d.monthlyTokens > 0 && (
+                          <div className={`text-[10px] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                            {d.monthlyTokens < 1 ? d.monthlyTokens.toFixed(4) : d.monthlyTokens.toFixed(1)} {d.ticker}
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="py-3 px-2 text-center">
+                      {d.sparklineData ? <Sparkline data={d.sparklineData} width={80} height={24} /> : <span className="text-gray-600">—</span>}
+                    </td>
+                    <td className={`py-3 px-2 text-right font-mono text-xs ${pctColor(d.change3m, darkMode)}`}>{formatPct(d.change3m)}</td>
+                    <td className={`py-3 px-2 text-right font-mono text-xs ${pctColor(d.change6m, darkMode)}`}>{formatPct(d.change6m)}</td>
+                    <td className={`py-3 px-2 text-right font-mono text-xs ${pctColor(d.change12m, darkMode)}`}>{formatPct(d.change12m)}</td>
+                    <td className="py-3 px-2 text-right">
+                      <div>
+                        <span className={`font-bold text-base ${d.isStable ? (darkMode ? 'text-blue-400' : 'text-blue-600') : (d.projectedAnnualMultiplier >= 1 ? 'text-emerald-400' : 'text-red-400')}`}>
+                          ${d.realAnnualValue.toFixed(0)}
+                        </span>
+                        {!d.isStable && d.projectedAnnualMultiplier !== 1 && (
+                          <div className={`text-[10px] ${d.projectedAnnualMultiplier >= 1 ? 'text-emerald-500/70' : 'text-red-500/70'}`}>
+                            {d.projectedAnnualMultiplier >= 1 ? '↑' : '↓'} {((d.projectedAnnualMultiplier - 1) * 100).toFixed(0)}% trend
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Cards */}
+          <div className="md:hidden space-y-3">
+            {sorted.map((d, i) => (
+              <div key={d.card.id}
+                className={`rounded-xl p-4 cursor-pointer transition ${darkMode ? 'bg-gray-900 border border-gray-800 hover:border-gray-700' : 'bg-white border border-gray-200 hover:border-gray-300'}`}
+                onClick={() => window.dispatchEvent(new CustomEvent('navigateToCard', { detail: d.card }))}>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className={`text-xs font-mono ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>#{i+1}</span>
+                    <img src={d.card.logo} alt="" className="w-6 h-6 rounded-md object-contain" onError={e => e.target.style.display='none'} />
+                    <span className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{d.card.name}</span>
+                    {d.isStable && <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400">STABLE</span>}
+                  </div>
+                  <span className={`font-bold text-lg ${d.isStable ? 'text-blue-400' : (d.projectedAnnualMultiplier >= 1 ? 'text-emerald-400' : 'text-red-400')}`}>
+                    ${d.realAnnualValue.toFixed(0)}<span className="text-xs font-normal">/yr</span>
+                  </span>
+                </div>
+                <div className="grid grid-cols-4 gap-2 text-center">
+                  <div>
+                    <div className={`text-[10px] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Rate</div>
+                    <div className="text-teal-400 text-xs font-semibold">{d.card.cashback}</div>
+                  </div>
+                  <div>
+                    <div className={`text-[10px] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Token</div>
+                    <div className={`text-xs ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{d.ticker}</div>
+                  </div>
+                  <div>
+                    <div className={`text-[10px] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Mo. Reward</div>
+                    <div className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>${d.monthlyRewardUSD.toFixed(2)}</div>
+                  </div>
+                  <div>
+                    <div className={`text-[10px] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>12M</div>
+                    <div className={`text-xs font-mono ${pctColor(d.change12m, darkMode)}`}>{formatPct(d.change12m)}</div>
+                  </div>
+                </div>
+                {d.sparklineData && (
+                  <div className="mt-2 flex justify-center">
+                    <Sparkline data={d.sparklineData} width={200} height={28} />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Disclaimer */}
+          <div className={`mt-8 p-4 rounded-xl text-xs ${darkMode ? 'bg-yellow-500/10 border border-yellow-500/20 text-yellow-400/80' : 'bg-yellow-50 border border-yellow-200 text-yellow-700'}`}>
+            <strong>⚠️ Disclaimer:</strong> Token price projections are based on historical trends and do not guarantee future performance.
+            Tokens marked <span className="text-blue-400 font-medium">STABLE</span> (USDC, USDT, fiat) have minimal volatility.
+            Volatile token rewards may be worth significantly more or less than headline rates suggest.
+            This is not financial advice. Prices from CoinGecko.
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+// Mini Token Widget for Card Detail
+function TokenRewardWidget({ card, darkMode }) {
+  const { prices, loading } = useTokenPrices();
+  const [history, setHistory] = useState(null);
+  const ticker = card.token?.ticker || card.cashbackToken;
+  const coingeckoId = card.token?.cmc || TOKEN_ID_MAP[ticker];
+  const isStable = STABLE_TOKENS.includes(ticker) || STABLE_TOKENS.includes(card.cashbackToken) || !coingeckoId;
+
+  useEffect(() => {
+    if (coingeckoId && !isStable) {
+      CoinGeckoService.fetchHistory(coingeckoId).then(h => setHistory(h));
+    }
+  }, [coingeckoId, isStable]);
+
+  const tokenPrice = prices && coingeckoId && prices[coingeckoId] ? prices[coingeckoId] : null;
+  const rate = parseCashbackRate(card.cashback);
+  if (rate === 0 && !tokenPrice) return null;
+
+  const monthlySpend = 1000;
+  const monthlyRewardUSD = (monthlySpend * rate) / 100;
+  const monthlyTokens = tokenPrice && tokenPrice.usd > 0 ? monthlyRewardUSD / tokenPrice.usd : 0;
+  const change12m = history ? CoinGeckoService.getChangeFromHistory(history, 365) : null;
+
+  // Downsample sparkline
+  let sparkData = null;
+  if (history) {
+    const step = Math.max(1, Math.floor(history.length / 60));
+    sparkData = history.filter((_, i) => i % step === 0);
+  }
+
+  return (
+    <div className={`rounded-xl p-4 mt-4 ${darkMode ? 'bg-gray-800/50 border border-gray-700' : 'bg-gray-50 border border-gray-200'}`}>
+      <div className="flex items-center gap-2 mb-3">
+        <svg className="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+        <h3 className={`text-sm font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Token Reward Insight</h3>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+        {!isStable && tokenPrice && (
+          <div className={`p-2 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className={`text-[10px] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{ticker} Price</div>
+            <div className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+              ${tokenPrice.usd < 0.01 ? tokenPrice.usd.toFixed(6) : tokenPrice.usd.toFixed(2)}
+            </div>
+            {tokenPrice.usd_24h_change !== undefined && (
+              <div className={`text-[10px] ${tokenPrice.usd_24h_change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                {tokenPrice.usd_24h_change >= 0 ? '+' : ''}{tokenPrice.usd_24h_change.toFixed(1)}% 24h
+              </div>
+            )}
+          </div>
+        )}
+        <div className={`p-2 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+          <div className={`text-[10px] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Monthly ($1K spend)</div>
+          <div className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>${monthlyRewardUSD.toFixed(2)}</div>
+          {!isStable && monthlyTokens > 0 && (
+            <div className={`text-[10px] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+              {monthlyTokens < 1 ? monthlyTokens.toFixed(4) : monthlyTokens.toFixed(1)} {ticker}
+            </div>
+          )}
+        </div>
+        {change12m !== null && (
+          <div className={`p-2 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className={`text-[10px] ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>12M Change</div>
+            <div className={`text-sm font-bold ${change12m >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+              {change12m >= 0 ? '+' : ''}{change12m.toFixed(1)}%
+            </div>
+          </div>
+        )}
+        {sparkData && (
+          <div className={`p-2 rounded-lg flex items-center justify-center ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <Sparkline data={sparkData} width={100} height={28} />
+          </div>
+        )}
+      </div>
+      {isStable && (
+        <div className={`mt-2 text-[10px] text-center ${darkMode ? 'text-blue-400/70' : 'text-blue-600'}`}>
+          ✓ Stable reward — value holds regardless of market conditions
+        </div>
+      )}
+      <div className={`mt-3 text-center`}>
+        <a href="/calculator" onClick={(e) => { e.preventDefault(); window.dispatchEvent(new CustomEvent('navigateTo', { detail: 'calculator' })); }}
+          className="text-xs text-teal-400 hover:text-teal-300 transition">
+          Open full Reward Calculator →
+        </a>
+      </div>
+    </div>
+  );
+}
+
 // Route map: view <-> path
 const VIEW_TO_PATH = {
   cards: '/',
@@ -5524,6 +6049,7 @@ const VIEW_TO_PATH = {
   wizard: '/find-my-card',
   ratings: '/scores',
   intel: '/intel',
+  calculator: '/calculator',
   privacy: '/privacy',
   terms: '/terms',
   demo: '/demo',
@@ -5567,6 +6093,7 @@ function updateSEO(view, cardName) {
     intel: 'Crypto Card Industry Intel | Infrastructure, Funding & Custody Analysis | Spendbase',
     privacy: 'Privacy Policy | Spendbase',
     terms: 'Terms of Service | Spendbase',
+    calculator: 'Crypto Card Reward Calculator — Real Value of Token Cashback | Spendbase',
     demo: 'Video Demo | Spendbase',
   };
   const descriptions = {
@@ -5578,6 +6105,7 @@ function updateSEO(view, cardName) {
     intel: 'Deep infrastructure analysis of 80+ crypto debit cards — who issues them, how they\'re built, and who\'s funding them.',
     privacy: 'Spendbase privacy policy — how we handle your data.',
     terms: 'Spendbase terms of service.',
+    calculator: 'See the real value of crypto card rewards. Compare token cashback rates adjusted for price performance — CRO, ETHFI, PLU, BNB & more.',
     demo: 'Watch a video demo of Spendbase features.',
   };
 
@@ -5778,6 +6306,7 @@ function Spendbase() {
         {activeView === 'cardDetail' && selectedCard ? <CardDetailPage card={selectedCard} darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} onBack={() => { setSelectedCard(null); navigateTo('cards'); }} /> :
          activeView === 'cards' ? <CardsView darkMode={darkMode} searchTerm={searchTerm} ratings={ratings} onRate={handleRate} userRatedCards={userRatedCards} compareList={compareList} onCompareToggle={handleCompareToggle} /> :
          activeView === 'wizard' ? <CardWizard darkMode={darkMode} /> :
+         activeView === 'calculator' ? <RewardCalculatorPage darkMode={darkMode} /> :
          activeView === 'ratings' ? <RatingsPage darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} /> :
          activeView === 'learn' ? <LearnSection darkMode={darkMode} /> :
          activeView === 'intel' ? <IntelPage darkMode={darkMode} onAdvertise={() => setShowAdvertise(true)} /> :
