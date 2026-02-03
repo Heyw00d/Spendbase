@@ -1880,7 +1880,7 @@ function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, se
 
           {/* Search Bar - visible only on cards view, hidden on mobile */}
           {activeView === 'cards' && (
-            <div className="flex-1 max-w-md mx-4 relative hidden md:block">
+            <div className="flex-1 max-w-lg mx-4 relative hidden md:block">
               <SearchIcon className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} />
               <input
                 type="text"
@@ -1906,19 +1906,19 @@ function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, se
             </div>
           )}
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {['cards','wizard','calculator','ratings','intel','learn','rewards'].map(v => (
+          {/* Desktop Navigation - compact labels to leave room for search */}
+          <nav className="hidden lg:flex items-center gap-0.5">
+            {['cards','wizard','calculator','ratings','intel','learn'].map(v => (
               <button
                 key={v}
                 onClick={() => handleNavClick(v)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition whitespace-nowrap ${
                   activeView === v
                     ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900')
                     : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')
                 }`}
             >
-              {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'calculator' ? 'Calculator' : v === 'ratings' ? 'Scores' : v === 'intel' ? 'Intel' : v.charAt(0).toUpperCase()+v.slice(1)}
+              {v === 'wizard' ? 'Wizard' : v === 'calculator' ? 'Calc' : v === 'ratings' ? 'Scores' : v === 'intel' ? 'Intel' : v === 'learn' ? 'Blog' : v.charAt(0).toUpperCase()+v.slice(1)}
             </button>
           ))}
           </nav>
@@ -1959,7 +1959,7 @@ function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, se
         {mobileMenuOpen && (
           <div className={`lg:hidden mt-3 pb-3 border-t ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
             <nav className="flex flex-col gap-1 pt-3">
-              {['cards','wizard','calculator','ratings','intel','learn','rewards'].map(v => (
+              {['cards','wizard','calculator','ratings','intel','learn'].map(v => (
                 <button
                   key={v}
                   onClick={() => handleNavClick(v)}
@@ -1969,7 +1969,7 @@ function Header({ activeView, navigateTo, onSubscribe, darkMode, setDarkMode, se
                       : (darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50')
                   }`}
                 >
-                  {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'calculator' ? 'Calculator' : v === 'cards' ? 'All Cards' : v === 'ratings' ? 'Scores' : v === 'intel' ? 'Intel' : v === 'learn' ? 'Learn' : v.charAt(0).toUpperCase()+v.slice(1)}
+                  {v === 'wizard' ? 'Card Wizard' : v === 'calculator' ? 'Calculator' : v === 'cards' ? 'All Cards' : v === 'ratings' ? 'Scores' : v === 'intel' ? 'Intel' : v === 'learn' ? 'Blog' : v.charAt(0).toUpperCase()+v.slice(1)}
                 </button>
               ))}
               {/* Mobile Subscribe button */}
@@ -2241,8 +2241,8 @@ function LearnSection({ darkMode }) {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="mb-8">
-        <h2 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Learn About Crypto Cards</h2>
-        <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Everything you need to know.</p>
+        <h2 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Blog</h2>
+        <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Learn about crypto cards, DeFi, and stablecoins.</p>
       </div>
       <div className="grid lg:grid-cols-4 gap-6">
         <nav className="space-y-1">
@@ -6361,8 +6361,9 @@ function Spendbase() {
          activeView === 'intel' ? <IntelPage darkMode={darkMode} onAdvertise={() => setShowAdvertise(true)} /> :
          activeView === 'privacy' ? <PrivacyPolicy darkMode={darkMode} /> :
          activeView === 'terms' ? <TermsOfService darkMode={darkMode} /> :
-         activeView === 'demo' ? <VideoDemoPage darkMode={darkMode} onBack={() => navigateTo('rewards')} /> :
-         <VideoRewardsPage darkMode={darkMode} onNavigateToDemo={() => navigateTo('demo')} />}
+         activeView === 'demo' ? <VideoDemoPage darkMode={darkMode} onBack={() => navigateTo('cards')} /> :
+         activeView === 'rewards' ? <VideoRewardsPage darkMode={darkMode} onNavigateToDemo={() => navigateTo('demo')} /> :
+         <CardsView darkMode={darkMode} searchTerm={searchTerm} ratings={ratings} onRate={handleRate} userRatedCards={userRatedCards} compareList={compareList} onCompareToggle={handleCompareToggle} />}
       </main>
 
       {/* Stablecoin Adoption Progress Bar */}
