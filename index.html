@@ -5744,12 +5744,18 @@ function RewardCalculatorPage({ darkMode }) {
 
   // Sort
   const sorted = React.useMemo(() => {
-    const arr = [...rewardData];
+    // Filter by reward type first
+    const filtered = rewardData.filter(d => {
+      if (rewardType === 'token') return !d.isStable && d.card.token?.live;
+      if (rewardType === 'stable') return d.isStable;
+      return true;
+    });
+    const arr = [...filtered];
     if (sortBy === 'realValue') arr.sort((a, b) => b.realAnnualValue - a.realAnnualValue);
     else if (sortBy === 'rate') arr.sort((a, b) => b.rate - a.rate);
     else if (sortBy === 'performance') arr.sort((a, b) => (b.change12m || 0) - (a.change12m || 0));
     return arr;
-  }, [rewardData, sortBy]);
+  }, [rewardData, sortBy, rewardType]);
 
   const formatPct = (v) => {
     if (v === null || v === undefined) return '—';
@@ -5762,6 +5768,8 @@ function RewardCalculatorPage({ darkMode }) {
     return v >= 0 ? 'text-emerald-400' : 'text-red-400';
   };
 
+  const [rewardType, setRewardType] = useState('token'); // 'token' or 'stable'
+  
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       {/* Hero */}
@@ -5770,44 +5778,53 @@ function RewardCalculatorPage({ darkMode }) {
           Real Reward Calculator
         </h1>
         <p className={`text-base sm:text-lg max-w-2xl mx-auto ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-          See the <span className="text-teal-400 font-semibold">actual value</span> of crypto card cashback rewards — adjusted for token price performance.
-          Not all "4% cashback" is created equal.
+          See the <span className="text-teal-400 font-semibold">actual value</span> of crypto card cashback rewards.
+        </p>
+        <p className={`text-sm mt-2 ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+          📊 Based on <strong>12 months</strong> of spending and <strong>holding all rewards</strong> (no selling)
         </p>
       </div>
 
-      {/* Spend Input */}
-      <div className={`rounded-xl p-6 mb-8 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+      {/* Spend Input - Simplified */}
+      <div className={`rounded-xl p-6 mb-6 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
         <label className={`block text-sm font-medium mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-          How much do you spend per month?
+          Monthly Spend
         </label>
-        <div className="flex items-center gap-4">
-          <input
-            type="range"
-            min={100}
-            max={10000}
-            step={100}
-            value={monthlySpend}
-            onChange={e => setMonthlySpend(Number(e.target.value))}
-            className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-teal-500"
-          />
+        <div className="flex flex-wrap items-center gap-3">
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
             <input
               type="number"
               value={monthlySpend}
               onChange={e => setMonthlySpend(Math.max(0, Number(e.target.value)))}
-              className={`w-28 pl-7 pr-3 py-2 rounded-lg text-sm font-mono font-bold ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-300 text-gray-900'}`}
+              placeholder="1000"
+              className={`w-32 pl-7 pr-3 py-2.5 rounded-lg text-lg font-mono font-bold ${darkMode ? 'bg-gray-800 border border-gray-700 text-white' : 'bg-gray-50 border border-gray-300 text-gray-900'}`}
             />
           </div>
+          <span className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>per month</span>
+          <div className="flex gap-2 ml-auto">
+            {[500, 1000, 2000, 5000].map(v => (
+              <button key={v} onClick={() => setMonthlySpend(v)}
+                className={`text-xs px-3 py-1.5 rounded-lg transition font-medium ${monthlySpend === v ? 'bg-teal-500/20 text-teal-400 border border-teal-500/30' : (darkMode ? 'bg-gray-800 text-gray-400 hover:text-white border border-gray-700' : 'bg-gray-100 text-gray-500 hover:text-gray-900 border border-gray-200')}`}>
+                ${v.toLocaleString()}
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="flex justify-between mt-2">
-          {[250, 500, 1000, 2500, 5000].map(v => (
-            <button key={v} onClick={() => setMonthlySpend(v)}
-              className={`text-xs px-2 py-1 rounded transition ${monthlySpend === v ? 'bg-teal-500/20 text-teal-400' : (darkMode ? 'text-gray-500 hover:text-gray-300' : 'text-gray-400 hover:text-gray-600')}`}>
-              ${v.toLocaleString()}
-            </button>
-          ))}
-        </div>
+      </div>
+
+      {/* Reward Type Tabs */}
+      <div className="flex gap-2 mb-6">
+        <button onClick={() => setRewardType('token')}
+          className={`flex-1 py-3 px-4 rounded-xl font-semibold text-sm transition ${rewardType === 'token' ? 'bg-teal-500/20 text-teal-400 border-2 border-teal-500/50' : (darkMode ? 'bg-gray-900 text-gray-400 border border-gray-800 hover:border-gray-700' : 'bg-gray-100 text-gray-500 border border-gray-200 hover:border-gray-300')}`}>
+          🪙 Token Rewards
+          <span className={`block text-xs font-normal mt-0.5 ${rewardType === 'token' ? 'text-teal-500/70' : 'text-gray-500'}`}>Earn native tokens (price varies)</span>
+        </button>
+        <button onClick={() => setRewardType('stable')}
+          className={`flex-1 py-3 px-4 rounded-xl font-semibold text-sm transition ${rewardType === 'stable' ? 'bg-blue-500/20 text-blue-400 border-2 border-blue-500/50' : (darkMode ? 'bg-gray-900 text-gray-400 border border-gray-800 hover:border-gray-700' : 'bg-gray-100 text-gray-500 border border-gray-200 hover:border-gray-300')}`}>
+          💵 Stablecoin Rewards
+          <span className={`block text-xs font-normal mt-0.5 ${rewardType === 'stable' ? 'text-blue-500/70' : 'text-gray-500'}`}>Earn USDC/USD (stable value)</span>
+        </button>
       </div>
 
       {/* Sort Controls */}
