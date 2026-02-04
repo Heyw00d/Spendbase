@@ -2441,9 +2441,14 @@ function LearnSection({ darkMode, embedded = false }) {
   );
 }
 
-function BlogView({ darkMode, embedded = false }) {
+function BlogView({ darkMode, embedded = false, initialPostSlug = null }) {
   const [categoryFilter, setCategoryFilter] = useState('All');
-  const [selectedPost, setSelectedPost] = useState(null);
+  const [selectedPost, setSelectedPost] = useState(() => {
+    if (initialPostSlug) {
+      return blogPosts.find(p => p.id === initialPostSlug) || null;
+    }
+    return null;
+  });
 
   const categories = ['All', 'Guide', 'Comparison', 'Education', 'Strategy'];
   const filteredPosts = categoryFilter === 'All' ? blogPosts : blogPosts.filter(p => p.category === categoryFilter);
@@ -2459,7 +2464,7 @@ function BlogView({ darkMode, embedded = false }) {
     const catColors = { Guide: 'bg-lime-400/20 text-lime-400', Comparison: 'bg-purple-400/20 text-purple-400', Education: 'bg-cyan-400/20 text-cyan-400', Strategy: 'bg-amber-400/20 text-amber-400' };
     return (
       <div className={embedded ? '' : 'max-w-3xl mx-auto px-4 py-8'}>
-        <button onClick={() => setSelectedPost(null)} className={`mb-6 flex items-center gap-2 text-sm font-medium ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}`}>
+        <button onClick={() => { setSelectedPost(null); if (!embedded) window.history.pushState({ view: 'blog' }, '', '/blog'); }} className={`mb-6 flex items-center gap-2 text-sm font-medium ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}`}>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
           Back to Blog
         </button>
@@ -2499,7 +2504,7 @@ function BlogView({ darkMode, embedded = false }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredPosts.map(post => (
-          <button key={post.id} onClick={() => setSelectedPost(post)} className={`text-left rounded-xl border overflow-hidden transition hover:scale-[1.02] ${darkMode ? 'bg-gray-900 border-gray-800 hover:border-gray-700' : 'bg-white border-gray-200 hover:border-gray-300 shadow-sm'}`}>
+          <button key={post.id} onClick={() => { setSelectedPost(post); if (!embedded) window.history.pushState({ view: 'blog', blogSlug: post.id }, '', '/blog/' + post.id); }} className={`text-left rounded-xl border overflow-hidden transition hover:scale-[1.02] ${darkMode ? 'bg-gray-900 border-gray-800 hover:border-gray-700' : 'bg-white border-gray-200 hover:border-gray-300 shadow-sm'}`}>
             <div className={`p-6 ${darkMode ? 'bg-gray-800/50' : 'bg-gray-50'} flex items-center justify-center`}>
               <span className="text-5xl">{post.image}</span>
             </div>
@@ -6596,6 +6601,10 @@ function getViewFromPath(pathname) {
   pathname = pathname.replace(/\/$/, '') || '/';
   if (PATH_TO_VIEW[pathname]) return { view: PATH_TO_VIEW[pathname] };
   if (pathname.startsWith('/card/')) return { view: 'cardDetail', slug: pathname.replace('/card/', '').replace(/\/$/, '') };
+  if (pathname.startsWith('/blog/')) {
+    const blogSlug = pathname.replace('/blog/', '').replace(/\/$/, '');
+    if (blogSlug) return { view: 'blog', blogSlug };
+  }
   return { view: 'cards' }; // fallback
 }
 
@@ -6687,6 +6696,7 @@ function Spendbase() {
   }, []);
 
   const [activeView, setActiveView] = useState(initialRoute.view);
+  const [initialBlogSlug] = useState(initialRoute.blogSlug || null);
   const [researchTab, setResearchTab] = useState('learn'); // learn, intel, funding, blog
   const [showSubscribe, setShowSubscribe] = useState(false);
   const [showListCard, setShowListCard] = useState(false);
@@ -6832,7 +6842,7 @@ function Spendbase() {
          activeView === 'calculator' ? <RewardCalculatorPage darkMode={darkMode} /> :
          activeView === 'ratings' ? <RatingsPage darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} /> :
          activeView === 'learn' ? <LearnSection darkMode={darkMode} /> :
-         activeView === 'blog' ? <BlogView darkMode={darkMode} /> :
+         activeView === 'blog' ? <BlogView darkMode={darkMode} initialPostSlug={initialBlogSlug} /> :
          activeView === 'intel' ? <IntelPage darkMode={darkMode} onAdvertise={() => setShowAdvertise(true)} /> :
          activeView === 'funding' ? <FundingLeaderboard darkMode={darkMode} /> :
          activeView === 'research' ? <ResearchPage darkMode={darkMode} activeTab={researchTab} onTabChange={setResearchTab} onAdvertise={() => setShowAdvertise(true)} /> :
