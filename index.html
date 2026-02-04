@@ -3550,7 +3550,26 @@ function RatingsPage({ darkMode, ratings, userRatedCards, onRate }) {
 // ============================================
 // CARD DETAIL PAGE - SEO-optimized individual card pages
 // ============================================
-function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBack }) {
+function getBestForTags(card) {
+  const tags = [];
+  if (card.custody === 'Non-Custodial') tags.push('🔐 Self-Custody Advocates');
+  if (card.fxFee === '0%') tags.push('✈️ International Travelers');
+  if (card.cashback && parseFloat(card.cashback) >= 5) tags.push('💰 Cashback Maximizers');
+  if ((card.annualFee || '$0') === '$0') tags.push('🆓 Budget Conscious');
+  if (card.chain === 'Solana') tags.push('◎ Solana Users');
+  if (card.chain === 'Bitcoin') tags.push('₿ Bitcoin Maximalists');
+  if (card.archetype === 'defi') tags.push('🌐 DeFi Users');
+  if (card.archetype === 'exchange') tags.push('📊 Exchange Traders');
+  if (card.regions?.includes('global')) tags.push('🌍 Global Users');
+  if (card.regions?.includes('europe') && !card.regions?.includes('global')) tags.push('🇪🇺 European Users');
+  if (card.regions?.includes('americas') && !card.regions?.includes('global')) tags.push('🇺🇸 US/Americas Users');
+  if (card.token?.live) tags.push('🪙 Token Holders');
+  if (card.comingSoon) tags.push('⏳ Early Adopters');
+  if (card.tier === 'Premium' || card.tier === 'Luxe' || card.tier === 'Limited') tags.push('👑 Premium Seekers');
+  return tags.length > 0 ? tags : ['💳 Everyday Spending'];
+}
+
+function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBack, allCards, onNavigateToCard }) {
   const [activeTab, setActiveTab] = useState('overview');
   const ratingsData = cardRatingsData[card.name] || {};
   const cardRating = ratings?.[card.id] || { average: 0, count: 0 };
@@ -3558,6 +3577,26 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
   
   // Get reviews for this card
   const cardReviews = cardReviewsData[card.name] || { trustpilot: [], appStore: [] };
+
+  // Card navigation (prev/next)
+  const currentIndex = allCards ? allCards.findIndex(c => c.id === card.id) : -1;
+  const prevCard = allCards && currentIndex > 0 ? allCards[currentIndex - 1] : null;
+  const nextCard = allCards && currentIndex < (allCards || []).length - 1 ? allCards[currentIndex + 1] : null;
+
+  // Touch swipe support
+  const touchStartX = React.useRef(null);
+  const handleTouchStart = React.useCallback((e) => {
+    touchStartX.current = e.touches[0].clientX;
+  }, []);
+  const handleTouchEnd = React.useCallback((e) => {
+    if (touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(deltaX) > 50) {
+      if (deltaX > 0 && prevCard && onNavigateToCard) onNavigateToCard(prevCard);
+      else if (deltaX < 0 && nextCard && onNavigateToCard) onNavigateToCard(nextCard);
+    }
+  }, [prevCard, nextCard, onNavigateToCard]);
 
   const categoryLabels = { cryptoNative: 'Crypto-Native', onchain: 'Onchain', neobank: 'Neobank' };
   const archetypeLabels = { exchange: 'Exchange', wallet: 'Wallet', defi: 'DeFi', stablecoin: 'Stablecoin', bank: 'Bank' };
@@ -3635,7 +3674,32 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
           Back to Cards
         </button>
 
+        {/* Card counter and peek navigation */}
+        {allCards && allCards.length > 1 && (
+          <div className="flex items-center justify-between mb-4">
+            <span className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+              {currentIndex + 1} of {allCards.length}
+            </span>
+            <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+              {prevCard && <button onClick={() => onNavigateToCard(prevCard)} className="hover:text-lime-400 transition">← {prevCard.name}</button>}
+              {prevCard && nextCard && <span className="mx-2">|</span>}
+              {nextCard && <button onClick={() => onNavigateToCard(nextCard)} className="hover:text-lime-400 transition">{nextCard.name} →</button>}
+            </div>
+          </div>
+        )}
+
         {/* Hero Section */}
+        <div className="relative" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+        {prevCard && onNavigateToCard && (
+          <button onClick={() => onNavigateToCard(prevCard)} className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-gray-800/60 hover:bg-gray-800 text-white/60 hover:text-white transition z-10 hidden sm:block">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+          </button>
+        )}
+        {nextCard && onNavigateToCard && (
+          <button onClick={() => onNavigateToCard(nextCard)} className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-gray-800/60 hover:bg-gray-800 text-white/60 hover:text-white transition z-10 hidden sm:block">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+          </button>
+        )}
         <div className={`rounded-2xl overflow-hidden mb-6 sm:mb-8 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
           <div className={`p-4 sm:p-6 bg-gradient-to-r ${card.bg || 'from-gray-700 to-gray-800'}`}>
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
@@ -3689,6 +3753,7 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
             </div>
           </div>
         </div>
+        </div>{/* close relative wrapper for hero arrows */}
 
         {/* Tabs */}
         <div className="flex gap-2 mb-4 sm:mb-6 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
@@ -3778,6 +3843,16 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
               </div>
             )}
 
+            {/* Best For */}
+            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Best For</h2>
+              <div className="flex flex-wrap gap-2">
+                {getBestForTags(card).map((tag, i) => (
+                  <span key={i} className="px-3 py-1.5 rounded-lg text-sm bg-cyan-400/10 text-cyan-400 border border-cyan-400/20">{tag}</span>
+                ))}
+              </div>
+            </div>
+
             {/* Features */}
             <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
               <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Features</h2>
@@ -3814,6 +3889,23 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
                     <p className={`text-xs mt-1 ${card.token.live ? 'text-green-400' : 'text-gray-500'}`}>{card.token.live ? '✓ Live on markets' : '🔜 Coming soon'}</p>
                   </div>
                 )}
+              </div>
+            </div>
+
+            {/* Fee Breakdown */}
+            <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+              <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Fee Breakdown</h2>
+              <div className="space-y-3">
+                {[
+                  { label: 'Annual Fee', value: card.annualFee || '$0', good: (card.annualFee || '$0') === '$0' },
+                  { label: 'FX Fee', value: card.fxFee, good: card.fxFee === '0%' },
+                  { label: 'Card Shipping', value: card.shippingCost || 'Varies', good: (card.shippingCost || '').toLowerCase().includes('free') },
+                ].map((fee, i) => (
+                  <div key={i} className={`flex items-center justify-between p-3 rounded-lg ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                    <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{fee.label}</span>
+                    <span className={`text-sm font-bold ${fee.good ? 'text-lime-400' : (darkMode ? 'text-white' : 'text-gray-900')}`}>{fee.value} {fee.good ? '✓' : ''}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -3939,6 +4031,54 @@ function CardDetailPage({ card, darkMode, ratings, userRatedCards, onRate, onBac
                 </div>
               </div>
             </div>
+
+            {/* Similar Cards */}
+            {(() => {
+              const similar = (allCards || [])
+                .filter(c => c.id !== card.id && (c.category === card.category || c.chain === card.chain))
+                .slice(0, 4);
+              if (similar.length === 0) return null;
+              return (
+                <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+                  <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Similar Cards</h2>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {similar.map(c => (
+                      <button key={c.id} onClick={() => onNavigateToCard && onNavigateToCard(c)} className={`p-4 rounded-xl text-left transition hover:scale-105 ${darkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
+                        <img loading="lazy" src={c.logo} alt={c.name} className="w-10 h-10 rounded-lg object-contain mb-2" onError={(e) => e.target.style.display='none'} />
+                        <p className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{c.name}</p>
+                        <p className="text-xs text-lime-400">{c.cashback} back</p>
+                        <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{c.custody}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Related Articles */}
+            {(() => {
+              const related = blogPosts.filter(p => 
+                p.content.toLowerCase().includes(card.name.toLowerCase()) ||
+                (card.token?.ticker && p.content.toLowerCase().includes(card.token.ticker.toLowerCase()))
+              );
+              if (related.length === 0) return null;
+              return (
+                <div className={`p-6 rounded-xl ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200'}`}>
+                  <h2 className={`text-lg font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Related Articles</h2>
+                  <div className="space-y-3">
+                    {related.map(post => (
+                      <a key={post.id} href={'/blog/' + post.id} className={`flex items-center gap-3 p-3 rounded-lg transition ${darkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
+                        <span className="text-2xl">{post.image}</span>
+                        <div>
+                          <p className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{post.title}</p>
+                          <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{post.date} · {post.readTime}</p>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )}
 
@@ -6836,7 +6976,7 @@ function Spendbase() {
         setSearchTerm={setSearchTerm}
       />
       <main className={compareList.length > 0 ? 'pb-32' : ''}>
-        {activeView === 'cardDetail' && selectedCard ? <CardDetailPage card={selectedCard} darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} onBack={() => { setSelectedCard(null); navigateTo('cards'); }} /> :
+        {activeView === 'cardDetail' && selectedCard ? <CardDetailPage card={selectedCard} darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} onBack={() => { setSelectedCard(null); navigateTo('cards'); }} allCards={allCards} onNavigateToCard={navigateToCard} /> :
          activeView === 'cards' ? <CardsView darkMode={darkMode} searchTerm={searchTerm} ratings={ratings} onRate={handleRate} userRatedCards={userRatedCards} compareList={compareList} onCompareToggle={handleCompareToggle} /> :
          activeView === 'wizard' ? <CardWizard darkMode={darkMode} /> :
          activeView === 'calculator' ? <RewardCalculatorPage darkMode={darkMode} /> :
