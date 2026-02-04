@@ -5164,6 +5164,126 @@ function BlogView({ darkMode }) {
   );
 }
 
+const CoinGeckoService = {
+  CACHE_KEY: 'sb_token_prices',
+  HIST_CACHE_KEY: 'sb_token_hist',
+  CACHE_TTL: 5 * 60 * 1000, // 5 min
+
+  getCachedPrices() {
+    try {
+      const raw = localStorage.getItem(this.CACHE_KEY);
+      if (!raw) return null;
+      const { data, ts } = JSON.parse(raw);
+      if (Date.now() - ts < this.CACHE_TTL) return data;
+    } catch(e) {}
+    return null;
+  },
+
+  setCachedPrices(data) {
+    try { localStorage.setItem(this.CACHE_KEY, JSON.stringify({ data, ts: Date.now() })); } catch(e) {}
+  },
+
+  getCachedHistory() {
+    try {
+      const raw = localStorage.getItem(this.HIST_CACHE_KEY);
+      if (!raw) return null;
+      const { data, ts } = JSON.parse(raw);
+      if (Date.now() - ts < 30 * 60 * 1000) return data; // 30 min cache for historical
+    } catch(e) {}
+    return null;
+  },
+
+  setCachedHistory(data) {
+    try { localStorage.setItem(this.HIST_CACHE_KEY, JSON.stringify({ data, ts: Date.now() })); } catch(e) {}
+  },
+
+  async fetchPrices() {
+    const cached = this.getCachedPrices();
+    if (cached) return cached;
+    const ids = [...new Set(Object.values(TOKEN_ID_MAP))].join(',');
+    try {
+      const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`);
+      if (!res.ok) throw new Error('API error');
+      const data = await res.json();
+      this.setCachedPrices(data);
+      return data;
+    } catch(e) { console.warn('CoinGecko price fetch failed:', e); return null; }
+  },
+
+  async fetchHistory(tokenId) {
+    const allHist = this.getCachedHistory() || {};
+    if (allHist[tokenId]) return allHist[tokenId];
+    try {
+      const res = await fetch(`https://api.coingecko.com/api/v3/coins/${tokenId}/market_chart?vs_currency=usd&days=365`);
+      if (!res.ok) throw new Error('API error');
+      const data = await res.json();
+      allHist[tokenId] = data.prices; // [[ts, price], ...]
+      this.setCachedHistory(allHist);
+      return data.prices;
+    } catch(e) { console.warn('CoinGecko history fetch failed:', e); return null; }
+  },
+
+  getChangeFromHistory(prices, daysAgo) {
+    if (!prices || prices.length < 2) return null;
+    const now = prices[prices.length - 1];
+    const cutoff = Date.now() - daysAgo * 86400000;
+    const past = prices.find(p => p[0] >= cutoff) || prices[0];
+    if (!past || past[1] === 0) return null;
+    return ((now[1] - past[1]) / past[1]) * 100;
+  },
+
+  getTokenPrice(priceData, ticker) {
+    if (!priceData || !ticker) return null;
+    const id = TOKEN_ID_MAP[ticker];
+    if (!id || !priceData[id]) return null;
+    return { usd: priceData[id].usd, change24h: priceData[id].usd_24h_change };
+  }
+};
+
+// Hook: use token prices
+function useTokenPrices() {
+  const [prices, setPrices] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    CoinGeckoService.fetchPrices().then(data => { setPrices(data); setLoading(false); });
+  }, []);
+  return { prices, loading };
+}
+
+// Sparkline component
+function Sparkline({ data, width = 120, height = 32, positive }) {
+  if (!data || data.length < 2) return null;
+  const prices = data.map(d => d[1] || d);
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  const range = max - min || 1;
+  const step = width / (prices.length - 1);
+  const points = prices.map((p, i) => `${i * step},${height - ((p - min) / range) * (height - 4) - 2}`).join(' ');
+  const color = positive === undefined ? (prices[prices.length-1] >= prices[0] ? '#14B8A6' : '#EF4444') : (positive ? '#14B8A6' : '#EF4444');
+  return (
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="inline-block">
+      <polyline points={points} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// Parse cashback rate to a numeric value
+function parseCashbackRate(str) {
+  if (!str || str === 'TBD' || str === 'N/A') return 0;
+  // Handle ranges like "1-8%" or "Up to 15%" or "3-9%"
+  const matches = str.match(/[\d.]+/g);
+  if (!matches) return 0;
+  const nums = matches.map(Number);
+  // For ranges like "1-8%", use the low end (realistic rate most users get)
+  // For single values like "4.08%", use as-is
+  if (nums.length === 1) return nums[0];
+  return nums[0]; // Use base rate, not max
+}
+
+// ============================================
+// REWARD CALCULATOR PAGE
+// ============================================
+
 function RewardCalculatorPage({ darkMode }) {
   const [monthlySpend, setMonthlySpend] = useState(1000);
   const [sortBy, setSortBy] = useState('realValue');
