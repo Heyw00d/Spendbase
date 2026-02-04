@@ -1642,8 +1642,8 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
 
   let filtered = allCards;
 
-  // Exclude Coming Soon cards from all views except the Coming Soon tab OR when searching
-  if (categoryFilter !== 'comingSoon' && !searchTerm) {
+  // Exclude Coming Soon cards unless that chip is selected or searching
+  if (archetypeFilter !== 'comingSoon' && !searchTerm) {
     filtered = filtered.filter(c => !c.comingSoon);
   }
 
@@ -1662,13 +1662,22 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
     );
   }
 
-  // Category filters
+  // Archetype / type filter (primary chips)
+  if (archetypeFilter === 'comingSoon') {
+    filtered = filtered.filter(c => c.comingSoon);
+  } else if (archetypeFilter === 'onchain-bank') {
+    filtered = filtered.filter(c => c.archetype === 'stablecoin');
+  } else if (archetypeFilter === 'neobank') {
+    filtered = filtered.filter(c => c.archetype === 'bank' || c.archetype === 'fintech');
+  } else if (archetypeFilter !== 'all') {
+    filtered = filtered.filter(c => c.archetype === archetypeFilter);
+  }
+  // Category filter (legacy, kept for compatibility)
   if (categoryFilter !== 'all') {
     if (categoryFilter === 'cryptoNative') filtered = filtered.filter(c => c.category === 'cryptoNative');
     else if (categoryFilter === 'onchain') filtered = filtered.filter(c => c.category === 'onchain');
     else if (categoryFilter === 'neobank') filtered = filtered.filter(c => c.category === 'neobank');
     else if (categoryFilter === 'staking') filtered = filtered.filter(c => c.token);
-    else if (categoryFilter === 'comingSoon') filtered = filtered.filter(c => c.comingSoon);
   }
   if (custodyFilter !== 'all') {
     if (custodyFilter === 'self') filtered = filtered.filter(c => c.custody === 'Non-Custodial');
@@ -1676,10 +1685,6 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
   }
   if (networkFilter !== 'all') filtered = filtered.filter(c => c.network.toLowerCase() === networkFilter);
   if (regionFilter !== 'all') filtered = filtered.filter(c => c.regions?.includes(regionFilter) || c.regions?.includes('global'));
-  if (archetypeFilter !== 'all') {
-    if (archetypeFilter === 'bank') filtered = filtered.filter(c => c.archetype === 'bank' || c.archetype === 'fintech');
-    else filtered = filtered.filter(c => c.archetype === archetypeFilter);
-  }
   if (platformFilter !== 'all') {
     if (platformFilter === 'ios') filtered = filtered.filter(c => c.platforms === 'ios' || c.platforms === 'both');
     else if (platformFilter === 'android') filtered = filtered.filter(c => c.platforms === 'android' || c.platforms === 'both');
@@ -1710,7 +1715,7 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
   }
 
   const clearFilters = () => { setCategoryFilter('all'); setCustodyFilter('all'); setNetworkFilter('all'); setRegionFilter('all'); setArchetypeFilter('all'); setPlatformFilter('all'); setChainFilter('all'); setSortBy('default'); };
-  const hasActiveFilters = categoryFilter !== 'all' || custodyFilter !== 'all' || networkFilter !== 'all' || regionFilter !== 'all' || archetypeFilter !== 'all' || platformFilter !== 'all' || chainFilter !== 'all' || sortBy !== 'default' || effectiveSearch;
+  const hasActiveFilters = archetypeFilter !== 'all' || categoryFilter !== 'all' || custodyFilter !== 'all' || networkFilter !== 'all' || regionFilter !== 'all' || platformFilter !== 'all' || chainFilter !== 'all' || sortBy !== 'default' || effectiveSearch;
 
   // Category descriptions for the filter section
   const categoryDescriptions = {
@@ -1783,68 +1788,30 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
         </div>
       </div>
 
-      {/* CATEGORY TABS - Primary filter */}
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible">
+      {/* FILTER CHIPS — Exchanges, Wallets, DeFi, Onchain Banks, Neobanks, Coming Soon */}
+      <div className="flex gap-1.5 sm:gap-2 mb-6 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible">
         {[
-          {id:'all', label:'All', labelFull:'All Cards', color:'bg-white text-gray-900'},
-          {id:'cryptoNative', label:'Crypto', labelFull:'Crypto-Native', color:'bg-lime-400 text-gray-900'},
-          {id:'onchain', label:'Onchain', labelFull:'Onchain', color:'bg-purple-500 text-white'},
-          {id:'neobank', label:'Banks', labelFull:'Neobanks + Crypto', color:'bg-gray-600 text-white'},
-          {id:'staking', label:'Tokens', labelFull:'Token Rewards', color:'bg-gradient-to-r from-amber-400 to-orange-500 text-gray-900'},
-          {id:'comingSoon', label:'Soon', labelFull:'Coming Soon', color:'bg-gradient-to-r from-cyan-400 to-blue-500 text-gray-900'}
+          { id: 'all', label: 'All', labelFull: 'All Cards' },
+          { id: 'exchange', label: 'Exchanges', labelFull: 'Exchanges' },
+          { id: 'wallet', label: 'Wallets', labelFull: 'Wallets' },
+          { id: 'defi', label: 'DeFi', labelFull: 'DeFi' },
+          { id: 'onchain-bank', label: 'Onchain', labelFull: 'Onchain Banks' },
+          { id: 'neobank', label: 'Neobanks', labelFull: 'Neobanks' },
+          { id: 'comingSoon', label: 'Soon', labelFull: 'Coming Soon' },
         ].map(f => (
-          <button key={f.id} onClick={() => setCategoryFilter(f.id)} className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition whitespace-nowrap flex-shrink-0 ${categoryFilter === f.id ? f.color : (darkMode ? 'bg-gray-800 text-gray-400 hover:text-white' : 'bg-gray-200 text-gray-600 hover:text-gray-900')}`}>
+          <button
+            key={f.id}
+            onClick={() => { setArchetypeFilter(f.id); setCategoryFilter('all'); }}
+            className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition whitespace-nowrap flex-shrink-0 ${
+              archetypeFilter === f.id
+                ? 'bg-lime-400 text-gray-900'
+                : (darkMode ? 'bg-gray-800 text-gray-400 hover:text-white' : 'bg-gray-200 text-gray-600 hover:text-gray-900')
+            }`}
+          >
             <span className="sm:hidden">{f.label}</span>
             <span className="hidden sm:inline">{f.labelFull}</span>
           </button>
         ))}
-      </div>
-
-      {/* Category description */}
-      {categoryFilter !== 'all' && (
-        <div className={`mb-4 p-3 rounded-lg border ${
-          categoryFilter === 'cryptoNative' ? 'bg-lime-400/10 border-lime-400/30 text-lime-600' :
-          categoryFilter === 'onchain' ? 'bg-purple-500/10 border-purple-500/30 text-purple-600' :
-          categoryFilter === 'staking' ? 'bg-amber-400/10 border-amber-400/30 text-amber-600' :
-          categoryFilter === 'comingSoon' ? 'bg-cyan-400/10 border-cyan-400/30 text-cyan-600' :
-          (darkMode ? 'bg-gray-700/30 border-gray-600 text-gray-400' : 'bg-gray-100 border-gray-300 text-gray-600')
-        }`}>
-          <span className="text-sm">{categoryDescriptions[categoryFilter]}</span>
-        </div>
-      )}
-
-      {/* ARCHETYPE FILTER CHIPS — Wallets, Exchanges, DeFi, etc. */}
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible">
-        {[
-          { id: 'all', label: 'All Types', emoji: '🃏' },
-          { id: 'exchange', label: 'Exchanges', emoji: '🏦' },
-          { id: 'wallet', label: 'Wallets', emoji: '👛' },
-          { id: 'defi', label: 'DeFi', emoji: '🔗' },
-          { id: 'stablecoin', label: 'Stablecoin', emoji: '💵' },
-          { id: 'bank', label: 'Banks', emoji: '🏛️' },
-        ].map(f => {
-          const isActive = archetypeFilter === f.id;
-          const count = f.id === 'all'
-            ? null
-            : f.id === 'bank'
-              ? allCards.filter(c => c.archetype === 'bank' || c.archetype === 'fintech').length
-              : allCards.filter(c => c.archetype === f.id).length;
-          return (
-            <button
-              key={f.id}
-              onClick={() => setArchetypeFilter(f.id)}
-              className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-xs sm:text-sm font-medium transition whitespace-nowrap flex-shrink-0 border ${
-                isActive
-                  ? (darkMode ? 'bg-white/10 border-white/30 text-white shadow-sm' : 'bg-gray-900 border-gray-900 text-white')
-                  : (darkMode ? 'bg-transparent border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-200' : 'bg-transparent border-gray-300 text-gray-500 hover:border-gray-400 hover:text-gray-700')
-              }`}
-            >
-              <span>{f.emoji}</span>
-              <span>{f.label}</span>
-              {count !== null && <span className={`text-[10px] sm:text-xs ${isActive ? (darkMode ? 'text-gray-300' : 'text-gray-300') : (darkMode ? 'text-gray-600' : 'text-gray-400')}`}>({count})</span>}
-            </button>
-          );
-        })}
       </div>
 
       {/* SECONDARY FILTERS - Hidden on mobile, visible on desktop */}
