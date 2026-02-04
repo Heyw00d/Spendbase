@@ -1497,7 +1497,7 @@ function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode,
 
   const viewPaths = { cards: '/', wizard: '/find-my-card', calculator: '/calculator', ratings: '/scores', learn: '/learn', blog: '/blog', rewards: '/rewards' };
   const handleNavClick = (view) => {
-    // calculator is now rendered in-app
+    if (view === 'calculator') { window.location.href = '/calculator/'; return; }
     const path = viewPaths[view] || '/';
     window.history.pushState(null, '', path);
     setActiveView(view);
@@ -5771,7 +5771,7 @@ function Spendbase() {
         {activeView === 'cardDetail' && selectedCard ? <CardDetailPage card={selectedCard} darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} allCardsList={allCards} onSelectCard={(c) => { const slug = c.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, ''); window.history.pushState(null, '', `/card/${slug}/`); setSelectedCard(c); }} onBack={() => { window.history.pushState(null, '', '/'); setSelectedCard(null); setActiveView('cards'); }} /> :
          activeView === 'cards' ? <CardsView darkMode={darkMode} searchTerm={searchTerm} ratings={ratings} onRate={handleRate} userRatedCards={userRatedCards} compareList={compareList} onCompareToggle={handleCompareToggle} /> :
          activeView === 'wizard' ? <CardWizard darkMode={darkMode} /> :
-         activeView === 'calculator' ? <RewardCalculatorPage darkMode={darkMode} /> :
+         activeView === 'calculator' ? null :
          activeView === 'ratings' ? <RatingsPage darkMode={darkMode} ratings={ratings} userRatedCards={userRatedCards} onRate={handleRate} /> :
          activeView === 'learn' ? <LearnSection darkMode={darkMode} /> :
          activeView === 'blog' ? <BlogView darkMode={darkMode} /> :
