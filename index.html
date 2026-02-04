@@ -2170,7 +2170,7 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
   const [archetypeFilter, setArchetypeFilter] = useState('all');
   const [platformFilter, setPlatformFilter] = useState('all');
   const [ratingSort, setRatingSort] = useState('none'); // 'none', 'highest', 'lowest'
-  const [rewardTypeFilter, setRewardTypeFilter] = useState('all'); // 'all', 'token', 'stable', 'other'
+  const [rewardTypeFilter, setRewardTypeFilter] = useState('all'); // 'all', 'token', 'stable', 'cash'
   const [visibleCount, setVisibleCount] = useState(24);
   const sentinelRef = useRef(null);
 
@@ -2203,31 +2203,46 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
     else if (categoryFilter === 'neobank') filtered = filtered.filter(c => c.category === 'neobank');
     else if (categoryFilter === 'staking') filtered = filtered.filter(c => c.token);
     else if (categoryFilter === 'comingSoon') filtered = filtered.filter(c => c.comingSoon);
+    else if (categoryFilter === 'exclusive') filtered = filtered.filter(c => c.exclusive);
   }
   if (custodyFilter !== 'all') {
     if (custodyFilter === 'self') filtered = filtered.filter(c => c.custody === 'Non-Custodial');
     else if (custodyFilter === 'custodial') filtered = filtered.filter(c => c.custody === 'Custodial' || c.custody === 'Hybrid');
+    else if (custodyFilter === 'kyc') filtered = filtered.filter(c => c.kyc === 'full');
+    else if (custodyFilter === 'lightkyc') filtered = filtered.filter(c => c.kyc === 'light');
+    else if (custodyFilter === 'nokyc') filtered = filtered.filter(c => c.kyc === 'none');
   }
   if (networkFilter !== 'all') filtered = filtered.filter(c => c.network.toLowerCase() === networkFilter);
   if (regionFilter !== 'all') filtered = filtered.filter(c => c.regions?.includes(regionFilter));
-  if (archetypeFilter !== 'all') filtered = filtered.filter(c => c.archetype === archetypeFilter);
+  if (archetypeFilter !== 'all') {
+    if (archetypeFilter === 'banks') filtered = filtered.filter(c => c.archetype === 'bank' || c.archetype === 'fintech' || c.archetype === 'neobank');
+    else if (archetypeFilter === 'neobanks') filtered = filtered.filter(c => c.archetype === 'neobank' || c.archetype === 'fintech');
+    else if (archetypeFilter === 'bank') filtered = filtered.filter(c => c.archetype === 'bank');
+    else filtered = filtered.filter(c => c.archetype === archetypeFilter);
+  }
   if (platformFilter !== 'all') {
     if (platformFilter === 'ios') filtered = filtered.filter(c => c.platforms === 'ios' || c.platforms === 'both');
     else if (platformFilter === 'android') filtered = filtered.filter(c => c.platforms === 'android' || c.platforms === 'both');
+    else if (platformFilter === 'web') filtered = filtered.filter(c => c.platforms === 'web' || c.platforms === 'both');
     else if (platformFilter === 'both') filtered = filtered.filter(c => c.platforms === 'both');
   }
 
   // Reward type filter
   if (rewardTypeFilter !== 'all') {
-    const stableTokens = ['USDC', 'USDT', 'USD', 'CASH', 'Stablecoin'];
-    const isStable = (c) => stableTokens.some(s => c.cashbackToken?.toUpperCase().includes(s));
-    const isToken = (c) => c.token?.live && !isStable(c);
+    const stableTokens = ['USDC', 'USDT', 'CASH', 'Stablecoin'];
+    const cashTokens = ['USD', 'Fiat'];
+    const isCash = (c) => {
+      const t = c.cashbackToken || '';
+      return cashTokens.includes(t) || t === 'BTC/Fiat' || t.toLowerCase() === 'fiat';
+    };
+    const isStable = (c) => stableTokens.some(s => c.cashbackToken?.toUpperCase().includes(s)) && !isCash(c);
+    const isToken = (c) => c.token?.live && !isStable(c) && !isCash(c);
     if (rewardTypeFilter === 'token') {
       filtered = filtered.filter(c => isToken(c));
     } else if (rewardTypeFilter === 'stable') {
       filtered = filtered.filter(c => isStable(c));
-    } else if (rewardTypeFilter === 'other') {
-      filtered = filtered.filter(c => !isToken(c) && !isStable(c) && c.cashbackToken && c.cashbackToken !== 'TBD' && c.cashbackToken !== 'N/A');
+    } else if (rewardTypeFilter === 'cash') {
+      filtered = filtered.filter(c => isCash(c));
     }
   }
 
@@ -2299,9 +2314,9 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
     <div className="max-w-6xl mx-auto px-4 sm:p-6">
       {/* SEO-optimized hero section */}
       <header className="mb-6 sm:mb-8">
-        <h1 className={`text-2xl sm:text-4xl font-bold mb-2 sm:mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Best Crypto Cards 2026</h1>
+        <h1 className={`text-2xl sm:text-4xl font-bold mb-2 sm:mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Best Onchain Cards 2026</h1>
         <p className={`text-sm sm:text-lg mb-3 sm:mb-4 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-          Compare {allCards.length}+ crypto debit cards, USDC cards, and Bitcoin cards.
+          Compare <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-emerald-500">{allCards.filter(c => !c.comingSoon).length}+</span> crypto debit cards, USDC cards, stablecoin cards, neobanks and bitcoin cards.
         </p>
         <div className={`text-xs sm:text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'} hidden sm:block`}>
           <span className="inline-flex items-center gap-2 mr-4">✓ Self-custody & non-custodial cards</span>
@@ -2324,76 +2339,107 @@ function CardsView({ darkMode, searchTerm, ratings, onRate, userRatedCards, comp
         </div>
       </div>
 
-      {/* Wizard Promo Banner */}
-      <div className={`mb-4 sm:mb-6 p-3 sm:p-4 rounded-xl border bg-gradient-to-r ${darkMode ? 'from-lime-400/10 to-emerald-500/10 border-lime-400/30' : 'from-lime-50 to-emerald-50 border-lime-200'}`}>
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <div className="text-xl sm:text-3xl flex-shrink-0"></div>
-            <div className="min-w-0">
-              <h3 className={`font-bold text-sm sm:text-base truncate ${darkMode ? 'text-white' : 'text-gray-900'}`}>Not sure which card?</h3>
-              <p className={`text-xs sm:text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'} hidden sm:block`}>Take our 60-second quiz to find your perfect match</p>
+      {/* Dynamic Promo Banner — rotates through features */}
+      {(() => {
+        const promos = [
+          { title: 'Not sure which card?', desc: 'Take our 60-second quiz to find your perfect match', btn: 'Quiz', nav: 'wizard', gradient: darkMode ? 'from-lime-400/10 to-emerald-500/10 border-lime-400/30' : 'from-lime-50 to-emerald-50 border-lime-200', btnGrad: 'from-lime-400 to-emerald-500' },
+          { title: 'Earn Video Rewards', desc: 'Watch short videos about top cards and earn exclusive rewards', btn: 'Watch', nav: 'rewards', gradient: darkMode ? 'from-purple-500/10 to-pink-500/10 border-purple-400/30' : 'from-purple-50 to-pink-50 border-purple-200', btnGrad: 'from-purple-500 to-pink-500' },
+          { title: 'Industry Intel', desc: 'Learn who issues your cards, explore past funding rounds and investors', btn: 'Explore', nav: 'intel', gradient: darkMode ? 'from-cyan-400/10 to-blue-500/10 border-cyan-400/30' : 'from-cyan-50 to-blue-50 border-cyan-200', btnGrad: 'from-cyan-400 to-blue-500' },
+          { title: 'Reward Calculator', desc: 'See how each token is performing and what your rewards are really worth', btn: 'Calculate', nav: 'calculator', gradient: darkMode ? 'from-amber-400/10 to-orange-500/10 border-amber-400/30' : 'from-amber-50 to-orange-50 border-amber-200', btnGrad: 'from-amber-400 to-orange-500' },
+          { title: 'Exclusive Offers & Rewards', desc: 'Subscribe to unlock deals, airdrops and early access from top providers', btn: 'Subscribe', nav: 'subscribe', gradient: darkMode ? 'from-rose-500/10 to-red-500/10 border-rose-400/30' : 'from-rose-50 to-red-50 border-rose-200', btnGrad: 'from-rose-500 to-red-500' }
+        ];
+        const [promoIdx, setPromoIdx] = useState(0);
+        useEffect(() => {
+          const t = setInterval(() => setPromoIdx(i => (i + 1) % promos.length), 6000);
+          return () => clearInterval(t);
+        }, []);
+        const p = promos[promoIdx];
+        return (
+          <div className={`mb-4 sm:mb-6 p-3 sm:p-4 rounded-xl border bg-gradient-to-r transition-all duration-500 ${p.gradient}`}>
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                <div className="min-w-0 flex-1 cursor-pointer" onClick={() => setPromoIdx(i => (i + 1) % promos.length)}>
+                  <h3 className={`font-bold text-sm sm:text-base truncate ${darkMode ? 'text-white' : 'text-gray-900'}`}>{p.title}</h3>
+                  <p className={`text-xs sm:text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'} hidden sm:block`}>{p.desc}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <div className="hidden sm:flex gap-1">
+                  {promos.map((_, i) => (
+                    <button key={i} onClick={() => setPromoIdx(i)} className={`w-1.5 h-1.5 rounded-full transition-all ${i === promoIdx ? 'bg-white w-4' : (darkMode ? 'bg-gray-600' : 'bg-gray-300')}`} />
+                  ))}
+                </div>
+                <button
+                  onClick={() => p.nav === 'subscribe' ? window.dispatchEvent(new CustomEvent('navigateTo', { detail: 'subscribe' })) : window.dispatchEvent(new CustomEvent('navigateTo', { detail: p.nav }))}
+                  className={`px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r ${p.btnGrad} text-white rounded-lg font-semibold text-xs sm:text-sm whitespace-nowrap`}
+                >
+                  {p.btn}
+                </button>
+              </div>
             </div>
           </div>
-          <button
-            onClick={() => window.dispatchEvent(new CustomEvent('navigateTo', { detail: 'wizard' }))}
-            className="px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900 rounded-lg font-semibold text-xs sm:text-sm whitespace-nowrap flex-shrink-0"
-          >
-            Quiz
-          </button>
-        </div>
-      </div>
+        );
+      })()}
 
-      {/* CATEGORY TABS - Primary filter */}
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible">
-        {[
-          {id:'all', label:'All', labelFull:'All Cards', color:'bg-white text-gray-900'},
-          {id:'cryptoNative', label:'Crypto', labelFull:'Crypto-Native', color:'bg-lime-400 text-gray-900'},
-          {id:'onchain', label:'Onchain', labelFull:'Onchain', color:'bg-purple-500 text-white'},
-          {id:'neobank', label:'Banks', labelFull:'Neobanks + Crypto', color:'bg-gray-600 text-white'},
-          {id:'staking', label:'Tokens', labelFull:'Token Rewards', color:'bg-gradient-to-r from-amber-400 to-orange-500 text-gray-900'},
-          {id:'comingSoon', label:'Soon', labelFull:'Coming Soon', color:'bg-gradient-to-r from-cyan-400 to-blue-500 text-gray-900'}
-        ].map(f => (
-          <button key={f.id} onClick={() => setCategoryFilter(f.id)} className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition whitespace-nowrap flex-shrink-0 ${categoryFilter === f.id ? f.color : (darkMode ? 'bg-gray-800 text-gray-400 hover:text-white' : 'bg-gray-200 text-gray-600 hover:text-gray-900')}`}>
-            <span className="sm:hidden">{f.label}</span>
-            <span className="hidden sm:inline">{f.labelFull}</span>
-          </button>
-        ))}
-      </div>
+      {/* UNIFIED FILTER TABS */}
+      {(() => {
+        const liveCards = allCards.filter(c => !c.comingSoon);
+        const tabs = [
+          { id: 'all', label: 'All Cards', labelShort: 'All', count: liveCards.length },
+          { id: 'exclusive', label: '🔥 Exclusive Offers', labelShort: '🔥 Exclusive' },
+          { id: 'onchain', label: 'Onchain', labelShort: 'Onchain', count: liveCards.filter(c => c.category === 'onchain').length },
+          { id: 'banks', label: 'Banks', labelShort: 'Banks', count: liveCards.filter(c => c.archetype === 'bank').length },
+          { id: 'neobanks', label: 'NeoBanks', labelShort: 'Neo', count: liveCards.filter(c => c.archetype === 'neobank' || c.archetype === 'fintech').length },
+          { id: 'exchanges', label: 'Exchanges', labelShort: 'Exch', count: liveCards.filter(c => c.archetype === 'exchange').length },
+          { id: 'wallets', label: 'Wallets', labelShort: 'Wallets', count: liveCards.filter(c => c.archetype === 'wallet').length },
+          { id: 'defi', label: 'DeFi', labelShort: 'DeFi', count: liveCards.filter(c => c.archetype === 'defi').length },
+          { id: 'comingSoon', label: 'Coming Soon', labelShort: 'Soon', count: allCards.filter(c => c.comingSoon).length }
+        ];
+        const activeTab = categoryFilter === 'all' && archetypeFilter === 'all' ? 'all' :
+          categoryFilter === 'onchain' ? 'onchain' :
+          categoryFilter === 'comingSoon' ? 'comingSoon' :
+          archetypeFilter === 'exchange' ? 'exchanges' :
+          archetypeFilter === 'wallet' ? 'wallets' :
+          archetypeFilter === 'defi' ? 'defi' :
+          archetypeFilter === 'bank' ? 'banks' :
+          archetypeFilter === 'neobanks' ? 'neobanks' :
+          categoryFilter === 'exclusive' ? 'exclusive' : 'all';
+        const handleTab = (id) => {
+          setCategoryFilter('all'); setArchetypeFilter('all');
+          if (id === 'onchain') setCategoryFilter('onchain');
+          else if (id === 'comingSoon') setCategoryFilter('comingSoon');
+          else if (id === 'exchanges') setArchetypeFilter('exchange');
+          else if (id === 'wallets') setArchetypeFilter('wallet');
+          else if (id === 'defi') setArchetypeFilter('defi');
+          else if (id === 'banks') setArchetypeFilter('bank');
+          else if (id === 'neobanks') setArchetypeFilter('neobanks');
+          else if (id === 'exclusive') setCategoryFilter('exclusive');
+        };
+        return (
+          <div className="flex gap-1.5 sm:gap-2 mb-5 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible">
+            {tabs.map(t => (
+              <button key={t.id} onClick={() => handleTab(t.id)} className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition whitespace-nowrap flex-shrink-0 ${activeTab === t.id ? 'bg-gradient-to-r from-lime-400 to-emerald-500 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-400 hover:text-white' : 'bg-gray-200 text-gray-600 hover:text-gray-900')}`}>
+                <span className="sm:hidden">{t.labelShort}</span>
+                <span className="hidden sm:inline">{t.label}</span>
+                {t.count != null && <span className={`ml-1 text-[10px] sm:text-xs ${activeTab === t.id ? 'opacity-70' : 'opacity-50'}`}>{t.count}</span>}
+              </button>
+            ))}
+          </div>
+        );
+      })()}
 
-      {/* Category description */}
-      {categoryFilter !== 'all' && (
-        <div className={`mb-6 p-3 rounded-lg border ${
-          categoryFilter === 'cryptoNative' ? 'bg-lime-400/10 border-lime-400/30 text-lime-600' :
-          categoryFilter === 'onchain' ? 'bg-purple-500/10 border-purple-500/30 text-purple-600' :
-          categoryFilter === 'staking' ? 'bg-amber-400/10 border-amber-400/30 text-amber-600' :
-          categoryFilter === 'comingSoon' ? 'bg-cyan-400/10 border-cyan-400/30 text-cyan-600' :
-          (darkMode ? 'bg-gray-700/30 border-gray-600 text-gray-400' : 'bg-gray-100 border-gray-300 text-gray-600')
-        }`}>
-          <span className="text-sm">{categoryDescriptions[categoryFilter]}</span>
-        </div>
-      )}
-
-      {/* SECONDARY FILTERS - Hidden on mobile, visible on desktop */}
-      <div className={`rounded-xl p-3 sm:p-4 mb-6 sm:mb-8 ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}>
-        {/* Mobile: Simple filter row */}
-        <div className="grid grid-cols-4 gap-2 sm:hidden mb-3">
-          <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'self',label:'Self'},{id:'custodial',label:'Cust.'}].map(f => <button key={f.id} onClick={() => setCustodyFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${custodyFilter === f.id ? 'bg-cyan-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
-          <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'americas',label:'US'},{id:'europe',label:'EU'}].map(f => <button key={f.id} onClick={() => setRegionFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${regionFilter === f.id ? 'bg-orange-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
-          <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'token',label:'Token'},{id:'stable',label:'Stable'}].map(f => <button key={f.id} onClick={() => setRewardTypeFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${rewardTypeFilter === f.id ? 'bg-teal-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
-          <div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'visa',label:'Visa'},{id:'mastercard',label:'MC'}].map(f => <button key={f.id} onClick={() => setNetworkFilter(f.id)} className={`px-2 py-1 rounded text-[10px] font-medium ${networkFilter === f.id ? 'bg-purple-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div>
-        </div>
-        {/* Desktop: Full filter grid */}
-        <div className="hidden sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Custody</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'self',label:'Self-Custody'},{id:'custodial',label:'Custodial'}].map(f => <button key={f.id} onClick={() => setCustodyFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${custodyFilter === f.id ? 'bg-cyan-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
-          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Network</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'visa',label:'Visa'},{id:'mastercard',label:'MC'}].map(f => <button key={f.id} onClick={() => setNetworkFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${networkFilter === f.id ? 'bg-purple-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
-          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Region</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'americas',label:'US'},{id:'europe',label:'EU'},{id:'apac',label:'APAC'},{id:'global',label:'Global'}].map(f => <button key={f.id} onClick={() => setRegionFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${regionFilter === f.id ? 'bg-orange-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
-          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Type</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'exchange',label:'Exchange'},{id:'wallet',label:'Wallet'},{id:'defi',label:'DeFi'},{id:'stablecoin',label:'Stablecoin'}].map(f => <button key={f.id} onClick={() => setArchetypeFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${archetypeFilter === f.id ? 'bg-pink-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
-          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Rewards</label><div className="flex flex-wrap gap-1">{[{id:'all',label:'All'},{id:'token',label:'Token'},{id:'stable',label:'Stable'},{id:'other',label:'Other'}].map(f => <button key={f.id} onClick={() => setRewardTypeFilter(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${rewardTypeFilter === f.id ? 'bg-teal-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
-          <div><label className={`text-xs mb-2 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Sort by Rating</label><div className="flex flex-wrap gap-1">{[{id:'none',label:'Default'},{id:'highest',label:'★ Highest'},{id:'lowest',label:'★ Lowest'}].map(f => <button key={f.id} onClick={() => setRatingSort(f.id)} className={`px-2 py-1 rounded text-xs font-medium ${ratingSort === f.id ? 'bg-yellow-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
-        </div>
-        <div className={`mt-3 pt-3 border-t flex justify-between items-center ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
-          <span className={`text-xs sm:text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>{filtered.length} cards found</span>
-          {hasActiveFilters && <button onClick={clearFilters} className="text-lime-500 text-xs sm:text-sm">Clear filters</button>}
+      {/* FILTERS — compact row */}
+      <div className={`rounded-xl p-3 mb-5 ${darkMode ? 'bg-gray-900/50 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}>
+        <div className="flex flex-wrap gap-x-6 gap-y-2 items-end">
+          <div><label className={`text-[10px] sm:text-xs mb-1 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Setup</label><div className="flex gap-1">{[{id:'all',label:'All'},{id:'self',label:'Self-Custody'},{id:'custodial',label:'Custodial'},{id:'kyc',label:'KYC'},{id:'lightkyc',label:'Light KYC'},{id:'nokyc',label:'No KYC'}].map(f => <button key={f.id} onClick={() => setCustodyFilter(f.id)} className={`px-2 py-1 rounded text-[10px] sm:text-xs font-medium ${custodyFilter === f.id ? 'bg-cyan-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
+          <div><label className={`text-[10px] sm:text-xs mb-1 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Issuer / OS</label><div className="flex gap-1">{[{id:'all',label:'All'},{id:'visa',label:'Visa'},{id:'mastercard',label:'MC'},{id:'ios',label:'iOS'},{id:'android',label:'Android'},{id:'web',label:'Web'}].map(f => <button key={f.id} onClick={() => { if (f.id === 'all') { setNetworkFilter('all'); setPlatformFilter('all'); } else if (['ios','android','web'].includes(f.id)) { setPlatformFilter(f.id); setNetworkFilter('all'); } else { setNetworkFilter(f.id); setPlatformFilter('all'); } }} className={`px-2 py-1 rounded text-[10px] sm:text-xs font-medium ${(f.id === 'all' && networkFilter === 'all' && platformFilter === 'all') || (f.id === networkFilter && f.id !== 'all') || (f.id === platformFilter && ['ios','android','web'].includes(f.id)) ? 'bg-purple-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
+          <div><label className={`text-[10px] sm:text-xs mb-1 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Region</label><div className="flex gap-1">{[{id:'all',label:'All'},{id:'americas',label:'US'},{id:'europe',label:'EU'},{id:'apac',label:'APAC'},{id:'global',label:'Global'}].map(f => <button key={f.id} onClick={() => setRegionFilter(f.id)} className={`px-2 py-1 rounded text-[10px] sm:text-xs font-medium ${regionFilter === f.id ? 'bg-orange-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
+          <div><label className={`text-[10px] sm:text-xs mb-1 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Rewards</label><div className="flex gap-1">{[{id:'all',label:'All'},{id:'token',label:'Token'},{id:'stable',label:'Stable'},{id:'cash',label:'Cash'}].map(f => <button key={f.id} onClick={() => setRewardTypeFilter(f.id)} className={`px-2 py-1 rounded text-[10px] sm:text-xs font-medium ${rewardTypeFilter === f.id ? 'bg-teal-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
+          <div><label className={`text-[10px] sm:text-xs mb-1 block ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>Rating</label><div className="flex gap-1">{[{id:'none',label:'Default'},{id:'highest',label:'★ Top'},{id:'lowest',label:'★ Low'}].map(f => <button key={f.id} onClick={() => setRatingSort(f.id)} className={`px-2 py-1 rounded text-[10px] sm:text-xs font-medium ${ratingSort === f.id ? 'bg-yellow-400 text-gray-900' : (darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-200 text-gray-600')}`}>{f.label}</button>)}</div></div>
+          <div className="flex items-center gap-3 ml-auto">
+            <span className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>{filtered.length} cards</span>
+            {hasActiveFilters && <button onClick={clearFilters} className="text-lime-500 text-xs">Clear</button>}
+          </div>
         </div>
       </div>
 
