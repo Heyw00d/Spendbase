@@ -1474,6 +1474,8 @@ function TermsOfService({ darkMode }) {
 
 function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode, searchTerm, setSearchTerm }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
+  const toolsRef = React.useRef(null);
   
   // Navigate to home - clears URL hash and sets view to cards
   const goHome = () => {
@@ -1484,11 +1486,24 @@ function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode,
 
   const viewPaths = { cards: '/', wizard: '/find-my-card', calculator: '/calculator', ratings: '/scores', learn: '/learn', blog: '/blog', rewards: '/rewards' };
   const handleNavClick = (view) => {
+    if (view === 'calculator') { window.open('/calculator', '_self'); return; }
     const path = viewPaths[view] || '/';
     window.history.pushState(null, '', path);
     setActiveView(view);
     setMobileMenuOpen(false);
+    setToolsOpen(false);
   };
+
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (toolsRef.current && !toolsRef.current.contains(e.target)) {
+        setToolsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <header className={`border-b sticky top-0 z-40 backdrop-blur-sm ${darkMode ? 'border-gray-800 bg-gray-950/80' : 'border-gray-200 bg-white/80'}`}>
@@ -1550,24 +1565,35 @@ function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode,
           )}
 
           {/* Desktop Navigation */}
+          {/* Desktop Navigation with Tools dropdown */}
           <nav className="hidden lg:flex items-center gap-1">
-            {['cards','wizard','calculator','ratings','blog'].map(v => {
-              const label = { cards: 'Cards', wizard: 'Find My Card', calculator: 'Calculator', ratings: 'Scores', blog: 'Blog' }[v];
-              const isExternal = v === 'calculator';
-              return (
-                <button
-                  key={v}
-                  onClick={() => isExternal ? window.open('/calculator', '_self') : handleNavClick(v)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                    activeView === v
-                      ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900')
-                      : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')
-                  }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
+            <button onClick={() => handleNavClick('cards')} className={`px-4 py-2 rounded-lg text-sm font-medium transition ${activeView === 'cards' ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900') : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')}`}>Cards</button>
+            
+            {/* Tools dropdown */}
+            <div className="relative" ref={toolsRef}>
+              <button
+                onClick={() => setToolsOpen(!toolsOpen)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-1 ${
+                  ['wizard','calculator','ratings'].includes(activeView)
+                    ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900')
+                    : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')
+                }`}
+              >
+                Tools
+                <svg className={`w-4 h-4 transition-transform ${toolsOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {toolsOpen && (
+                <div className={`absolute top-full left-0 mt-1 py-1 rounded-lg shadow-lg border min-w-[180px] z-50 ${darkMode ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-200'}`}>
+                  <button onClick={() => handleNavClick('wizard')} className={`w-full text-left px-4 py-2.5 text-sm transition ${darkMode ? 'text-gray-300 hover:bg-gray-800 hover:text-white' : 'text-gray-700 hover:bg-gray-100'}`}>Card Wizard</button>
+                  <button onClick={() => handleNavClick('calculator')} className={`w-full text-left px-4 py-2.5 text-sm transition ${darkMode ? 'text-gray-300 hover:bg-gray-800 hover:text-white' : 'text-gray-700 hover:bg-gray-100'}`}>Reward Calculator</button>
+                  <button onClick={() => handleNavClick('ratings')} className={`w-full text-left px-4 py-2.5 text-sm transition ${darkMode ? 'text-gray-300 hover:bg-gray-800 hover:text-white' : 'text-gray-700 hover:bg-gray-100'}`}>Card Scores</button>
+                </div>
+              )}
+            </div>
+            
+            <button onClick={() => handleNavClick('blog')} className={`px-4 py-2 rounded-lg text-sm font-medium transition ${activeView === 'blog' ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900') : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')}`}>Blog</button>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -1606,23 +1632,21 @@ function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode,
         {mobileMenuOpen && (
           <div className={`lg:hidden mt-3 pb-3 border-t ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
             <nav className="flex flex-col gap-1 pt-3">
-              {['cards','wizard','calculator','ratings','blog'].map(v => {
-                const label = { cards: 'Cards', wizard: 'Find My Card', calculator: 'Calculator', ratings: 'Scores', blog: 'Blog' }[v];
-                const isExternal = v === 'calculator';
-                return (
-                  <button
-                    key={v}
-                    onClick={() => { if (isExternal) { window.open('/calculator', '_self'); } else { handleNavClick(v); } setMobileMenuOpen(false); }}
-                    className={`px-4 py-3 rounded-lg text-sm font-medium transition text-left ${
-                      activeView === v
-                        ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900')
-                        : (darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50')
-                    }`}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
+              <button onClick={() => handleNavClick('cards')} className={`px-4 py-3 rounded-lg text-sm font-medium transition text-left ${activeView === 'cards' ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900') : (darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50')}`}>All Cards</button>
+              
+              {/* Tools Section */}
+              <div className={`mt-2 pt-2 border-t ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+                <span className={`px-4 text-xs font-medium uppercase tracking-wider ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>Tools</span>
+              </div>
+              <button onClick={() => handleNavClick('wizard')} className={`px-4 py-3 rounded-lg text-sm font-medium transition text-left ${activeView === 'wizard' ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900') : (darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50')}`}>Card Wizard</button>
+              <button onClick={() => handleNavClick('calculator')} className={`px-4 py-3 rounded-lg text-sm font-medium transition text-left ${activeView === 'calculator' ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900') : (darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50')}`}>Reward Calculator</button>
+              <button onClick={() => handleNavClick('ratings')} className={`px-4 py-3 rounded-lg text-sm font-medium transition text-left ${activeView === 'ratings' ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900') : (darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50')}`}>Card Scores</button>
+              
+              {/* Content Section */}
+              <div className={`mt-2 pt-2 border-t ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+                <span className={`px-4 text-xs font-medium uppercase tracking-wider ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>Content</span>
+              </div>
+              <button onClick={() => handleNavClick('blog')} className={`px-4 py-3 rounded-lg text-sm font-medium transition text-left ${activeView === 'blog' ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900') : (darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50')}`}>Blog</button>
               {/* Mobile Subscribe button */}
               <button 
                 onClick={() => { onSubscribe(); setMobileMenuOpen(false); }} 
