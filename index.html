@@ -820,8 +820,15 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
                 </div>
               </div>
             )}
-            {/* Action Buttons — 3 in a row */}
-            <div className="flex gap-1.5">
+            {/* Primary CTA — Learn More & Apply (keeps user on site) */}
+            <button
+              onClick={(e) => { e.stopPropagation(); window.dispatchEvent(new CustomEvent('navigateToCard', { detail: card })); }}
+              className="w-full py-2.5 rounded-lg text-xs font-bold text-center transition-all hover:scale-[1.02] hover:shadow-lg bg-gradient-to-r from-lime-400 to-emerald-500 hover:from-lime-300 hover:to-emerald-400 text-gray-900 hover:shadow-lime-400/25"
+            >
+              {variantCount > 1 ? `${variantCount} Cards · Learn More & Apply` : 'Learn More & Apply'}
+            </button>
+            {/* Secondary row — Ask AI | Compare */}
+            <div className="flex gap-1.5 mt-1.5">
               <div className="flex-1"><AskAIWidget cardName={card.name} darkMode={darkMode} compact={true} /></div>
               <button
                 onClick={(e) => { e.stopPropagation(); onCompareToggle && onCompareToggle(card); }}
@@ -829,22 +836,7 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
               >
                 {isInCompare ? '✓ Added' : '+ Compare'}
               </button>
-              <a
-                href={card.comingSoon ? (card.waitlistUrl || card.website) : card.website || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.open(e.currentTarget.href, '_blank'); }}
-                className={`flex-1 py-2 rounded-lg text-[10px] sm:text-xs font-bold text-center block transition-all hover:scale-105 hover:shadow-lg ${card.comingSoon ? 'bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-gray-900 hover:shadow-cyan-400/25' : 'bg-gradient-to-r from-lime-400 to-emerald-500 hover:from-lime-300 hover:to-emerald-400 text-gray-900 hover:shadow-lime-400/25'}`}
-              >{card.comingSoon ? 'Waitlist' : 'Apply'}</a>
             </div>
-            {/* Learn More Button */}
-            <button
-              onClick={(e) => { e.stopPropagation(); window.dispatchEvent(new CustomEvent('navigateToCard', { detail: card })); }}
-              className="w-full mt-1.5 py-1.5 rounded-lg text-[10px] sm:text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition flex items-center justify-center gap-2"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              {variantCount > 1 ? `${variantCount} Cards · Learn More` : 'Learn More'}
-            </button>
           </div>
         </div>
       </div>
