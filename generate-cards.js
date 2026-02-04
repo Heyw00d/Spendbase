@@ -45,6 +45,183 @@ function getCardSlug(card) {
   return card.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
 
+// KAST tier configuration for navigation
+const kastTiers = {
+  standard: { label: 'Standard', color: 'purple', fee: '$20/year', cashback: '2%' },
+  premium: { label: 'Premium', color: 'pink', fee: '$1,000/year', cashback: '5%' },
+  limited: { label: 'Limited', color: 'amber', fee: '$10,000 one-time', cashback: '5%' },
+  luxe: { label: 'Luxe', color: 'yellow', fee: 'Invite Only', cashback: '8%' }
+};
+
+// Get all KAST cards grouped by tier
+function getKastCardsByTier() {
+  const kastCards = allCards.filter(c => c.brand === 'KAST');
+  const grouped = {};
+  for (const card of kastCards) {
+    const tier = card.tierGroup || 'standard';
+    if (!grouped[tier]) grouped[tier] = [];
+    grouped[tier].push(card);
+  }
+  return grouped;
+}
+
+// Generate KAST family banner HTML
+function generateKastBanner(card) {
+  if (card.brand !== 'KAST') return '';
+  const tierInfo = kastTiers[card.tierGroup] || kastTiers.standard;
+  return `
+  <!-- KAST Card Family Banner -->
+  <div class="container mx-auto px-4 pt-4">
+    <a href="/card/kast/" class="block bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/30 rounded-lg p-4 hover:border-purple-400/50 transition-colors">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <img src="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public" alt="KAST" class="h-8 w-8 rounded">
+          <div>
+            <span class="text-sm text-purple-300 font-medium">Part of the KAST card family</span>
+            <span class="text-xs text-gray-400 ml-2">• ${tierInfo.label} Tier</span>
+          </div>
+        </div>
+        <span class="text-purple-400 text-sm">View all 9 KAST cards →</span>
+      </div>
+    </a>
+  </div>`;
+}
+
+// Generate KAST tier navigation HTML
+function generateKastTierNav(card) {
+  if (card.brand !== 'KAST') return '';
+  const grouped = getKastCardsByTier();
+  const currentTier = card.tierGroup || 'standard';
+  
+  let html = `
+  <!-- KAST Tier Navigation -->
+  <section class="mb-8">
+    <h2 class="text-xl font-bold mb-4">KAST Card Tiers</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">`;
+  
+  for (const [tierKey, tierInfo] of Object.entries(kastTiers)) {
+    const isActive = tierKey === currentTier;
+    const cards = grouped[tierKey] || [];
+    html += `
+      <div class="p-3 rounded-lg border ${isActive ? 'border-' + tierInfo.color + '-400 bg-' + tierInfo.color + '-500/20' : 'border-gray-700 bg-gray-800/50'} text-center">
+        <div class="text-sm font-semibold ${isActive ? 'text-white' : 'text-gray-300'}">${tierInfo.label}</div>
+        <div class="text-xs text-gray-400 mt-1">${tierInfo.cashback} cashback</div>
+        <div class="text-xs text-gray-500">${tierInfo.fee}</div>
+      </div>`;
+  }
+  
+  html += `
+    </div>`;
+  
+  // Show sibling cards in same tier
+  const siblings = (grouped[currentTier] || []).filter(c => c.id !== card.id);
+  if (siblings.length > 0) {
+    html += `
+    <div class="bg-gray-800/50 rounded-lg p-4">
+      <p class="text-sm text-gray-400 mb-3">Other ${kastTiers[currentTier]?.label || 'KAST'} tier cards:</p>
+      <div class="flex flex-wrap gap-3">`;
+    for (const sib of siblings) {
+      const sibSlug = getCardSlug(sib);
+      html += `
+        <a href="/card/${sibSlug}/" class="flex items-center space-x-2 bg-gray-700/50 hover:bg-gray-600/50 px-3 py-2 rounded-lg transition-colors">
+          <img src="${sib.logo}" alt="${sib.name}" class="w-6 h-6 rounded">
+          <span class="text-sm">${sib.name}</span>
+        </a>`;
+    }
+    html += `
+      </div>
+    </div>`;
+  }
+  
+  html += `
+  </section>`;
+  
+  return html;
+}
+
+// Generate Real Return Calculator HTML
+function generateRealReturnCalc(card) {
+  // Parse cashback rate (take first number from rates like "2%", "5%", "8%", "2-6%", "Up to 15%")
+  const cashbackMatch = card.cashback.match(/([\d.]+)/);
+  const cashbackRate = cashbackMatch ? parseFloat(cashbackMatch[1]) : 0;
+  
+  // Parse annual fee
+  let annualFeeNum = 0;
+  let feeNote = '';
+  if (card.annualFee.includes('Invite')) {
+    feeNote = 'Invite only — fee not publicly disclosed';
+  } else {
+    const feeMatch = card.annualFee.match(/([\d,]+)/);
+    annualFeeNum = feeMatch ? parseFloat(feeMatch[1].replace(',', '')) : 0;
+    if (card.annualFee.includes('one-time')) {
+      feeNote = 'One-time fee (amortized over 5 years for calculation)';
+      annualFeeNum = annualFeeNum / 5; // Amortize over 5 years
+    }
+  }
+  
+  if (cashbackRate === 0 && annualFeeNum === 0) return ''; // Skip if no useful data
+  
+  return `
+  <!-- Real Return Calculator -->
+  <section class="mb-8">
+    <h2 class="text-2xl font-bold mb-4">💰 Real Return Calculator</h2>
+    <p class="text-gray-400 text-sm mb-4">See your actual net return after fees. No hype — real numbers.</p>
+    <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-6">
+      <div class="mb-6">
+        <label class="block text-sm text-gray-400 mb-2">Monthly spending</label>
+        <div class="flex items-center space-x-3">
+          <span class="text-gray-400">$</span>
+          <input type="range" id="calc-spend-${card.id}" min="100" max="20000" step="100" value="1000"
+            class="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+            oninput="updateCalc${card.id}(this.value)">
+          <span id="calc-spend-val-${card.id}" class="text-xl font-bold w-24 text-right">$1,000</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
+          <div class="text-xs text-gray-400 mb-1">Monthly Cashback</div>
+          <div id="calc-cashback-${card.id}" class="text-xl font-bold text-green-400">$${(1000 * cashbackRate / 100).toFixed(0)}</div>
+          <div class="text-xs text-gray-500">${cashbackRate}% rate</div>
+        </div>
+        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
+          <div class="text-xs text-gray-400 mb-1">Monthly Fee Cost</div>
+          <div id="calc-fee-${card.id}" class="text-xl font-bold text-red-400">-$${(annualFeeNum / 12).toFixed(0)}</div>
+          <div class="text-xs text-gray-500">${card.annualFee}</div>
+        </div>
+        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
+          <div class="text-xs text-gray-400 mb-1">Net Monthly</div>
+          <div id="calc-net-${card.id}" class="text-xl font-bold text-blue-400">$${((1000 * cashbackRate / 100) - (annualFeeNum / 12)).toFixed(0)}</div>
+          <div class="text-xs text-gray-500">cashback − fees</div>
+        </div>
+        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
+          <div class="text-xs text-gray-400 mb-1">Annual Net Return</div>
+          <div id="calc-annual-${card.id}" class="text-xl font-bold text-purple-400">$${((1000 * cashbackRate / 100 * 12) - annualFeeNum).toFixed(0)}</div>
+          <div class="text-xs text-gray-500">per year</div>
+        </div>
+      </div>
+      ${feeNote ? `<p class="text-xs text-gray-500 mt-3 italic">* ${feeNote}</p>` : ''}
+    </div>
+    <script>
+    function updateCalc${card.id}(spend) {
+      spend = parseFloat(spend);
+      document.getElementById('calc-spend-val-${card.id}').textContent = '$' + spend.toLocaleString();
+      const cashback = spend * ${cashbackRate} / 100;
+      const monthlyFee = ${annualFeeNum} / 12;
+      const net = cashback - monthlyFee;
+      const annual = (cashback * 12) - ${annualFeeNum};
+      document.getElementById('calc-cashback-${card.id}').textContent = '$' + Math.round(cashback).toLocaleString();
+      document.getElementById('calc-fee-${card.id}').textContent = '-$' + Math.round(monthlyFee).toLocaleString();
+      const netEl = document.getElementById('calc-net-${card.id}');
+      netEl.textContent = (net >= 0 ? '$' : '-$') + Math.abs(Math.round(net)).toLocaleString();
+      netEl.className = 'text-xl font-bold ' + (net >= 0 ? 'text-green-400' : 'text-red-400');
+      const annualEl = document.getElementById('calc-annual-${card.id}');
+      annualEl.textContent = (annual >= 0 ? '$' : '-$') + Math.abs(Math.round(annual)).toLocaleString();
+      annualEl.className = 'text-xl font-bold ' + (annual >= 0 ? 'text-green-400' : 'text-red-400');
+    }
+    </script>
+  </section>`;
+}
+
 // Generate static HTML for a card
 function generateCardHTML(card) {
   const slug = getCardSlug(card);
@@ -252,10 +429,12 @@ function generateCardHTML(card) {
   <div class="container mx-auto px-4 py-3">
     <nav class="text-sm text-gray-400">
       <a href="/" class="hover:text-white">Home</a> > 
-      <a href="/" class="hover:text-white ml-1">Cards</a> > 
+      ${card.brand === 'KAST' ? '<a href="/card/kast/" class="hover:text-white ml-1">KAST Cards</a> > ' : '<a href="/" class="hover:text-white ml-1">Cards</a> > '}
       <span class="text-white ml-1">${card.name}</span>
     </nav>
   </div>
+
+  ${generateKastBanner(card)}
 
   <main class="container mx-auto px-4 py-8">
     <article>
@@ -293,6 +472,8 @@ function generateCardHTML(card) {
           <a href="/?compare=${card.id}" class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">View Interactive Comparison →</a>
         </div>
       </header>
+
+      ${generateKastTierNav(card)}
 
       <!-- Key Specs Table -->
       <section class="mb-8">
@@ -442,6 +623,8 @@ function generateCardHTML(card) {
         </div>
       </section>
       ` : ''}
+
+      ${generateRealReturnCalc(card)}
 
       <!-- FAQ -->
       <section class="mb-8">

@@ -17,7 +17,7 @@
   <meta property="og:url" content="https://spendbase.cards/card/binance-card/">
   <meta property="og:title" content="Binance Card Crypto Card Review | Up to 8% Cashback">
   <meta property="og:description" content="Binance Card is a crypto-native crypto card offering Up to 8% cashback in BNB. Custodial solution on BNB Chain with 0.9% FX fees.">
-  <meta property="og:image" content="https://cdn.brandfetch.io/idXI-zkGu8/w/334/h/334/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1760641089923">
+  <meta property="og:image" content="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/binance-white-logo/public">
   <meta property="og:site_name" content="Spendbase">
   
   <!-- Twitter -->
@@ -26,7 +26,7 @@
   <meta name="twitter:url" content="https://spendbase.cards/card/binance-card/">
   <meta name="twitter:title" content="Binance Card Crypto Card Review | Up to 8% Cashback">
   <meta name="twitter:description" content="Binance Card is a crypto-native crypto card offering Up to 8% cashback in BNB. Custodial solution on BNB Chain with 0.9% FX fees.">
-  <meta name="twitter:image" content="https://cdn.brandfetch.io/idXI-zkGu8/w/334/h/334/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1760641089923">
+  <meta name="twitter:image" content="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/binance-white-logo/public">
   
   <link rel="icon" type="image/png" href="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/cc680d90-ee94-499a-2074-50ec819a2000/public">
   
@@ -37,7 +37,7 @@
   "@type": "Product",
   "name": "Binance Card Crypto Card",
   "description": "Binance Card is a crypto-native crypto card offering Up to 8% cashback in BNB. Custodial solution on BNB Chain with 0.9% FX fees.",
-  "image": "https://cdn.brandfetch.io/idXI-zkGu8/w/334/h/334/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1760641089923",
+  "image": "https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/binance-white-logo/public",
   "brand": {
     "@type": "Brand",
     "name": "Binance Card"
@@ -184,13 +184,15 @@
     </nav>
   </div>
 
+  
+
   <main class="container mx-auto px-4 py-8">
     <article>
       <!-- Hero Section -->
       <header class="mb-8">
         <div class="flex flex-col md:flex-row items-start md:items-center gap-6 mb-6">
           <div class="flex items-center space-x-4">
-            <img src="https://cdn.brandfetch.io/idXI-zkGu8/w/334/h/334/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1760641089923" alt="Binance Card" class="w-16 h-16 md:w-20 md:h-20 rounded-lg object-contain">
+            <img src="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/binance-white-logo/public" alt="Binance Card" class="w-16 h-16 md:w-20 md:h-20 rounded-lg">
             <div>
               <h1 class="text-3xl md:text-4xl font-bold">Binance Card</h1>
               <div class="flex items-center space-x-3 mt-2">
@@ -226,6 +228,8 @@
           <a href="/?compare=121" class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">View Interactive Comparison →</a>
         </div>
       </header>
+
+      
 
       <!-- Key Specs Table -->
       <section class="mb-8">
@@ -348,6 +352,66 @@
 
       <!-- Ratings -->
       
+
+      
+  <!-- Real Return Calculator -->
+  <section class="mb-8">
+    <h2 class="text-2xl font-bold mb-4">💰 Real Return Calculator</h2>
+    <p class="text-gray-400 text-sm mb-4">See your actual net return after fees. No hype — real numbers.</p>
+    <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-6">
+      <div class="mb-6">
+        <label class="block text-sm text-gray-400 mb-2">Monthly spending</label>
+        <div class="flex items-center space-x-3">
+          <span class="text-gray-400">$</span>
+          <input type="range" id="calc-spend-121" min="100" max="20000" step="100" value="1000"
+            class="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+            oninput="updateCalc121(this.value)">
+          <span id="calc-spend-val-121" class="text-xl font-bold w-24 text-right">$1,000</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
+          <div class="text-xs text-gray-400 mb-1">Monthly Cashback</div>
+          <div id="calc-cashback-121" class="text-xl font-bold text-green-400">$80</div>
+          <div class="text-xs text-gray-500">8% rate</div>
+        </div>
+        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
+          <div class="text-xs text-gray-400 mb-1">Monthly Fee Cost</div>
+          <div id="calc-fee-121" class="text-xl font-bold text-red-400">-$0</div>
+          <div class="text-xs text-gray-500">$0</div>
+        </div>
+        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
+          <div class="text-xs text-gray-400 mb-1">Net Monthly</div>
+          <div id="calc-net-121" class="text-xl font-bold text-blue-400">$80</div>
+          <div class="text-xs text-gray-500">cashback − fees</div>
+        </div>
+        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
+          <div class="text-xs text-gray-400 mb-1">Annual Net Return</div>
+          <div id="calc-annual-121" class="text-xl font-bold text-purple-400">$960</div>
+          <div class="text-xs text-gray-500">per year</div>
+        </div>
+      </div>
+      
+    </div>
+    <script>
+    function updateCalc121(spend) {
+      spend = parseFloat(spend);
+      document.getElementById('calc-spend-val-121').textContent = '$' + spend.toLocaleString();
+      const cashback = spend * 8 / 100;
+      const monthlyFee = 0 / 12;
+      const net = cashback - monthlyFee;
+      const annual = (cashback * 12) - 0;
+      document.getElementById('calc-cashback-121').textContent = '$' + Math.round(cashback).toLocaleString();
+      document.getElementById('calc-fee-121').textContent = '-$' + Math.round(monthlyFee).toLocaleString();
+      const netEl = document.getElementById('calc-net-121');
+      netEl.textContent = (net >= 0 ? '$' : '-$') + Math.abs(Math.round(net)).toLocaleString();
+      netEl.className = 'text-xl font-bold ' + (net >= 0 ? 'text-green-400' : 'text-red-400');
+      const annualEl = document.getElementById('calc-annual-121');
+      annualEl.textContent = (annual >= 0 ? '$' : '-$') + Math.abs(Math.round(annual)).toLocaleString();
+      annualEl.className = 'text-xl font-bold ' + (annual >= 0 ? 'text-green-400' : 'text-red-400');
+    }
+    </script>
+  </section>
 
       <!-- FAQ -->
       <section class="mb-8">

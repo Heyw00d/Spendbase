@@ -273,9 +273,19 @@ const allCards = [
   // "Next-gen stablecoin spending" - the trend we're naming
   // ============================================
   { id: 201, name: 'Solayer Emerald', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/25f81335-2e88-40f2-a5b6-02ffc34a6100/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/3d87d3f2-08e2-4126-18d5-62ab9da57e00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/3d87d3f2-08e2-4126-18d5-62ab9da57e00/public', brandLogoSize: 'h-10', xHandle: 'solayer_labs', showFrontTags: true, bg: 'from-[#0a3d3d] to-[#1a5f5f]', network: 'Visa', category: 'onchain', archetype: 'defi', custody: 'Non-Custodial', chain: 'Solana', regions: ['global'], cashback: '2-4%', cashbackToken: 'LAYER', fxFee: '0%', annualFee: '$75', features: ['InfiniSVM L1', 'sUSD 4-5% yield', 'Apple/Google Pay', 'ATM withdrawals'], perks: ['40K+ users', '100 countries', 'On-chain rewards'], token: { ticker: 'LAYER', live: true, cmc: 'solayer' }, website: 'https://solayer.org/product/card', platforms: 'both' },
-  { id: 102, name: 'KAST K Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/71022706-a9ef-47ea-d5ab-04132e69ea00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-purple-600 to-pink-600', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global', 'latam', 'argentina'], tier: 'Standard', cashback: '2-6%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: '$20/year', features: ['Virtual card free', 'Stablecoin native', 'No conversion fee', 'ACH/Wire'], perks: ['160+ countries', 'Season 5 rewards', 'Token Q2 2026'], token: { ticker: 'KAST', live: false }, website: 'https://www.kast.xyz/', affiliate: 'https://www.kast.xyz/affiliate', platforms: 'both' },
-  { id: 1021, name: 'KAST X Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/71022706-a9ef-47ea-d5ab-04132e69ea00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-pink-600 to-rose-700', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global', 'latam', 'argentina'], tier: 'Premium', cashback: '5-12%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: '$1,000/year', features: ['Premium metal card', 'Higher limits', 'Priority support', 'Exclusive perks'], perks: ['Up to 12% rewards', 'Unlimited transactions', 'VIP access'], token: { ticker: 'KAST', live: false }, website: 'https://www.kast.xyz/', affiliate: 'https://www.kast.xyz/affiliate', platforms: 'both' },
-  { id: 1022, name: 'KAST Founders', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/71022706-a9ef-47ea-d5ab-04132e69ea00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-amber-500 to-yellow-600', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global', 'latam', 'argentina'], tier: 'Elite', cashback: 'Up to 15%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: '$10,000 one-time', features: ['Exclusive founders edition', 'Lifetime benefits', 'Max rewards', 'Concierge'], perks: ['Up to 15% rewards', 'Free replacements', 'Max SOL staking'], token: { ticker: 'KAST', live: false }, website: 'https://www.kast.xyz/', affiliate: 'https://www.kast.xyz/affiliate', platforms: 'both' },
+  // --- KAST Standard Tier ---
+  { id: 102, name: 'KAST K Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/71022706-a9ef-47ea-d5ab-04132e69ea00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-purple-600 to-pink-600', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global', 'latam', 'argentina'], tier: 'Standard', brand: 'KAST', tierGroup: 'standard', cashback: '2%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: '$20/year', features: ['Standard plastic card', 'Stablecoin native', '0.25x KAST points on staked SOL', 'Virtual card free'], perks: ['160+ countries', 'Season 5 rewards', 'Token Q2 2026', 'ACH/Wire support'], token: { ticker: 'KAST', live: false }, website: 'https://www.kast.xyz/', affiliate: 'https://www.kast.xyz/affiliate', platforms: 'both' },
+  { id: 1023, name: 'KAST Solana Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-purple-500 to-indigo-600', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global', 'latam', 'argentina'], tier: 'Standard', brand: 'KAST', tierGroup: 'standard', cashback: '2%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: '$20/year', features: ['Solana-branded plastic card', 'Stablecoin native', '0.25x KAST points on staked SOL', 'Virtual card free'], perks: ['160+ countries', 'Season 5 rewards', 'Solana ecosystem design'], token: { ticker: 'KAST', live: false }, website: 'https://www.kast.xyz/', affiliate: 'https://www.kast.xyz/affiliate', platforms: 'both' },
+  { id: 1024, name: 'KAST Bitcoin Silver', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-gray-400 to-gray-600', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global', 'latam', 'argentina'], tier: 'Standard', brand: 'KAST', tierGroup: 'standard', cashback: '2%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: '$20/year', features: ['Bitcoin-branded silver plastic card', 'Stablecoin native', '0.25x KAST points on staked SOL', 'Virtual card free'], perks: ['160+ countries', 'Season 5 rewards', 'Bitcoin design aesthetic'], token: { ticker: 'KAST', live: false }, website: 'https://www.kast.xyz/', affiliate: 'https://www.kast.xyz/affiliate', platforms: 'both' },
+  // --- KAST Premium Tier ---
+  { id: 1021, name: 'KAST X Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/71022706-a9ef-47ea-d5ab-04132e69ea00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-pink-600 to-rose-700', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global', 'latam', 'argentina'], tier: 'Premium', brand: 'KAST', tierGroup: 'premium', cashback: '5%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: '$1,000/year', features: ['100% chromoly 32g metal card', '0.5x KAST points boost', 'Higher limits', 'Priority support'], perks: ['Season 5 rewards', 'Premium metal build', 'Unlimited transactions'], token: { ticker: 'KAST', live: false }, website: 'https://www.kast.xyz/', affiliate: 'https://www.kast.xyz/affiliate', platforms: 'both' },
+  { id: 1025, name: 'KAST Solana Illuma', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-violet-600 to-purple-800', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global', 'latam', 'argentina'], tier: 'Premium', brand: 'KAST', tierGroup: 'premium', cashback: '5%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: '$1,000/year', features: ['Illuminating metal card', '0.5x KAST points boost', 'Higher limits', 'Priority support'], perks: ['Season 5 rewards', 'Light-up Solana design', 'Unlimited transactions'], token: { ticker: 'KAST', live: false }, website: 'https://www.kast.xyz/', affiliate: 'https://www.kast.xyz/affiliate', platforms: 'both' },
+  { id: 1026, name: 'KAST Bitcoin Black', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-gray-800 to-black', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global', 'latam', 'argentina'], tier: 'Premium', brand: 'KAST', tierGroup: 'premium', cashback: '5%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: '$1,000/year', features: ['Bitcoin-branded metal card', '0.5x KAST points boost', 'Higher limits', 'Priority support'], perks: ['Season 5 rewards', 'Stealth black design', 'Unlimited transactions'], token: { ticker: 'KAST', live: false }, website: 'https://www.kast.xyz/', affiliate: 'https://www.kast.xyz/affiliate', platforms: 'both' },
+  // --- KAST Limited Tier ---
+  { id: 1022, name: 'KAST Founders', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/71022706-a9ef-47ea-d5ab-04132e69ea00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-amber-500 to-yellow-600', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global', 'latam', 'argentina'], tier: 'Limited', brand: 'KAST', tierGroup: 'limited', cashback: '5%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: '$10,000 one-time', features: ['Strictly limited metal card', 'VIP Concierge', '0.5x KAST points boost', 'No annual fee after purchase'], perks: ['Lifetime benefits', 'Free replacements', '5% cashback Season 5'], token: { ticker: 'KAST', live: false }, website: 'https://www.kast.xyz/', affiliate: 'https://www.kast.xyz/affiliate', platforms: 'both' },
+  // --- KAST Luxe Tier ---
+  { id: 1027, name: 'KAST Solana Gold', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-yellow-500 to-amber-700', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global'], tier: 'Luxe', brand: 'KAST', tierGroup: 'luxe', cashback: '8%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: 'Invite Only', features: ['24k gold plated card', '1x KAST points boost', 'VIP Concierge', 'Invite only'], perks: ['8% cashback Season 5', 'Maximum points multiplier', 'Ultra-premium design'], token: { ticker: 'KAST', live: false }, website: 'https://www.kast.xyz/', affiliate: 'https://www.kast.xyz/affiliate', platforms: 'both' },
+  { id: 1028, name: 'KAST Solid Gold', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public', xHandle: 'KASTxyz', showFrontTags: true, bg: 'from-yellow-400 to-yellow-700', network: 'Visa', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Solana', regions: ['global'], tier: 'Luxe', brand: 'KAST', tierGroup: 'luxe', cashback: '8%', cashbackToken: 'KAST Points', fxFee: '0%', annualFee: 'Invite Only', features: ['37g solid gold card', '1x KAST points boost', 'VIP Concierge', 'Invite only'], perks: ['8% cashback Season 5', 'Maximum points multiplier', 'Solid gold construction'], token: { ticker: 'KAST', live: false }, website: 'https://www.kast.xyz/', affiliate: 'https://www.kast.xyz/affiliate', platforms: 'both' },
   { id: 101, name: 'Ready', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/04d75186-a574-4a06-c8de-2b1428b63600/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/a7aa5395-2ba3-4391-ebe0-12c023986e00/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/a7aa5395-2ba3-4391-ebe0-12c023986e00/public', xHandle: 'ready_co', showFrontTags: true, bg: 'from-violet-600 to-purple-900', network: 'Mastercard', category: 'onchain', archetype: 'stablecoin', custody: 'Non-Custodial', chain: 'Starknet', regions: ['global', 'latam', 'india'], cashback: '0.5-3%', cashbackToken: 'STRK', fxFee: '0%', annualFee: '$0 / $120', features: ['Account Abstraction', 'Zero FX', 'ZK proofs', 'DeFi native'], perks: ['True self-custody', 'Best conversion rate', '$56M funding'], token: { ticker: 'STRK', live: true, cmc: 'starknet' }, website: 'https://www.ready.co/card', platforms: 'both' },
   { id: 103, name: 'Avici', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/avici-white-logo/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/avici-white-logo/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/avici-white-logo/public', showBrandName: true, xHandle: 'AviciMoney', showFrontTags: true, bg: 'from-[#888888] to-[#666666]', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Solana', regions: ['global'], cashback: '1.5-2%', cashbackToken: 'AVICI', fxFee: '0-3%', annualFee: '$0', features: ['Smart wallet', 'Passkey login', 'USD/EUR accounts', '0% APR'], perks: ['Self-custody Solana', 'AVICI token live', 'Gas sponsored'], token: { ticker: 'AVICI', live: true, cmc: 'avici' }, website: 'https://avici.money', platforms: 'both' },
   { id: 115, name: 'Phantom Card', logo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/f25169b7-26a2-40f7-3227-50c5dcb49e00/public', brandLogo: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/c86440c7-dbdc-4025-d22f-178f370ba900/public', brandLogoBack: 'https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/c86440c7-dbdc-4025-d22f-178f370ba900/public', showBrandName: true, brandNameText: 'Phantom Cash', brandNameColor: '#79789F', xHandle: 'phantom', showFrontTags: true, bg: 'holographic', network: 'Visa', category: 'onchain', archetype: 'wallet', custody: 'Non-Custodial', chain: 'Solana', regions: ['americas', 'global'], cashback: '2%', cashbackToken: 'CASH', fxFee: '0%', annualFee: '$0', features: ['$CASH stablecoin', 'Self-custody', 'Solana native', 'Wallet integrated'], perks: ['$100M CASH supply', 'Growing steadily', 'Native stablecoin'], website: 'https://phantom.app', platforms: 'both' },
@@ -544,7 +554,7 @@ const blogPosts = [
     date: '2026-01-30',
     readTime: '8 min',
     image: '🔐',
-    content: `Self-custody is the whole point of crypto — owning your keys, controlling your assets. But until recently, spending crypto in the real world meant handing your funds to a centralized card issuer.\n\nThat's changing fast. In 2026, several cards let you spend directly from your own wallet without giving up custody. Here are the best options:\n\n**1. Gnosis Pay** — The OG self-custody Visa card. Spend EURe on Gnosis Chain. Your funds stay in your Safe wallet until the moment you tap. EU only for now.\n\n**2. KAST** — Solana-based, non-custodial, available in 160+ countries. Stablecoin-native with 2-6% cashback in KAST Points. The K Card ($20/year) is the sweet spot.\n\n**3. Phantom Card** — From the most popular Solana wallet. Uses $CASH stablecoin. Still in waitlist but massive potential given Phantom's 15M+ users.\n\n**4. Holyheld** — Supports 14 chains with zero gas fees. Connects to MetaMask, Rainbow, or any WalletConnect wallet. Great for multi-chain users.\n\n**5. Ether.fi Cash** — Spend against staked ETH without unstaking. Your assets keep earning yield while you spend. "Buy now, pay never" model.\n\n**What to look for:** Check if the card truly holds funds in your wallet until spending (Gnosis Pay) vs. requiring a deposit to a card balance (most others). Also check supported chains and regions — most self-custody cards are still EU-focused.`
+    content: `Self-custody is the whole point of crypto — owning your keys, controlling your assets. But until recently, spending crypto in the real world meant handing your funds to a centralized card issuer.\n\nThat's changing fast. In 2026, several cards let you spend directly from your own wallet without giving up custody. Here are the best options:\n\n**1. Gnosis Pay** — The OG self-custody Visa card. Spend EURe on Gnosis Chain. Your funds stay in your Safe wallet until the moment you tap. EU only for now.\n\n**2. KAST** — Solana-based, non-custodial, available in 160+ countries. Stablecoin-native with 2-8% cashback in KAST Points across 4 tiers and 9 card designs. The K Card ($20/year, 2% cashback) is the sweet spot for most.\n\n**3. Phantom Card** — From the most popular Solana wallet. Uses $CASH stablecoin. Still in waitlist but massive potential given Phantom's 15M+ users.\n\n**4. Holyheld** — Supports 14 chains with zero gas fees. Connects to MetaMask, Rainbow, or any WalletConnect wallet. Great for multi-chain users.\n\n**5. Ether.fi Cash** — Spend against staked ETH without unstaking. Your assets keep earning yield while you spend. "Buy now, pay never" model.\n\n**What to look for:** Check if the card truly holds funds in your wallet until spending (Gnosis Pay) vs. requiring a deposit to a card balance (most others). Also check supported chains and regions — most self-custody cards are still EU-focused.`
   },
   {
     id: 'crypto-card-fees-explained',
@@ -564,7 +574,7 @@ const blogPosts = [
     date: '2026-01-28',
     readTime: '10 min',
     image: '◎',
-    content: `Solana has quietly become the #1 chain for crypto card innovation. Here's every Solana-based card and what makes each one different:\n\n**KAST** — The leader. Non-custodial, 160+ countries, 2-6% cashback. Three tiers: K Card ($20/year), X Card ($1K/year), Founders ($10K one-time). Token launching Q2 2026. Best for: Most people.\n\n**Phantom Card** — From the biggest Solana wallet (15M+ users). Uses $CASH stablecoin. Pre-launch/waitlist. Best for: Phantom users who want seamless wallet-to-card spending.\n\n**Jupiter Card** — Just launched by Jupiter Exchange (biggest Solana DEX). Credit card rails (not prepaid), USDC deposits 1:1, no annual fee. Digital-first, physical card May 2026. Best for: Jupiter ecosystem users.\n\n**Solayer Emerald** — Yield-bearing card. Spend while your assets earn. Early stage. Best for: DeFi-native users who want yield + spending.\n\n**Avici** — Solana passkey card. Crypto-backed Visa credit card. Uses Solana's mobile stack. Best for: Users who want a credit card (borrow against crypto) rather than debit.\n\n**Solcard** — No KYC required. Privacy-focused. Best for: Users who prioritize privacy and don't want identity verification.\n\n**The Solana Advantage:** Low fees, fast finality, and a mobile-first ecosystem make Solana ideal for real-time card payments. Most Solana cards use USDC as the base currency, avoiding volatile crypto conversions at checkout.`
+    content: `Solana has quietly become the #1 chain for crypto card innovation. Here's every Solana-based card and what makes each one different:\n\n**KAST** — The leader. Non-custodial, 160+ countries, 2-8% cashback across 4 tiers and 9 card variants. Standard ($20/yr, 2%), Premium ($1K/yr, 5%), Limited Founders ($10K one-time, 5%), and invite-only Luxe (8%). Token launching Q2 2026. Best for: Most people.\n\n**Phantom Card** — From the biggest Solana wallet (15M+ users). Uses $CASH stablecoin. Pre-launch/waitlist. Best for: Phantom users who want seamless wallet-to-card spending.\n\n**Jupiter Card** — Just launched by Jupiter Exchange (biggest Solana DEX). Credit card rails (not prepaid), USDC deposits 1:1, no annual fee. Digital-first, physical card May 2026. Best for: Jupiter ecosystem users.\n\n**Solayer Emerald** — Yield-bearing card. Spend while your assets earn. Early stage. Best for: DeFi-native users who want yield + spending.\n\n**Avici** — Solana passkey card. Crypto-backed Visa credit card. Uses Solana's mobile stack. Best for: Users who want a credit card (borrow against crypto) rather than debit.\n\n**Solcard** — No KYC required. Privacy-focused. Best for: Users who prioritize privacy and don't want identity verification.\n\n**The Solana Advantage:** Low fees, fast finality, and a mobile-first ecosystem make Solana ideal for real-time card payments. Most Solana cards use USDC as the base currency, avoiding volatile crypto conversions at checkout.`
   },
   {
     id: 'custodial-vs-non-custodial-cards',
@@ -584,7 +594,7 @@ const blogPosts = [
     date: '2026-01-26',
     readTime: '7 min',
     image: '🎯',
-    content: `Let's be honest about crypto card cashback. The headline rates are marketing. Here's what you actually get and how to optimize:\n\n**The Reality of Tiered Cashback**\nCrypto.com: "Up to 8%" requires $400K staked in CRO. Base tier: 1%.\nBybit: "Up to 10%" requires VIP status from high trading volume. Base: 2%.\nPlutus: "Up to 9%" with PLU staking. Free tier: 3% (actually good).\nFold: "Up to 15%" via Bitcoin reward spins. Average: ~2-3%.\n\n**Best Cashback Without Staking:**\n1. Plutus — 3% free tier, no staking needed. Best no-commitment cashback.\n2. KAST K Card — 2-6% for $20/year. Good value.\n3. Fold — 1% guaranteed + spin for more. Fun Bitcoin accumulation.\n4. Coinbase — Up to 4% for Coinbase One subscribers ($30/month).\n\n**Stacking Strategies:**\n- Use a high-cashback card for big purchases (groceries, subscriptions)\n- Use a 0% FX fee card for travel (KAST, Gnosis Pay)\n- Use an exchange card for crypto-to-fiat when you want to take profits\n\n**Tax Tip:**\nIn most jurisdictions, cashback received on purchases is not taxable income — it's treated as a discount. But cashback paid in a volatile token (like CRO or PLU) creates a cost basis for future capital gains. Stablecoin cashback (USDC) is simpler for tax purposes.\n\n**The Best Overall Strategy:**\nDon't chase the highest headline rate. A card with 3% real cashback and 0% FX fees beats a card with "10%" that requires $50K staked and charges 2% FX.`
+    content: `Let's be honest about crypto card cashback. The headline rates are marketing. Here's what you actually get and how to optimize:\n\n**The Reality of Tiered Cashback**\nCrypto.com: "Up to 8%" requires $400K staked in CRO. Base tier: 1%.\nBybit: "Up to 10%" requires VIP status from high trading volume. Base: 2%.\nPlutus: "Up to 9%" with PLU staking. Free tier: 3% (actually good).\nFold: "Up to 15%" via Bitcoin reward spins. Average: ~2-3%.\n\n**Best Cashback Without Staking:**\n1. Plutus — 3% free tier, no staking needed. Best no-commitment cashback.\n2. KAST K Card — 2% for $20/year. Good entry-level value. Premium tier gets 5% for $1K/year.\n3. Fold — 1% guaranteed + spin for more. Fun Bitcoin accumulation.\n4. Coinbase — Up to 4% for Coinbase One subscribers ($30/month).\n\n**Stacking Strategies:**\n- Use a high-cashback card for big purchases (groceries, subscriptions)\n- Use a 0% FX fee card for travel (KAST, Gnosis Pay)\n- Use an exchange card for crypto-to-fiat when you want to take profits\n\n**Tax Tip:**\nIn most jurisdictions, cashback received on purchases is not taxable income — it's treated as a discount. But cashback paid in a volatile token (like CRO or PLU) creates a cost basis for future capital gains. Stablecoin cashback (USDC) is simpler for tax purposes.\n\n**The Best Overall Strategy:**\nDon't chase the highest headline rate. A card with 3% real cashback and 0% FX fees beats a card with "10%" that requires $50K staked and charges 2% FX.`
   }
 ];
 
@@ -4545,54 +4555,156 @@ With the LAYER token at ~$30M market cap, the project is newer but backed by sig
     ]
   },
   'KAST K Card': {
-    seoTitle: "KAST K Card Review 2026: Solana Stablecoin Spending | Spendbase",
-    metaDescription: "KAST K Card offers 2-6% cashback in KAST Points. Non-custodial Solana card in 160+ countries. See features →",
-    overview: `The KAST K Card is the standard tier card from KAST, a Solana-based stablecoin spending platform. It offers 2-6% cashback in KAST Points with zero FX fees in 160+ countries.
+    seoTitle: "KAST K Card Review 2026: Standard Solana Spending Card | Spendbase",
+    metaDescription: "KAST K Card: 2% cashback in Season 5, 0.25x KAST points on staked SOL. Non-custodial Solana card for $20/year in 160+ countries →",
+    overview: `The KAST K Card is the entry-level standard tier card from KAST, a Solana-based stablecoin spending platform. It offers 2% cashback during Season 5 with 0.25x KAST points on staked SOL, all with zero FX fees in 160+ countries.
 
-The card is non-custodial, meaning your stablecoins stay in your wallet until you spend. It's designed for global users who want simple stablecoin spending without currency conversion headaches.
+As a standard plastic card, it's the most accessible way into the KAST ecosystem. The card is non-custodial — your stablecoins stay in your Solana wallet until the moment you spend. At just $20/year, it's one of the lowest-cost entries into crypto card spending.
 
-With a Cryptonoshi ranking of #8, KAST has gained recognition in the crypto card space. The KAST token is upcoming (Q2 2026), so current rewards are in points that will convert. Best for Solana users who want accessible, low-fee international spending.`,
-    pros: ["2-6% cashback in KAST Points", "0% FX fees", "Non-custodial", "160+ countries", "Virtual card free"],
-    cons: ["KAST token not live yet", "Points system (not instant value)", "Solana-only", "$20/year annual fee"],
+Part of KAST's 4-tier card family alongside the Solana Card and Bitcoin Silver Card (same tier), the premium X Card, Solana Illuma, Bitcoin Black, the limited Founders Edition, and invite-only Luxe tier gold cards.`,
+    pros: ["2% cashback (Season 5)", "Only $20/year", "0% FX fees", "Non-custodial", "160+ countries", "0.25x KAST points on staked SOL"],
+    cons: ["KAST token not live yet", "Points system (not instant value)", "Solana-only", "Plastic card (no metal)"],
     faq: [
-      { q: "What is the KAST K Card cashback rate?", a: "The K Card earns 2-6% cashback in KAST Points. Rates depend on spending volume and tier status." },
-      { q: "When will the KAST token launch?", a: "KAST token is planned for Q2 2026. Current points will convert to tokens at launch." },
+      { q: "What is the KAST K Card cashback rate?", a: "The K Card earns 2% cashback during Season 5, plus 0.25x KAST points on staked SOL." },
+      { q: "How does the K Card compare to the Solana Card?", a: "They share identical benefits — 2% cashback, $20/year, 0.25x points. The only difference is the card design aesthetic." },
       { q: "Is KAST available in my country?", a: "KAST supports 160+ countries globally, including most of Latin America, Europe, and Asia. US availability may be limited." },
       { q: "Is the KAST Card self-custody?", a: "Yes, KAST is non-custodial. Your stablecoins stay in your Solana wallet until the moment of purchase." }
     ]
   },
-  'KAST X Card': {
-    seoTitle: "KAST X Card Review 2026: Premium 5-12% Cashback | Spendbase",
-    metaDescription: "KAST X Card is the premium tier with 5-12% rewards. $1,000/year for serious crypto spenders. See if it's worth it →",
-    overview: `The KAST X Card is the premium tier from KAST, offering 5-12% cashback for serious crypto spenders. At $1,000/year, it's positioned for high-volume users who can maximize the elevated rewards.
+  'KAST Solana Card': {
+    seoTitle: "KAST Solana Card Review 2026: Solana-Branded Spending Card | Spendbase",
+    metaDescription: "KAST Solana Card: Solana-branded standard tier, 2% cashback Season 5, 0.25x KAST points. $20/year, 160+ countries →",
+    overview: `The KAST Solana Card is a standard tier card with Solana ecosystem branding. It offers identical benefits to the K Card — 2% cashback during Season 5 and 0.25x KAST points on staked SOL — but with a Solana-themed design.
 
-You'll get a premium metal card, higher spending limits, priority support, and unlimited transactions. The non-custodial architecture keeps your funds secure in your wallet.
+At $20/year with zero FX fees, it's the same accessible entry point into non-custodial stablecoin spending. The card is plastic and available globally across 160+ countries.
 
-The X Card is best for users spending $10,000+/month who can justify the annual fee through higher rewards. For casual spenders, the standard K Card ($20/year) makes more sense. Calculate your expected spend before committing.`,
-    pros: ["5-12% cashback — highest tier", "Premium metal card", "Unlimited transactions", "Priority support", "VIP access perks"],
-    cons: ["$1,000/year annual fee", "Only worthwhile for high spenders", "KAST token still upcoming", "Requires significant volume"],
+Choose this card over the K Card or Bitcoin Silver if you want to represent the Solana ecosystem. All three standard tier cards share the same rewards structure and features.`,
+    pros: ["2% cashback (Season 5)", "Only $20/year", "0% FX fees", "Non-custodial", "Solana ecosystem branding"],
+    cons: ["KAST token not live yet", "Same benefits as K Card", "Plastic card only", "Points not instantly liquid"],
     faq: [
-      { q: "Is the KAST X Card worth $1,000/year?", a: "If you spend $10,000+/month on the card, the higher cashback rates (5-12% vs 2-6%) can offset the fee. Calculate your expected rewards before committing." },
-      { q: "What's the difference between K and X Cards?", a: "The X Card costs $1,000/year vs $20/year, but offers 5-12% cashback vs 2-6%, plus metal card, priority support, and higher limits." },
-      { q: "What are the spending limits?", a: "The X Card has higher limits than the standard K Card, suitable for users spending $10K+ monthly." },
-      { q: "Can I upgrade from K to X Card?", a: "Yes, you can upgrade from the K Card to X Card by paying the difference in annual fees and meeting tier requirements." }
+      { q: "Is the Solana Card different from the K Card?", a: "Same benefits — 2% cashback, $20/year, 0.25x points on staked SOL. The only difference is the Solana-branded card design." },
+      { q: "What is Season 5?", a: "KAST runs seasonal reward programs. Season 5 is the current rewards season offering cashback in KAST Points." },
+      { q: "Can I upgrade from Solana Card to X Card?", a: "Yes, you can upgrade to any higher KAST tier — X Card ($1,000/year), Founders ($10,000 one-time), or qualify for Luxe (invite only)." },
+      { q: "Where can I use the Solana Card?", a: "Anywhere Visa is accepted, in 160+ countries. Funds are spent from your Solana wallet." }
+    ]
+  },
+  'KAST Bitcoin Silver': {
+    seoTitle: "KAST Bitcoin Silver Card Review 2026: Bitcoin-Themed Crypto Card | Spendbase",
+    metaDescription: "KAST Bitcoin Silver: Bitcoin-branded standard tier, 2% cashback Season 5, 0.25x KAST points. $20/year, non-custodial →",
+    overview: `The KAST Bitcoin Silver Card is a standard tier card with a Bitcoin-inspired silver design aesthetic. It shares the same benefits as the K Card and Solana Card — 2% cashback during Season 5 and 0.25x KAST points on staked SOL.
+
+Despite the Bitcoin branding, this card operates on Solana and uses stablecoins for spending, just like all KAST cards. The Bitcoin theme is purely cosmetic — perfect for Bitcoin enthusiasts who also use Solana DeFi.
+
+At $20/year with zero FX fees and non-custodial architecture, it's a solid entry-level option for global crypto card spending.`,
+    pros: ["2% cashback (Season 5)", "Only $20/year", "0% FX fees", "Non-custodial", "Bitcoin-themed design"],
+    cons: ["KAST token not live yet", "Same benefits as other standard cards", "Runs on Solana not Bitcoin", "Plastic card only"],
+    faq: [
+      { q: "Does the Bitcoin Silver Card actually use Bitcoin?", a: "No — the Bitcoin branding is cosmetic. Like all KAST cards, it runs on Solana and uses stablecoins. The design pays tribute to Bitcoin culture." },
+      { q: "How does it compare to K Card and Solana Card?", a: "Identical benefits — 2% cashback, $20/year, 0.25x points. Only the card design differs." },
+      { q: "Is there a Bitcoin Black card too?", a: "Yes — the Bitcoin Black Card is part of KAST's premium tier at $1,000/year with 5% cashback and metal construction." },
+      { q: "Why choose Bitcoin Silver over K Card?", a: "Pure aesthetic preference. If you love Bitcoin culture, choose the Silver. If you prefer Solana branding, get the Solana Card. Benefits are identical." }
+    ]
+  },
+  'KAST X Card': {
+    seoTitle: "KAST X Card Review 2026: Premium 5% Cashback Metal Card | Spendbase",
+    metaDescription: "KAST X Card: 100% chromoly 32g metal, 5% cashback Season 5, 0.5x KAST points boost. $1,000/year for serious spenders →",
+    overview: `The KAST X Card is the flagship premium tier from KAST — a 100% chromoly steel card weighing 32 grams. It offers 5% cashback during Season 5 with a 0.5x KAST points boost on staked SOL, more than double the standard tier.
+
+At $1,000/year, it's positioned for serious crypto spenders. The metal construction makes a statement, and the elevated rewards make it worthwhile for users spending $2,000+/month (the breakeven vs standard tier after accounting for the fee difference).
+
+Part of KAST's premium tier alongside the Solana Illuma (illuminating metal) and Bitcoin Black (stealth metal). All three share the same 5% cashback and 0.5x points boost — the difference is design.`,
+    pros: ["5% cashback (Season 5)", "100% chromoly 32g metal card", "0.5x KAST points boost", "0% FX fees", "Higher spending limits", "Priority support"],
+    cons: ["$1,000/year annual fee", "Only worthwhile for $2K+/month spenders", "KAST token still upcoming", "Heavy metal card"],
+    faq: [
+      { q: "Is the KAST X Card worth $1,000/year?", a: "At 5% cashback vs 2% standard, the extra 3% on $2,800/month of spending covers the $980 fee difference. Spend more than that and you're ahead." },
+      { q: "What is chromoly?", a: "Chromoly (chromium-molybdenum steel) is a high-strength alloy. The X Card weighs 32g — noticeably heavier than a standard plastic card." },
+      { q: "Difference between X Card, Solana Illuma, and Bitcoin Black?", a: "All three are premium tier with identical 5% cashback and 0.5x points. X Card is chromoly steel, Illuma has illuminating elements, Bitcoin Black has a stealth design." },
+      { q: "Can I upgrade from K Card to X Card?", a: "Yes, upgrade anytime by paying the premium tier annual fee." }
+    ]
+  },
+  'KAST Solana Illuma': {
+    seoTitle: "KAST Solana Illuma Card Review 2026: Illuminating Metal Card | Spendbase",
+    metaDescription: "KAST Solana Illuma: illuminating metal card, 5% cashback Season 5, 0.5x points boost. $1,000/year premium tier →",
+    overview: `The KAST Solana Illuma is a premium tier metal card with an illuminating design — it literally lights up. It shares the premium tier's 5% cashback during Season 5 and 0.5x KAST points boost on staked SOL.
+
+The Illuma stands out with its Solana-themed illuminating elements, making it one of the most visually distinctive crypto cards on the market. Functionally identical to the X Card and Bitcoin Black in the premium tier.
+
+At $1,000/year, it includes higher spending limits, priority support, and all the non-custodial benefits of the KAST platform across 160+ countries.`,
+    pros: ["5% cashback (Season 5)", "Illuminating metal design", "0.5x KAST points boost", "0% FX fees", "Solana branding", "Priority support"],
+    cons: ["$1,000/year annual fee", "Same benefits as X Card", "KAST token not live", "Battery/electronics in card"],
+    faq: [
+      { q: "How does the Illuma card light up?", a: "The Solana Illuma features built-in illuminating elements with a Solana-themed design. It's one of the most visually unique crypto cards available." },
+      { q: "Is Illuma different from X Card in rewards?", a: "No — identical 5% cashback, 0.5x points boost, $1,000/year. The only difference is the illuminating Solana-branded design." },
+      { q: "Is the Illuma card durable?", a: "Yes, it's a metal card designed for everyday use. The illuminating elements are integrated into the card's construction." },
+      { q: "Can I choose between X Card and Illuma?", a: "Yes, all three premium tier designs (X Card, Solana Illuma, Bitcoin Black) offer the same benefits. Choose based on aesthetic preference." }
+    ]
+  },
+  'KAST Bitcoin Black': {
+    seoTitle: "KAST Bitcoin Black Card Review 2026: Stealth Metal Premium | Spendbase",
+    metaDescription: "KAST Bitcoin Black: stealth metal card, 5% cashback Season 5, 0.5x KAST points boost. $1,000/year premium →",
+    overview: `The KAST Bitcoin Black is a premium tier metal card with a stealth black Bitcoin-themed design. It offers the full premium benefits — 5% cashback during Season 5 and 0.5x KAST points boost on staked SOL.
+
+The all-black metal construction and Bitcoin branding make it the most understated premium KAST card. For those who want a luxury crypto card without flash, this is the subtle choice.
+
+Like all KAST cards, it runs on Solana and is non-custodial. At $1,000/year, it includes higher limits, priority support, and works in 160+ countries.`,
+    pros: ["5% cashback (Season 5)", "Stealth black metal design", "0.5x KAST points boost", "0% FX fees", "Understated luxury", "Priority support"],
+    cons: ["$1,000/year annual fee", "Same benefits as X Card", "Bitcoin branding but runs on Solana", "KAST token not live"],
+    faq: [
+      { q: "Does the Bitcoin Black card use Bitcoin?", a: "No — like all KAST cards, it runs on Solana and uses stablecoins. The Bitcoin branding is a design choice." },
+      { q: "Why choose Bitcoin Black over X Card?", a: "Pure aesthetics. Both offer 5% cashback, 0.5x points, $1,000/year. Bitcoin Black has a stealth black design vs the X Card's chromoly finish." },
+      { q: "Is it actually black metal?", a: "Yes, it's a metal card with a black finish and Bitcoin-themed design elements." },
+      { q: "What's the difference from Bitcoin Silver?", a: "Bitcoin Silver is standard tier ($20/year, 2% cashback, plastic). Bitcoin Black is premium ($1,000/year, 5% cashback, metal)." }
     ]
   },
   'KAST Founders': {
-    seoTitle: "KAST Founders Card Review 2026: Exclusive 15% Rewards | Spendbase",
-    metaDescription: "KAST Founders Card offers up to 15% cashback for $10,000 lifetime purchase. Limited exclusive tier. See details →",
-    overview: `The KAST Founders Card is an exclusive limited tier offering up to 15% cashback — the highest rate in the KAST ecosystem. Rather than an annual fee, it requires a one-time $10,000 purchase for lifetime access.
+    seoTitle: "KAST Founders Edition Review 2026: Limited 5% Cashback + VIP | Spendbase",
+    metaDescription: "KAST Founders: strictly limited metal card, 5% cashback, VIP Concierge, 0.5x points, no annual fee. $10,000 one-time →",
+    overview: `The KAST Founders Edition is a strictly limited metal card available for a one-time payment of approximately $10,000. It offers 5% cashback during Season 5 with 0.5x KAST points boost — matching the premium tier — but with no recurring annual fee.
 
-Founders get exclusive benefits including maximum reward rates, free card replacements forever, maximum SOL staking rewards, and concierge support. It's designed for KAST believers who want lifetime premium access.
+Founders get VIP Concierge service, free lifetime card replacements, and the prestige of a numbered limited edition. The one-time cost structure means no $1,000/year renewals, making it the best long-term value for committed KAST users.
 
-The Founders Card is best for users committed to the KAST ecosystem long-term. The $10,000 one-time cost only makes sense if you plan to use KAST for years and can take advantage of the highest reward tier.`,
-    pros: ["Up to 15% cashback — maximum tier", "One-time $10K (not annual)", "Lifetime benefits", "Free replacements forever", "Maximum staking rewards"],
-    cons: ["$10,000 upfront commitment", "Only for KAST believers", "Token not yet live", "Exclusive/limited availability"],
+At the premium tier's $1,000/year rate, the Founders card pays for itself in under 10 years while delivering identical cashback rates plus VIP perks. Limited availability — once they're gone, they're gone.`,
+    pros: ["5% cashback (Season 5)", "No annual fee (one-time $10K)", "VIP Concierge", "0.5x KAST points boost", "Limited edition metal", "Free lifetime replacements"],
+    cons: ["$10,000 upfront commitment", "Limited availability", "Same cashback as premium tier", "KAST token not live yet"],
     faq: [
-      { q: "How much does the Founders Card cost?", a: "The KAST Founders Card requires a one-time $10,000 purchase for lifetime access, rather than recurring annual fees." },
-      { q: "Is Founders Card better than X Card?", a: "Founders offers up to 15% vs X's 5-12%, plus lifetime benefits. If you're a long-term KAST user, the one-time cost may beat annual X Card fees over time." },
-      { q: "What makes Founders exclusive?", a: "The Founders tier is limited edition with the highest rewards, lifetime benefits, and priority access to new features." },
-      { q: "Can I still get a Founders Card?", a: "Founders Card availability is limited. Check the KAST website for current availability." }
+      { q: "How much does the Founders Card cost?", a: "Approximately $10,000 one-time purchase for lifetime access. No recurring annual fees after that." },
+      { q: "Is Founders better than X Card?", a: "Same 5% cashback and 0.5x points, but Founders has no annual fee, VIP Concierge, and free replacements. It pays for itself vs X Card's $1K/year in under 10 years." },
+      { q: "What is VIP Concierge?", a: "Dedicated support service for Founders and Luxe tier cardholders, offering priority assistance and exclusive access." },
+      { q: "Can I still get a Founders Card?", a: "Founders availability is strictly limited. Check the KAST website — once the allocation is sold out, it won't return." }
+    ]
+  },
+  'KAST Solana Gold': {
+    seoTitle: "KAST Solana Gold Card Review 2026: 24K Gold Plated, 8% Cashback | Spendbase",
+    metaDescription: "KAST Solana Gold: 24k gold plated, 8% cashback Season 5, 1x KAST points boost, VIP Concierge. Invite only →",
+    overview: `The KAST Solana Gold Card is a 24-karat gold plated card from KAST's invite-only Luxe tier. It offers the highest cashback rate in the KAST ecosystem — 8% during Season 5 — with a 1x KAST points boost on staked SOL.
+
+This is not a card you can buy. Luxe tier access is by invitation only, reserved for KAST's most valued users and community members. It includes VIP Concierge service and the maximum rewards multiplier.
+
+The 24k gold plating makes it one of the most premium physical crypto cards in existence, rivaling traditional luxury card programs from Amex and JP Morgan.`,
+    pros: ["8% cashback (Season 5) — highest tier", "24k gold plated", "1x KAST points boost (maximum)", "VIP Concierge", "0% FX fees", "Invite-only exclusivity"],
+    cons: ["Invite only — cannot purchase", "KAST token not live", "Not available to general public", "Gold plating may wear over time"],
+    faq: [
+      { q: "How do I get a Solana Gold Card?", a: "The Luxe tier is invite-only. You cannot purchase it directly. Invitations go to KAST's most active and valued community members." },
+      { q: "Is it real 24k gold?", a: "Yes, the Solana Gold Card features genuine 24-karat gold plating over a metal card base." },
+      { q: "What's the difference between Gold and Solid Gold?", a: "The Solana Gold is 24k gold plated. The Solid Gold card is 37 grams of actual solid gold — significantly more valuable and exclusive." },
+      { q: "What is the 1x points boost?", a: "The maximum KAST points multiplier on staked SOL. Standard gets 0.25x, Premium gets 0.5x, Luxe gets the full 1x multiplier." }
+    ]
+  },
+  'KAST Solid Gold': {
+    seoTitle: "KAST Solid Gold Card Review 2026: 37g Solid Gold, 8% Cashback | Spendbase",
+    metaDescription: "KAST Solid Gold: 37g solid gold card, 8% cashback Season 5, 1x points boost, VIP Concierge. Invite only →",
+    overview: `The KAST Solid Gold Card is the ultimate crypto card — 37 grams of actual solid gold. Part of the invite-only Luxe tier, it offers 8% cashback during Season 5 with the maximum 1x KAST points boost.
+
+This isn't gold plating — it's a functional payment card made from solid gold. At current gold prices, the material value alone is significant. It represents the absolute pinnacle of crypto card luxury.
+
+Like the Solana Gold, it's invite-only with VIP Concierge and maximum rewards. The Solid Gold card is KAST's statement piece — proof that crypto finance has arrived at the level of traditional ultra-high-net-worth banking.`,
+    pros: ["37g solid gold construction", "8% cashback (Season 5)", "1x KAST points boost (maximum)", "VIP Concierge", "Inherent gold material value", "Ultimate exclusivity"],
+    cons: ["Invite only — most exclusive tier", "KAST token not live", "Heavy for daily carry", "Extremely limited availability"],
+    faq: [
+      { q: "Is the Solid Gold card actually gold?", a: "Yes — 37 grams of solid gold, not plated. It's a functional Visa card made from real gold." },
+      { q: "How much is the gold worth?", a: "At current gold prices (~$2,400/oz), 37g of gold is worth approximately $2,800+ in material alone." },
+      { q: "Can I buy the Solid Gold card?", a: "No — it's invite-only, part of KAST's Luxe tier. Reserved for the most exclusive KAST community members." },
+      { q: "Is it practical for daily use?", a: "At 37g it's heavier than a standard card but fully functional as a Visa. Many holders treat it as a collector's item while using other KAST cards daily." }
     ]
   },
   'Ready': {
@@ -5637,6 +5749,15 @@ const cardRatingsData = {
   'Nexo': { ios: 4.0, android: 4.1, trustpilot: 4.4, cryptonoshi: 1, composite: 4.5, reviews: 30000 }, // Trustpilot 4.4 (Excellent)
   'Holyheld': { ios: null, android: null, trustpilot: null, cryptonoshi: 6, composite: 4.4, reviews: 1500 },
   'KAST': { ios: null, android: null, trustpilot: null, cryptonoshi: 8, composite: 4.3, reviews: 2000 },
+  'KAST K Card': { ios: null, android: null, trustpilot: null, cryptonoshi: 8, composite: 4.3, reviews: 2000 },
+  'KAST Solana Card': { ios: null, android: null, trustpilot: null, cryptonoshi: 8, composite: 4.2, reviews: 800 },
+  'KAST Bitcoin Silver': { ios: null, android: null, trustpilot: null, cryptonoshi: 8, composite: 4.2, reviews: 600 },
+  'KAST X Card': { ios: null, android: null, trustpilot: null, cryptonoshi: 8, composite: 4.4, reviews: 1500 },
+  'KAST Solana Illuma': { ios: null, android: null, trustpilot: null, cryptonoshi: 8, composite: 4.4, reviews: 500 },
+  'KAST Bitcoin Black': { ios: null, android: null, trustpilot: null, cryptonoshi: 8, composite: 4.4, reviews: 400 },
+  'KAST Founders': { ios: null, android: null, trustpilot: null, cryptonoshi: 8, composite: 4.5, reviews: 300 },
+  'KAST Solana Gold': { ios: null, android: null, trustpilot: null, cryptonoshi: 8, composite: 4.7, reviews: 100 },
+  'KAST Solid Gold': { ios: null, android: null, trustpilot: null, cryptonoshi: 8, composite: 4.8, reviews: 50 },
   'Kolo': { ios: null, android: null, trustpilot: null, cryptonoshi: 11, composite: 4.2, reviews: 1000 },
   'Solid Card': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 4.3, reviews: 0 },
   'BonkX': { ios: null, android: null, trustpilot: null, cryptonoshi: null, composite: 4.0, reviews: 0 },

@@ -17,7 +17,7 @@
   <meta property="og:url" content="https://spendbase.cards/card/solid-card/">
   <meta property="og:title" content="Solid Card Crypto Card Review | 3% Cashback">
   <meta property="og:description" content="Solid Card is a onchain crypto card offering 3% cashback in Stablecoin. Self-custody solution on Multi-chain with 0% FX fees.">
-  <meta property="og:image" content="https://cdn.prod.website-files.com/68380f669498be506ce62c45/696666e9db2b00198db7d4ff_webclip.png">
+  <meta property="og:image" content="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/solid-card-logo/public">
   <meta property="og:site_name" content="Spendbase">
   
   <!-- Twitter -->
@@ -26,7 +26,7 @@
   <meta name="twitter:url" content="https://spendbase.cards/card/solid-card/">
   <meta name="twitter:title" content="Solid Card Crypto Card Review | 3% Cashback">
   <meta name="twitter:description" content="Solid Card is a onchain crypto card offering 3% cashback in Stablecoin. Self-custody solution on Multi-chain with 0% FX fees.">
-  <meta name="twitter:image" content="https://cdn.prod.website-files.com/68380f669498be506ce62c45/696666e9db2b00198db7d4ff_webclip.png">
+  <meta name="twitter:image" content="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/solid-card-logo/public">
   
   <link rel="icon" type="image/png" href="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/cc680d90-ee94-499a-2074-50ec819a2000/public">
   
@@ -37,7 +37,7 @@
   "@type": "Product",
   "name": "Solid Card Crypto Card",
   "description": "Solid Card is a onchain crypto card offering 3% cashback in Stablecoin. Self-custody solution on Multi-chain with 0% FX fees.",
-  "image": "https://cdn.prod.website-files.com/68380f669498be506ce62c45/696666e9db2b00198db7d4ff_webclip.png",
+  "image": "https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/solid-card-logo/public",
   "brand": {
     "@type": "Brand",
     "name": "Solid Card"
@@ -184,19 +184,21 @@
     </nav>
   </div>
 
+  
+
   <main class="container mx-auto px-4 py-8">
     <article>
       <!-- Hero Section -->
       <header class="mb-8">
         <div class="flex flex-col md:flex-row items-start md:items-center gap-6 mb-6">
           <div class="flex items-center space-x-4">
-            <img src="https://cdn.prod.website-files.com/68380f669498be506ce62c45/696666e9db2b00198db7d4ff_webclip.png" alt="Solid Card" class="w-16 h-16 md:w-20 md:h-20 rounded-lg object-contain">
+            <img src="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/solid-card-logo/public" alt="Solid Card" class="w-16 h-16 md:w-20 md:h-20 rounded-lg">
             <div>
               <h1 class="text-3xl md:text-4xl font-bold">Solid Card</h1>
               <div class="flex items-center space-x-3 mt-2">
                 <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">Onchain</span>
                 <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">DeFi</span>
-                
+                <span class="px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-sm">Coming Soon</span>
               </div>
             </div>
           </div>
@@ -222,10 +224,12 @@
         
         <!-- Quick Actions -->
         <div class="flex flex-wrap gap-3">
-          <a href="https://www.solid.xyz" target="_blank" rel="nofollow" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">Visit Website</a>
+          <a href="https://www.solid.xyz/card" target="_blank" rel="nofollow" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">Visit Website</a>
           <a href="/?compare=1303" class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">View Interactive Comparison →</a>
         </div>
       </header>
+
+      
 
       <!-- Key Specs Table -->
       <section class="mb-8">
@@ -349,6 +353,66 @@
       </section>
       
 
+      
+  <!-- Real Return Calculator -->
+  <section class="mb-8">
+    <h2 class="text-2xl font-bold mb-4">💰 Real Return Calculator</h2>
+    <p class="text-gray-400 text-sm mb-4">See your actual net return after fees. No hype — real numbers.</p>
+    <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-6">
+      <div class="mb-6">
+        <label class="block text-sm text-gray-400 mb-2">Monthly spending</label>
+        <div class="flex items-center space-x-3">
+          <span class="text-gray-400">$</span>
+          <input type="range" id="calc-spend-1303" min="100" max="20000" step="100" value="1000"
+            class="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+            oninput="updateCalc1303(this.value)">
+          <span id="calc-spend-val-1303" class="text-xl font-bold w-24 text-right">$1,000</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
+          <div class="text-xs text-gray-400 mb-1">Monthly Cashback</div>
+          <div id="calc-cashback-1303" class="text-xl font-bold text-green-400">$30</div>
+          <div class="text-xs text-gray-500">3% rate</div>
+        </div>
+        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
+          <div class="text-xs text-gray-400 mb-1">Monthly Fee Cost</div>
+          <div id="calc-fee-1303" class="text-xl font-bold text-red-400">-$0</div>
+          <div class="text-xs text-gray-500">$0</div>
+        </div>
+        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
+          <div class="text-xs text-gray-400 mb-1">Net Monthly</div>
+          <div id="calc-net-1303" class="text-xl font-bold text-blue-400">$30</div>
+          <div class="text-xs text-gray-500">cashback − fees</div>
+        </div>
+        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
+          <div class="text-xs text-gray-400 mb-1">Annual Net Return</div>
+          <div id="calc-annual-1303" class="text-xl font-bold text-purple-400">$360</div>
+          <div class="text-xs text-gray-500">per year</div>
+        </div>
+      </div>
+      
+    </div>
+    <script>
+    function updateCalc1303(spend) {
+      spend = parseFloat(spend);
+      document.getElementById('calc-spend-val-1303').textContent = '$' + spend.toLocaleString();
+      const cashback = spend * 3 / 100;
+      const monthlyFee = 0 / 12;
+      const net = cashback - monthlyFee;
+      const annual = (cashback * 12) - 0;
+      document.getElementById('calc-cashback-1303').textContent = '$' + Math.round(cashback).toLocaleString();
+      document.getElementById('calc-fee-1303').textContent = '-$' + Math.round(monthlyFee).toLocaleString();
+      const netEl = document.getElementById('calc-net-1303');
+      netEl.textContent = (net >= 0 ? '$' : '-$') + Math.abs(Math.round(net)).toLocaleString();
+      netEl.className = 'text-xl font-bold ' + (net >= 0 ? 'text-green-400' : 'text-red-400');
+      const annualEl = document.getElementById('calc-annual-1303');
+      annualEl.textContent = (annual >= 0 ? '$' : '-$') + Math.abs(Math.round(annual)).toLocaleString();
+      annualEl.className = 'text-xl font-bold ' + (annual >= 0 ? 'text-green-400' : 'text-red-400');
+    }
+    </script>
+  </section>
+
       <!-- FAQ -->
       <section class="mb-8">
         <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
@@ -383,7 +447,7 @@
         <p class="text-lg mb-6">Compare Solid Card with other crypto cards to find your perfect match.</p>
         <div class="space-x-4">
           <a href="/" class="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 inline-block">Compare All Cards</a>
-          <a href="https://www.solid.xyz" target="_blank" rel="nofollow" class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 inline-block">Visit Solid Card →</a>
+          <a href="https://www.solid.xyz/card" target="_blank" rel="nofollow" class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 inline-block">Visit Solid Card →</a>
         </div>
       </section>
     </article>
