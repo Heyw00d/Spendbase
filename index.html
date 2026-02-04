@@ -1482,7 +1482,7 @@ function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode,
     setMobileMenuOpen(false);
   };
 
-  const viewPaths = { cards: '/', wizard: '/find-my-card', ratings: '/scores', learn: '/learn', blog: '/blog', rewards: '/rewards' };
+  const viewPaths = { cards: '/', wizard: '/find-my-card', calculator: '/calculator', ratings: '/scores', learn: '/learn', blog: '/blog', rewards: '/rewards' };
   const handleNavClick = (view) => {
     const path = viewPaths[view] || '/';
     window.history.pushState(null, '', path);
@@ -1551,19 +1551,23 @@ function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode,
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
-            {['cards','wizard','ratings','learn','blog','rewards'].map(v => (
-              <button
-                key={v}
-                onClick={() => handleNavClick(v)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  activeView === v
-                    ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900')
-                    : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')
-                }`}
-            >
-              {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'ratings' ? 'Scores' : v === 'blog' ? 'Blog' : v.charAt(0).toUpperCase()+v.slice(1)}
-            </button>
-          ))}
+            {['cards','wizard','calculator','ratings','blog'].map(v => {
+              const label = { cards: 'Cards', wizard: 'Find My Card', calculator: 'Calculator', ratings: 'Scores', blog: 'Blog' }[v];
+              const isExternal = v === 'calculator';
+              return (
+                <button
+                  key={v}
+                  onClick={() => isExternal ? window.open('/calculator', '_self') : handleNavClick(v)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                    activeView === v
+                      ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900')
+                      : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900')
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-3">
@@ -1602,19 +1606,23 @@ function Header({ activeView, setActiveView, onSubscribe, darkMode, setDarkMode,
         {mobileMenuOpen && (
           <div className={`lg:hidden mt-3 pb-3 border-t ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
             <nav className="flex flex-col gap-1 pt-3">
-              {['cards','wizard','learn','blog','rewards'].map(v => (
-                <button
-                  key={v}
-                  onClick={() => handleNavClick(v)}
-                  className={`px-4 py-3 rounded-lg text-sm font-medium transition text-left ${
-                    activeView === v
-                      ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900')
-                      : (darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50')
-                  }`}
-                >
-                  {v === 'rewards' ? 'Video Rewards' : v === 'wizard' ? 'Find My Card' : v === 'cards' ? 'Cards' : v === 'learn' ? 'Learn' : v === 'blog' ? 'Blog' : v.charAt(0).toUpperCase()+v.slice(1)}
-                </button>
-              ))}
+              {['cards','wizard','calculator','ratings','blog'].map(v => {
+                const label = { cards: 'Cards', wizard: 'Find My Card', calculator: 'Calculator', ratings: 'Scores', blog: 'Blog' }[v];
+                const isExternal = v === 'calculator';
+                return (
+                  <button
+                    key={v}
+                    onClick={() => { if (isExternal) { window.open('/calculator', '_self'); } else { handleNavClick(v); } setMobileMenuOpen(false); }}
+                    className={`px-4 py-3 rounded-lg text-sm font-medium transition text-left ${
+                      activeView === v
+                        ? (darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900')
+                        : (darkMode ? 'text-gray-400 hover:text-white hover:bg-gray-800/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50')
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
               {/* Mobile Subscribe button */}
               <button 
                 onClick={() => { onSubscribe(); setMobileMenuOpen(false); }} 
