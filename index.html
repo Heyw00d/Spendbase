@@ -718,7 +718,7 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
                   <span className="font-bold text-base">{card.name}</span>
                 )}
                 {card.brandLogo && !card.showBrandName && <span className="font-bold text-base" style={{ display: 'none' }}>{card.name}</span>}
-                {card.tier && <span className={`text-[10px] px-2 py-0.5 rounded font-medium ${card.tier === 'Elite' ? 'bg-yellow-500/30 text-yellow-300' : card.tier === 'Premium' ? 'bg-pink-500/30 text-pink-300' : 'bg-gray-500/30 text-gray-300'}`}>{card.tier}</span>}
+                {card.tier && card.tier !== 'Standard' && <span className={`text-[10px] px-2 py-0.5 rounded font-medium ${card.tier === 'Elite' ? 'bg-yellow-500/30 text-yellow-300' : card.tier === 'Luxe' ? 'bg-yellow-500/30 text-yellow-300' : card.tier === 'Premium' ? 'bg-pink-500/30 text-pink-300' : card.tier === 'Limited' ? 'bg-red-500/30 text-red-300' : 'bg-gray-500/30 text-gray-300'}`}>{card.tier}</span>}
               </div>
               <span className="text-white/30 text-[10px] hidden md:inline">Hover for details</span>
               <span className="text-white/30 text-[10px] md:hidden">Tap for details</span>
@@ -738,12 +738,16 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
               </div>
               {card.network === 'Visa' ? <VisaLogo /> : <MastercardLogo />}
             </div>
-            {/* Tags row at very bottom — matches filter categories */}
+            {/* Tags row at very bottom — Type · Chain · Rewards · Setup */}
             <div className="flex items-center justify-between mt-1 relative z-10">
               <div className="flex items-center gap-1.5 flex-wrap">
+                {/* Type (archetype) */}
+                {card.archetype && <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold ${card.archetype === 'exchange' ? 'bg-blue-500/20 text-blue-300' : card.archetype === 'wallet' ? 'bg-orange-500/20 text-orange-300' : card.archetype === 'defi' ? 'bg-cyan-500/20 text-cyan-300' : card.archetype === 'stablecoin' ? 'bg-purple-500/20 text-purple-300' : card.archetype === 'bank' ? 'bg-gray-500/20 text-gray-300' : card.archetype === 'neobank' ? 'bg-gray-500/20 text-gray-300' : 'bg-purple-500/20 text-purple-300'}`}>{archetypeLabels[card.archetype] || card.archetype}</span>}
+                {/* Setup (custody) */}
+                <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold ${(card.custody === 'Self-Custody' || card.custody === 'Non-Custodial') ? 'bg-lime-400/20 text-lime-300 border border-lime-400/30' : 'bg-cyan-500/20 text-cyan-300'}`}>{(card.custody === 'Self-Custody' || card.custody === 'Non-Custodial') ? 'Self-Custody' : 'Custodial'}</span>
                 {/* Chain */}
                 <span className="text-[9px] bg-violet-500/20 text-violet-300 px-1.5 py-0.5 rounded font-bold">{card.chain}</span>
-                {/* Rewards payout type */}
+                {/* Rewards payout category */}
                 {(() => {
                   const t = card.cashbackToken || '';
                   const stb = ['USDC','USDT','CASH','Stablecoin'];
@@ -751,16 +755,11 @@ function Card({ card, ratings, onRate, darkMode = true, userRatedCards = {}, isI
                   const isCash = csh.includes(t) || t === 'BTC/Fiat';
                   const isStable = stb.some(s => t.toUpperCase().includes(s.toUpperCase())) && !isCash;
                   const isToken = card.token?.live && !isStable && !isCash;
-                  if (isToken) return <span className="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded font-bold">${card.token.ticker}</span>;
-                  if (isStable) return <span className="text-[9px] bg-teal-500/20 text-teal-300 px-1.5 py-0.5 rounded font-bold">{t}</span>;
+                  if (isToken) return <span className="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded font-bold">Token</span>;
+                  if (isStable) return <span className="text-[9px] bg-teal-500/20 text-teal-300 px-1.5 py-0.5 rounded font-bold">Stable</span>;
                   if (isCash) return <span className="text-[9px] bg-green-500/20 text-green-300 px-1.5 py-0.5 rounded font-bold">Cash</span>;
-                  if (t && t !== 'TBD' && t !== 'N/A' && t !== 'None') return <span className="text-[9px] bg-gray-500/20 text-gray-300 px-1.5 py-0.5 rounded font-bold">{t}</span>;
                   return null;
                 })()}
-                {/* Custody */}
-                {(card.custody === 'Self-Custody' || card.custody === 'Non-Custodial') && <span className="text-[9px] px-1.5 py-0.5 rounded font-bold bg-lime-400/20 text-lime-300 border border-lime-400/30">Self-Custody</span>}
-                {/* Fee tier */}
-                {card.annualFee === '$0' && <span className="text-[9px] bg-green-500/20 text-green-300 px-1.5 py-0.5 rounded font-bold">Free</span>}
               </div>
             </div>
           </div>
