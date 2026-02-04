@@ -5186,7 +5186,13 @@ function Spendbase() {
 
   // Listen for navigation events (from wizard promo banner)
   React.useEffect(() => {
-    const handleNavigate = (e) => setActiveView(e.detail);
+    const handleNavigate = (e) => {
+      const view = e.detail;
+      const viewPaths = { cards: '/', wizard: '/find-my-card', calculator: '/calculator', ratings: '/scores', learn: '/learn', blog: '/blog', rewards: '/rewards' };
+      const path = viewPaths[view] || '/';
+      window.history.pushState(null, '', path);
+      setActiveView(view);
+    };
     window.addEventListener('navigateTo', handleNavigate);
     return () => window.removeEventListener('navigateTo', handleNavigate);
   }, []);
@@ -5202,6 +5208,12 @@ function Spendbase() {
     const pathToView = { '/': 'cards', '/find-my-card': 'wizard', '/scores': 'ratings', '/learn': 'learn', '/blog': 'blog', '/rewards': 'rewards' };
 
     const handleRouteChange = () => {
+      // Check for SPA redirect from 404.html
+      const spaRedirect = sessionStorage.getItem('spa-redirect');
+      if (spaRedirect) {
+        sessionStorage.removeItem('spa-redirect');
+        window.history.replaceState(null, '', spaRedirect);
+      }
       const pathname = window.location.pathname;
       
       // Check path first: /card/slug/ 
