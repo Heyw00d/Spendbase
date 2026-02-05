@@ -2813,11 +2813,8 @@ function VideoDemoPage({ darkMode, onBack }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const videos = [
-    { id: '95298802', title: 'ARC — Privacy-First AI', logo: '/logos/arc-white.png', desc: 'Learn about ARC\'s privacy-first AI infrastructure', link: '/rewards/arc/' },
-    { id: '104', title: 'Aptos — Move Smart Contracts' },
-    { id: '104', title: 'Stablecoin Basics' },
-    { id: '104', title: 'Crypto Card Guide' },
-    { id: '104', title: 'Blockchain 101' },
+    { id: '95298802', title: 'Learn about ARC', logo: '/logos/arc-white.png', desc: 'Privacy-first AI infrastructure', link: '/rewards/arc/' },
+    { id: '104', title: 'Learn about Aptos', logo: '/logos/aptos-white.svg', desc: 'Layer-1 blockchain with Move smart contracts', link: 'https://aptoslabs.com' },
   ];
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % videos.length);
@@ -2839,10 +2836,10 @@ function VideoDemoPage({ darkMode, onBack }) {
       {/* Header */}
       <div className="text-center mb-10">
         <h2 className="text-3xl font-bold mb-3 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-          Video Demo
+          Video Rewards
         </h2>
         <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-          Watch videos and earn crypto rewards - powered by ViewFi
+          Watch videos to learn about products on Spendbase and earn rewards
         </p>
       </div>
 
@@ -2850,16 +2847,20 @@ function VideoDemoPage({ darkMode, onBack }) {
       <div className="relative max-w-4xl mx-auto">
         {/* Main Video Container */}
         <div className={`rounded-2xl overflow-hidden ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-lg'}`}>
-          {/* Video Title */}
+          {/* Video Title with Brand Logo */}
           <div className={`px-6 py-4 border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
             <div className="flex items-center justify-between">
-              <h3 className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                {videos[currentSlide].title}
-              </h3>
+              <div className="flex items-center gap-3">
+                {videos[currentSlide].logo && <img src={videos[currentSlide].logo} alt="" className="h-5 object-contain" />}
+                <h3 className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                  {videos[currentSlide].title}
+                </h3>
+              </div>
               <span className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
                 {currentSlide + 1} / {videos.length}
               </span>
             </div>
+            {videos[currentSlide].desc && <p className={`text-xs mt-1 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{videos[currentSlide].desc}</p>}
           </div>
 
           {/* ViewFi Embed */}
@@ -2908,19 +2909,17 @@ function VideoDemoPage({ darkMode, onBack }) {
         ))}
       </div>
 
-      {/* Video Thumbnails */}
-      <div className="grid grid-cols-5 gap-3 mt-8 max-w-4xl mx-auto">
+      {/* Video Thumbnails — brand cards */}
+      <div className={`grid gap-3 mt-8 max-w-4xl mx-auto`} style={{ gridTemplateColumns: `repeat(${Math.min(videos.length, 4)}, 1fr)` }}>
         {videos.map((video, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentSlide(idx)}
             className={`rounded-xl overflow-hidden transition-all ${currentSlide === idx ? 'ring-2 ring-purple-500 scale-105' : 'opacity-60 hover:opacity-100'}`}
           >
-            <div className={`aspect-video flex items-center justify-center ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
-              <div className="text-center p-2">
-                <div className="text-2xl mb-1">🎬</div>
-                <p className={`text-xs font-medium truncate ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{video.title}</p>
-              </div>
+            <div className={`aspect-video flex flex-col items-center justify-center gap-2 p-3 ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+              {video.logo ? <img src={video.logo} alt="" className="h-5 object-contain" /> : <div className="text-2xl">🎬</div>}
+              <p className={`text-xs font-medium truncate w-full text-center ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{video.title}</p>
             </div>
           </button>
         ))}
