@@ -2813,8 +2813,8 @@ function VideoDemoPage({ darkMode, onBack }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const videos = [
-    { id: '95298802', title: 'Learn about ARC', logo: '/logos/arc-icon-white.png', desc: 'Privacy-first AI infrastructure', link: '/rewards/arc/', reward: '0.10 USDC' },
-    { id: '104', title: 'Learn about Aptos', logo: '/logos/aptos-icon-white.svg', desc: 'Layer-1 blockchain with Move smart contracts', link: 'https://aptoslabs.com', reward: '0.10 USDC' },
+    { id: '95298802', title: 'Learn about ARC', logo: '/logos/arc-icon-white.png', desc: 'Privacy-first AI infrastructure', link: '/rewards/arc/' },
+    { id: '104', title: 'Learn about Aptos', logo: '/logos/aptos-icon-white.svg', desc: 'Layer-1 blockchain with Move smart contracts', link: 'https://aptoslabs.com' },
   ];
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % videos.length);
@@ -2837,7 +2837,7 @@ function VideoDemoPage({ darkMode, onBack }) {
       <div className="text-center mb-8">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500/15 to-pink-500/15 border border-purple-500/25 mb-4">
           <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-          <span className="text-xs font-medium text-purple-400">Earn USDC</span>
+          <span className="text-xs font-medium text-purple-400">Earn Rewards</span>
         </div>
         <h2 className="text-2xl sm:text-3xl font-bold mb-3 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
           Video Rewards
@@ -2926,12 +2926,7 @@ function VideoDemoPage({ darkMode, onBack }) {
       </div>
 
       {/* How It Works */}
-      <div className="grid grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto mt-8">
-        <div className={`rounded-xl p-3 sm:p-4 text-center ${darkMode ? 'bg-gray-900/50 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}>
-          <div className="text-xl sm:text-2xl mb-1">▶️</div>
-          <p className={`font-semibold text-xs sm:text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Watch</p>
-          <p className={`text-[10px] sm:text-xs mt-0.5 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Learn about the project</p>
-        </div>
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 max-w-2xl mx-auto mt-8">
         <div className={`rounded-xl p-3 sm:p-4 text-center ${darkMode ? 'bg-gray-900/50 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}>
           <div className="text-xl sm:text-2xl mb-1">✅</div>
           <p className={`font-semibold text-xs sm:text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Complete</p>
@@ -2939,8 +2934,8 @@ function VideoDemoPage({ darkMode, onBack }) {
         </div>
         <div className={`rounded-xl p-3 sm:p-4 text-center ${darkMode ? 'bg-gray-900/50 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}>
           <div className="text-xl sm:text-2xl mb-1">💰</div>
-          <p className={`font-semibold text-xs sm:text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Earn USDC</p>
-          <p className={`text-[10px] sm:text-xs mt-0.5 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Rewards paid in USDC</p>
+          <p className={`font-semibold text-xs sm:text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Earn Rewards</p>
+          <p className={`text-[10px] sm:text-xs mt-0.5 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Crypto rewards for learning</p>
         </div>
       </div>
 
