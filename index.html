@@ -2813,11 +2813,11 @@ function VideoDemoPage({ darkMode, onBack }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const videos = [
-    { id: '104', title: 'Learn About DeFi' },
+    { id: '95298802', title: 'ARC — Privacy-First AI', logo: '/logos/arc-white.png', desc: 'Learn about ARC\'s privacy-first AI infrastructure', link: '/rewards/arc/' },
+    { id: '104', title: 'Aptos — Move Smart Contracts' },
     { id: '104', title: 'Stablecoin Basics' },
     { id: '104', title: 'Crypto Card Guide' },
     { id: '104', title: 'Blockchain 101' },
-    { id: '104', title: 'Earn Rewards' },
   ];
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % videos.length);
@@ -6807,7 +6807,7 @@ const VIEW_TO_PATH = {
   calculator: '/calculator',
   privacy: '/privacy',
   terms: '/terms',
-  demo: '/demo',
+  demo: '/rewards/demo',
   research: '/research',
   blog: '/blog',
   funding: '/funding',
@@ -6856,7 +6856,7 @@ function updateSEO(view, cardName) {
     privacy: 'Privacy Policy | Spendbase',
     terms: 'Terms of Service | Spendbase',
     calculator: 'Crypto Card Reward Calculator — Real Value of Token Cashback | Spendbase',
-    demo: 'Video Demo | Spendbase',
+    demo: 'Video Rewards Demo | Spendbase',
   };
   const descriptions = {
     cards: 'Compare the best crypto debit cards for 2026. Find USDC, Bitcoin, and stablecoin cards with cashback, low fees, and global acceptance.',
@@ -6868,7 +6868,7 @@ function updateSEO(view, cardName) {
     privacy: 'Spendbase privacy policy — how we handle your data.',
     terms: 'Spendbase terms of service.',
     calculator: 'See the real value of crypto card rewards. Compare token cashback rates adjusted for price performance — CRO, ETHFI, PLU, BNB & more.',
-    demo: 'Watch a video demo of Spendbase features.',
+    demo: 'Watch and earn crypto rewards by learning about top projects.',
   };
 
   let title, desc, canonical;
