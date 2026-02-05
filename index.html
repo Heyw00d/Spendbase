@@ -2925,20 +2925,6 @@ function VideoDemoPage({ darkMode, onBack }) {
         </>}
       </div>
 
-      {/* How It Works */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 max-w-2xl mx-auto mt-8">
-        <div className={`rounded-xl p-3 sm:p-4 text-center ${darkMode ? 'bg-gray-900/50 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}>
-          <div className="text-xl sm:text-2xl mb-1">✅</div>
-          <p className={`font-semibold text-xs sm:text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Complete</p>
-          <p className={`text-[10px] sm:text-xs mt-0.5 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Answer a quick question</p>
-        </div>
-        <div className={`rounded-xl p-3 sm:p-4 text-center ${darkMode ? 'bg-gray-900/50 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}>
-          <div className="text-xl sm:text-2xl mb-1">💰</div>
-          <p className={`font-semibold text-xs sm:text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Earn Test USDC</p>
-          <p className={`text-[10px] sm:text-xs mt-0.5 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Test rewards for learning</p>
-        </div>
-      </div>
-
     </div>
   );
 }
@@ -7091,8 +7077,8 @@ function Spendbase() {
          <CardsView darkMode={darkMode} searchTerm={searchTerm} ratings={ratings} onRate={handleRate} userRatedCards={userRatedCards} compareList={compareList} onCompareToggle={handleCompareToggle} />}
       </main>
 
-      {/* Stablecoin Adoption Progress Bar */}
-      <div className={`border-t py-8 ${darkMode ? 'border-gray-800 bg-gray-900/50' : 'border-gray-200 bg-gray-50'}`}>
+      {/* Stablecoin Adoption Progress Bar — hidden on demo/rewards */}
+      {activeView !== 'demo' && activeView !== 'rewards' && <div className={`border-t py-8 ${darkMode ? 'border-gray-800 bg-gray-900/50' : 'border-gray-200 bg-gray-50'}`}>
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col items-center gap-3">
             <div className="flex items-center gap-2">
@@ -7138,7 +7124,7 @@ function Spendbase() {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
 
       <footer className={`border-t py-8 ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
         <div className="max-w-6xl mx-auto px-4">
