@@ -2807,21 +2807,21 @@ function VideoRewardsPage({ darkMode, onNavigateToDemo }) {
 }
 
 // ============================================
-// VIDEO DEMO PAGE - Carousel of ViewFi videos
+// VIDEO REWARDS PAGE - Brand campaigns carousel
 // ============================================
 function VideoDemoPage({ darkMode, onBack }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const videos = [
-    { id: '95298802', title: 'Learn about ARC', logo: '/logos/arc-white.png', desc: 'Privacy-first AI infrastructure', link: '/rewards/arc/' },
-    { id: '104', title: 'Learn about Aptos', logo: '/logos/aptos-white.svg', desc: 'Layer-1 blockchain with Move smart contracts', link: 'https://aptoslabs.com' },
+    { id: '95298802', title: 'Learn about ARC', logo: '/logos/arc-white.png', desc: 'Privacy-first AI infrastructure', link: '/rewards/arc/', reward: '0.10 USDC' },
+    { id: '104', title: 'Learn about Aptos', logo: '/logos/aptos-white.svg', desc: 'Layer-1 blockchain with Move smart contracts', link: 'https://aptoslabs.com', reward: '0.10 USDC' },
   ];
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % videos.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + videos.length) % videos.length);
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-4 sm:p-6">
       {/* Back Button */}
       <button
         onClick={onBack}
@@ -2830,42 +2830,71 @@ function VideoDemoPage({ darkMode, onBack }) {
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
-        Back to Video Rewards
+        Back
       </button>
 
       {/* Header */}
-      <div className="text-center mb-10">
-        <h2 className="text-3xl font-bold mb-3 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500/15 to-pink-500/15 border border-purple-500/25 mb-4">
+          <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+          <span className="text-xs font-medium text-purple-400">Earn USDC</span>
+        </div>
+        <h2 className="text-2xl sm:text-3xl font-bold mb-3 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
           Video Rewards
         </h2>
-        <p className={`${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+        <p className={`text-sm sm:text-base max-w-lg mx-auto ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
           Watch videos to learn about products on Spendbase and earn rewards
         </p>
       </div>
 
-      {/* Video Carousel */}
-      <div className="relative max-w-4xl mx-auto">
-        {/* Main Video Container */}
-        <div className={`rounded-2xl overflow-hidden ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-lg'}`}>
-          {/* Video Title with Brand Logo */}
-          <div className={`px-6 py-4 border-b ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                {videos[currentSlide].logo && <img src={videos[currentSlide].logo} alt="" className="h-5 object-contain" />}
-                <h3 className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                  {videos[currentSlide].title}
-                </h3>
-              </div>
-              <span className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                {currentSlide + 1} / {videos.length}
-              </span>
+      {/* Campaign Cards — select which to watch */}
+      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl mx-auto mb-8`}>
+        {videos.map((video, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentSlide(idx)}
+            className={`rounded-xl p-4 text-left transition-all ${currentSlide === idx 
+              ? (darkMode ? 'bg-gray-800/80 border-2 border-purple-500 shadow-lg shadow-purple-500/10' : 'bg-white border-2 border-purple-500 shadow-lg') 
+              : (darkMode ? 'bg-gray-900/50 border border-gray-800 hover:border-gray-700' : 'bg-gray-50 border border-gray-200 hover:border-gray-300')}`}
+          >
+            <div className="flex items-center gap-3 mb-2">
+              {video.logo && <img src={video.logo} alt="" className="h-5 object-contain" />}
+              {currentSlide === idx && <span className="ml-auto w-2 h-2 bg-purple-400 rounded-full animate-pulse"></span>}
             </div>
-            {videos[currentSlide].desc && <p className={`text-xs mt-1 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{videos[currentSlide].desc}</p>}
+            <p className={`font-semibold text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{video.title}</p>
+            <p className={`text-xs mt-0.5 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{video.desc}</p>
+            {video.reward && (
+              <div className="mt-3 inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-green-500/10 border border-green-500/20">
+                <svg className="w-3 h-3 text-green-400" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/><text x="10" y="14" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">$</text></svg>
+                <span className="text-xs font-medium text-green-400">{video.reward}</span>
+              </div>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Video Player */}
+      <div className="relative max-w-4xl mx-auto">
+        <div className={`rounded-2xl overflow-hidden ${darkMode ? 'bg-gray-900 border border-gray-800' : 'bg-white border border-gray-200 shadow-lg'}`}>
+          {/* Now Playing Bar */}
+          <div className={`px-4 sm:px-6 py-3 border-b flex items-center justify-between ${darkMode ? 'border-gray-800 bg-gray-900/50' : 'border-gray-200 bg-gray-50'}`}>
+            <div className="flex items-center gap-3">
+              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+              <div className="flex items-center gap-2">
+                {videos[currentSlide].logo && <img src={videos[currentSlide].logo} alt="" className="h-4 object-contain opacity-70" />}
+                <span className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{videos[currentSlide].title}</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              {videos[currentSlide].reward && <span className="text-xs font-medium text-green-400 hidden sm:inline">{videos[currentSlide].reward}</span>}
+              <span className={`text-xs ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>{currentSlide + 1}/{videos.length}</span>
+            </div>
           </div>
 
           {/* ViewFi Embed */}
           <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
             <iframe
+              key={videos[currentSlide].id}
               src={`https://video-rewards.com/widget/${videos[currentSlide].id}?muted=1`}
               title={videos[currentSlide].title}
               style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
@@ -2880,55 +2909,45 @@ function VideoDemoPage({ darkMode, onBack }) {
         </div>
 
         {/* Navigation Arrows */}
+        {videos.length > 1 && <>
         <button
           onClick={prevSlide}
-          className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 w-10 h-10 rounded-full flex items-center justify-center transition-all ${darkMode ? 'bg-gray-800 hover:bg-gray-700 text-white' : 'bg-white hover:bg-gray-100 text-gray-900 shadow-lg'}`}
+          className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-12 w-10 h-10 rounded-full flex items-center justify-center transition-all ${darkMode ? 'bg-gray-800 hover:bg-gray-700 text-white' : 'bg-white hover:bg-gray-100 text-gray-900 shadow-lg'}`}
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
         </button>
         <button
           onClick={nextSlide}
-          className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 w-10 h-10 rounded-full flex items-center justify-center transition-all ${darkMode ? 'bg-gray-800 hover:bg-gray-700 text-white' : 'bg-white hover:bg-gray-100 text-gray-900 shadow-lg'}`}
+          className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-12 w-10 h-10 rounded-full flex items-center justify-center transition-all ${darkMode ? 'bg-gray-800 hover:bg-gray-700 text-white' : 'bg-white hover:bg-gray-100 text-gray-900 shadow-lg'}`}
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
         </button>
+        </>}
       </div>
 
-      {/* Slide Indicators */}
-      <div className="flex justify-center gap-2 mt-6">
-        {videos.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrentSlide(idx)}
-            className={`w-2 h-2 rounded-full transition-all ${currentSlide === idx ? 'bg-purple-500 w-6' : darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-300 hover:bg-gray-400'}`}
-          />
-        ))}
+      {/* How It Works */}
+      <div className="grid grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto mt-8">
+        <div className={`rounded-xl p-3 sm:p-4 text-center ${darkMode ? 'bg-gray-900/50 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}>
+          <div className="text-xl sm:text-2xl mb-1">▶️</div>
+          <p className={`font-semibold text-xs sm:text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Watch</p>
+          <p className={`text-[10px] sm:text-xs mt-0.5 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Learn about the project</p>
+        </div>
+        <div className={`rounded-xl p-3 sm:p-4 text-center ${darkMode ? 'bg-gray-900/50 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}>
+          <div className="text-xl sm:text-2xl mb-1">✅</div>
+          <p className={`font-semibold text-xs sm:text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Complete</p>
+          <p className={`text-[10px] sm:text-xs mt-0.5 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Answer a quick question</p>
+        </div>
+        <div className={`rounded-xl p-3 sm:p-4 text-center ${darkMode ? 'bg-gray-900/50 border border-gray-800' : 'bg-gray-50 border border-gray-200'}`}>
+          <div className="text-xl sm:text-2xl mb-1">💰</div>
+          <p className={`font-semibold text-xs sm:text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>Earn USDC</p>
+          <p className={`text-[10px] sm:text-xs mt-0.5 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Rewards paid in USDC</p>
+        </div>
       </div>
 
-      {/* Video Thumbnails — brand cards */}
-      <div className={`grid gap-3 mt-8 max-w-4xl mx-auto`} style={{ gridTemplateColumns: `repeat(${Math.min(videos.length, 4)}, 1fr)` }}>
-        {videos.map((video, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrentSlide(idx)}
-            className={`rounded-xl overflow-hidden transition-all ${currentSlide === idx ? 'ring-2 ring-purple-500 scale-105' : 'opacity-60 hover:opacity-100'}`}
-          >
-            <div className={`aspect-video flex flex-col items-center justify-center gap-2 p-3 ${darkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
-              {video.logo ? <img src={video.logo} alt="" className="h-5 object-contain" /> : <div className="text-2xl">🎬</div>}
-              <p className={`text-xs font-medium truncate w-full text-center ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{video.title}</p>
-            </div>
-          </button>
-        ))}
-      </div>
-
-      {/* Powered By */}
-      <div className="text-center mt-10">
-        <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-          Powered by <span className="font-semibold text-purple-400">ViewFi</span> - Watch to Earn
+      {/* Footer */}
+      <div className="text-center mt-8">
+        <p className={`text-xs ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>
+          Powered by <span className="font-semibold text-purple-400">ViewFi</span> · Rewards in USDC on Solana
         </p>
       </div>
     </div>
