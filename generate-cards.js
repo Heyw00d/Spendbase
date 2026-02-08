@@ -445,23 +445,32 @@ function generateCardHTML(card) {
 
   <main class="container mx-auto px-4 py-8">
     <article>
-      <!-- Hero Section -->
+      <!-- Hero Section - Mobile Vertical Stack -->
       <header class="mb-8">
-        <div class="flex flex-col md:flex-row items-start md:items-center gap-6 mb-6">
+        <!-- Card Image - Show first on mobile -->
+        ${card.cardImage ? `
+        <div class="mb-6 md:hidden">
+          <img src="${card.cardImage}" alt="${card.name} card" class="w-full max-w-xs mx-auto rounded-2xl shadow-xl">
+        </div>
+        ` : ''}
+        
+        <!-- Logo, Title & Rating Row -->
+        <div class="flex flex-col gap-4 mb-6">
+          <!-- Logo + Name -->
           <div class="flex items-center space-x-4">
-            <img src="${card.logo}" alt="${card.name}" class="w-16 h-16 md:w-20 md:h-20 rounded-lg">
+            <img src="${card.logo}" alt="${card.name}" class="w-16 h-16 md:w-20 md:h-20 rounded-lg object-contain">
             <div>
-              <h1 class="text-3xl md:text-4xl font-bold">${card.name}</h1>
-              <div class="flex items-center space-x-3 mt-2">
-                <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm">${categoryLabel}</span>
-                <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm">${archetypeLabel}</span>
-                ${card.comingSoon ? '<span class="px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-sm">Coming Soon</span>' : ''}
+              <h1 class="text-2xl md:text-4xl font-bold">${card.name}</h1>
+              <div class="flex flex-wrap items-center gap-2 mt-2">
+                <span class="px-2 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs md:text-sm">${categoryLabel}</span>
+                <span class="px-2 py-1 bg-green-500/20 text-green-300 rounded-full text-xs md:text-sm">${archetypeLabel}</span>
+                ${card.comingSoon ? '<span class="px-2 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-xs md:text-sm">Coming Soon</span>' : ''}
               </div>
             </div>
           </div>
           
           <!-- Rating -->
-          <div class="flex items-center space-x-2 ml-auto">
+          <div class="flex items-center space-x-2">
             <div class="flex">
               ${Array.from({length: 5}, (_, i) => 
                 `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="${i <= Math.round(rating) ? '#FBBF24' : '#374151'}">
@@ -473,17 +482,17 @@ function generateCardHTML(card) {
           </div>
         </div>
         
-        <!-- Card Image -->
+        <!-- Card Image - Desktop only (side placement) -->
         ${card.cardImage ? `
-        <div class="my-6">
+        <div class="my-6 hidden md:block">
           <img src="${card.cardImage}" alt="${card.name} card" class="max-w-sm w-full rounded-2xl shadow-xl">
         </div>
         ` : ''}
         
         <!-- Quick Actions -->
-        <div class="flex flex-wrap gap-3">
-          ${card.website ? `<a href="${card.website}" target="_blank" rel="nofollow" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">Visit Website</a>` : ''}
-          <a href="/?compare=${card.id}" class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">View Interactive Comparison →</a>
+        <div class="flex flex-col sm:flex-row gap-3">
+          ${card.website ? `<a href="${card.website}" target="_blank" rel="nofollow" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold text-center">Visit Website</a>` : ''}
+          <a href="/?compare=${card.id}" class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold text-center">View Interactive Comparison →</a>
         </div>
       </header>
 
