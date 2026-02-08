@@ -466,6 +466,13 @@ function generateCardHTML(card) {
           </div>
         </div>
         
+        <!-- Card Image -->
+        ${card.cardImage ? `
+        <div class="my-6">
+          <img src="${card.cardImage}" alt="${card.name} card" class="max-w-sm w-full rounded-2xl shadow-xl">
+        </div>
+        ` : ''}
+        
         <!-- Quick Actions -->
         <div class="flex flex-wrap gap-3">
           ${card.website ? `<a href="${card.website}" target="_blank" rel="nofollow" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">Visit Website</a>` : ''}
