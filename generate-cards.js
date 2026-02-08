@@ -436,6 +436,13 @@ function generateCardHTML(card) {
 
   ${generateKastBanner(card)}
 
+  ${card.xBanner ? `
+  <!-- X/Twitter Banner -->
+  <div class="w-full h-32 md:h-48 overflow-hidden">
+    <img src="${card.xBanner}" alt="${card.name} banner" class="w-full h-full object-cover">
+  </div>
+  ` : ''}
+
   <main class="container mx-auto px-4 py-8">
     <article>
       <!-- Hero Section -->
