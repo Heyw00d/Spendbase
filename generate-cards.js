@@ -1,771 +1,293 @@
 const fs = require('fs');
 const path = require('path');
 
-console.log('🚀 Generating static HTML pages for crypto cards...\n');
+console.log('🚀 Generating static HTML pages for crypto cards (v2 - SPA-matching design)...\n');
 
-// Read the main HTML file
+// Read the main HTML file to extract card data
 const htmlContent = fs.readFileSync('./index.html', 'utf8');
 
-// Extract allCards array using more precise matching
+// Extract allCards array
 const allCardsStart = htmlContent.indexOf('const allCards = [');
 const allCardsEnd = htmlContent.indexOf('];', allCardsStart) + 2;
-if (allCardsStart === -1 || allCardsEnd === -1) {
-  throw new Error('Could not find allCards array boundaries in index.html');
-}
 const allCardsCode = htmlContent.substring(allCardsStart, allCardsEnd);
 
 // Extract cardRatingsData object
 const ratingsStart = htmlContent.indexOf('const cardRatingsData = {');
 const ratingsEnd = htmlContent.indexOf('};', ratingsStart) + 2;
-if (ratingsStart === -1 || ratingsEnd === -1) {
-  throw new Error('Could not find cardRatingsData object boundaries in index.html');
-}
 const ratingsCode = htmlContent.substring(ratingsStart, ratingsEnd);
 
-// Parse the extracted data by creating a function that returns the objects
 let allCards, cardRatingsData;
-
 try {
-  // Create functions that return the data when called
   const getAllCards = new Function('return ' + allCardsCode.replace('const allCards = ', ''));
   const getRatingsData = new Function('return ' + ratingsCode.replace('const cardRatingsData = ', ''));
-  
   allCards = getAllCards();
   cardRatingsData = getRatingsData();
-  
-  console.log(`✅ Successfully parsed ${allCards.length} cards`);
-  console.log(`✅ Successfully parsed ratings for ${Object.keys(cardRatingsData).length} cards\n`);
+  console.log(`✅ Parsed ${allCards.length} cards`);
 } catch (error) {
   console.error('Parse error:', error.message);
-  throw new Error('Failed to parse card data: ' + error.message);
+  process.exit(1);
 }
 
-// Slug generation function
 function getCardSlug(card) {
   return card.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 }
 
-// KAST tier configuration for navigation
-const kastTiers = {
-  standard: { label: 'Standard', color: 'purple', fee: '$20/year', cashback: '2%' },
-  premium: { label: 'Premium', color: 'pink', fee: '$1,000/year', cashback: '5%' },
-  limited: { label: 'Limited', color: 'amber', fee: '$10,000 one-time', cashback: '5%' },
-  luxe: { label: 'Luxe', color: 'yellow', fee: 'Invite Only', cashback: '8%' }
-};
-
-// Get all KAST cards grouped by tier
-function getKastCardsByTier() {
-  const kastCards = allCards.filter(c => c.brand === 'KAST');
-  const grouped = {};
-  for (const card of kastCards) {
-    const tier = card.tierGroup || 'standard';
-    if (!grouped[tier]) grouped[tier] = [];
-    grouped[tier].push(card);
-  }
-  return grouped;
-}
-
-// Generate KAST family banner HTML
-function generateKastBanner(card) {
-  if (card.brand !== 'KAST') return '';
-  const tierInfo = kastTiers[card.tierGroup] || kastTiers.standard;
-  return `
-  <!-- KAST Card Family Banner -->
-  <div class="container mx-auto px-4 pt-4">
-    <a href="/card/kast/" class="block bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/30 rounded-lg p-4 hover:border-purple-400/50 transition-colors">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-          <img src="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/af067f2d-59c7-4076-797f-26b063088c00/public" alt="KAST" class="h-8 w-8 rounded">
-          <div>
-            <span class="text-sm text-purple-300 font-medium">Part of the KAST card family</span>
-            <span class="text-xs text-gray-400 ml-2">• ${tierInfo.label} Tier</span>
-          </div>
-        </div>
-        <span class="text-purple-400 text-sm">View all 9 KAST cards →</span>
-      </div>
-    </a>
-  </div>`;
-}
-
-// Generate KAST tier navigation HTML
-function generateKastTierNav(card) {
-  if (card.brand !== 'KAST') return '';
-  const grouped = getKastCardsByTier();
-  const currentTier = card.tierGroup || 'standard';
-  
-  let html = `
-  <!-- KAST Tier Navigation -->
-  <section class="mb-8">
-    <h2 class="text-xl font-bold mb-4">KAST Card Tiers</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">`;
-  
-  for (const [tierKey, tierInfo] of Object.entries(kastTiers)) {
-    const isActive = tierKey === currentTier;
-    const cards = grouped[tierKey] || [];
-    html += `
-      <div class="p-3 rounded-lg border ${isActive ? 'border-' + tierInfo.color + '-400 bg-' + tierInfo.color + '-500/20' : 'border-gray-700 bg-gray-800/50'} text-center">
-        <div class="text-sm font-semibold ${isActive ? 'text-white' : 'text-gray-300'}">${tierInfo.label}</div>
-        <div class="text-xs text-gray-400 mt-1">${tierInfo.cashback} cashback</div>
-        <div class="text-xs text-gray-500">${tierInfo.fee}</div>
-      </div>`;
-  }
-  
-  html += `
-    </div>`;
-  
-  // Show sibling cards in same tier
-  const siblings = (grouped[currentTier] || []).filter(c => c.id !== card.id);
-  if (siblings.length > 0) {
-    html += `
-    <div class="bg-gray-800/50 rounded-lg p-4">
-      <p class="text-sm text-gray-400 mb-3">Other ${kastTiers[currentTier]?.label || 'KAST'} tier cards:</p>
-      <div class="flex flex-wrap gap-3">`;
-    for (const sib of siblings) {
-      const sibSlug = getCardSlug(sib);
-      html += `
-        <a href="/card/${sibSlug}/" class="flex items-center space-x-2 bg-gray-700/50 hover:bg-gray-600/50 px-3 py-2 rounded-lg transition-colors">
-          <img src="${sib.logo}" alt="${sib.name}" class="w-6 h-6 rounded">
-          <span class="text-sm">${sib.name}</span>
-        </a>`;
-    }
-    html += `
-      </div>
-    </div>`;
-  }
-  
-  html += `
-  </section>`;
-  
-  return html;
-}
-
-// Generate Real Return Calculator HTML
-function generateRealReturnCalc(card) {
-  // Parse cashback rate (take first number from rates like "2%", "5%", "8%", "2-6%", "Up to 15%")
-  const cashbackMatch = card.cashback.match(/([\d.]+)/);
-  const cashbackRate = cashbackMatch ? parseFloat(cashbackMatch[1]) : 0;
-  
-  // Parse annual fee
-  let annualFeeNum = 0;
-  let feeNote = '';
-  if (card.annualFee.includes('Invite')) {
-    feeNote = 'Invite only — fee not publicly disclosed';
-  } else {
-    const feeMatch = card.annualFee.match(/([\d,]+)/);
-    annualFeeNum = feeMatch ? parseFloat(feeMatch[1].replace(',', '')) : 0;
-    if (card.annualFee.includes('one-time')) {
-      feeNote = 'One-time fee (amortized over 5 years for calculation)';
-      annualFeeNum = annualFeeNum / 5; // Amortize over 5 years
-    }
-  }
-  
-  if (cashbackRate === 0 && annualFeeNum === 0) return ''; // Skip if no useful data
-  
-  return `
-  <!-- Real Return Calculator -->
-  <section class="mb-8">
-    <h2 class="text-2xl font-bold mb-4">💰 Real Return Calculator</h2>
-    <p class="text-gray-400 text-sm mb-4">See your actual net return after fees. No hype — real numbers.</p>
-    <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-6">
-      <div class="mb-6">
-        <label class="block text-sm text-gray-400 mb-2">Monthly spending</label>
-        <div class="flex items-center space-x-3">
-          <span class="text-gray-400">$</span>
-          <input type="range" id="calc-spend-${card.id}" min="100" max="20000" step="100" value="1000"
-            class="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
-            oninput="updateCalc${card.id}(this.value)">
-          <span id="calc-spend-val-${card.id}" class="text-xl font-bold w-24 text-right">$1,000</span>
-        </div>
-      </div>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
-          <div class="text-xs text-gray-400 mb-1">Monthly Cashback</div>
-          <div id="calc-cashback-${card.id}" class="text-xl font-bold text-green-400">$${(1000 * cashbackRate / 100).toFixed(0)}</div>
-          <div class="text-xs text-gray-500">${cashbackRate}% rate</div>
-        </div>
-        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
-          <div class="text-xs text-gray-400 mb-1">Monthly Fee Cost</div>
-          <div id="calc-fee-${card.id}" class="text-xl font-bold text-red-400">-$${(annualFeeNum / 12).toFixed(0)}</div>
-          <div class="text-xs text-gray-500">${card.annualFee}</div>
-        </div>
-        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
-          <div class="text-xs text-gray-400 mb-1">Net Monthly</div>
-          <div id="calc-net-${card.id}" class="text-xl font-bold text-blue-400">$${((1000 * cashbackRate / 100) - (annualFeeNum / 12)).toFixed(0)}</div>
-          <div class="text-xs text-gray-500">cashback − fees</div>
-        </div>
-        <div class="bg-gray-800/80 p-4 rounded-lg text-center">
-          <div class="text-xs text-gray-400 mb-1">Annual Net Return</div>
-          <div id="calc-annual-${card.id}" class="text-xl font-bold text-purple-400">$${((1000 * cashbackRate / 100 * 12) - annualFeeNum).toFixed(0)}</div>
-          <div class="text-xs text-gray-500">per year</div>
-        </div>
-      </div>
-      ${feeNote ? `<p class="text-xs text-gray-500 mt-3 italic">* ${feeNote}</p>` : ''}
-    </div>
-    <script>
-    function updateCalc${card.id}(spend) {
-      spend = parseFloat(spend);
-      document.getElementById('calc-spend-val-${card.id}').textContent = '$' + spend.toLocaleString();
-      const cashback = spend * ${cashbackRate} / 100;
-      const monthlyFee = ${annualFeeNum} / 12;
-      const net = cashback - monthlyFee;
-      const annual = (cashback * 12) - ${annualFeeNum};
-      document.getElementById('calc-cashback-${card.id}').textContent = '$' + Math.round(cashback).toLocaleString();
-      document.getElementById('calc-fee-${card.id}').textContent = '-$' + Math.round(monthlyFee).toLocaleString();
-      const netEl = document.getElementById('calc-net-${card.id}');
-      netEl.textContent = (net >= 0 ? '$' : '-$') + Math.abs(Math.round(net)).toLocaleString();
-      netEl.className = 'text-xl font-bold ' + (net >= 0 ? 'text-green-400' : 'text-red-400');
-      const annualEl = document.getElementById('calc-annual-${card.id}');
-      annualEl.textContent = (annual >= 0 ? '$' : '-$') + Math.abs(Math.round(annual)).toLocaleString();
-      annualEl.className = 'text-xl font-bold ' + (annual >= 0 ? 'text-green-400' : 'text-red-400');
-    }
-    </script>
-  </section>`;
-}
-
-// Generate static HTML for a card
+// Generate SPA-matching HTML for a card
 function generateCardHTML(card) {
   const slug = getCardSlug(card);
   const ratingsData = cardRatingsData[card.name] || {};
   const rating = ratingsData.composite || 3.5;
   
-  // Category and archetype labels
-  const categoryLabels = { 
-    cryptoNative: 'Crypto-Native', 
-    onchain: 'Onchain', 
-    neobank: 'Neobank' 
-  };
-  const archetypeLabels = { 
-    exchange: 'Exchange', 
-    wallet: 'Wallet', 
-    defi: 'DeFi', 
-    stablecoin: 'Stablecoin', 
-    bank: 'Bank' 
-  };
-
-  const categoryLabel = categoryLabels[card.category] || card.category;
-  const archetypeLabel = archetypeLabels[card.archetype] || card.archetype;
+  const categoryLabels = { cryptoNative: 'Crypto-Native', onchain: 'Onchain', neobank: 'Neobank', exchange: 'Exchange', fintech: 'Fintech' };
+  const archetypeLabels = { exchange: 'Exchange', wallet: 'Wallet', defi: 'DeFi', stablecoin: 'Stablecoin', bank: 'Bank', fintech: 'Fintech' };
+  const categoryLabel = categoryLabels[card.category] || card.category || '';
+  const archetypeLabel = archetypeLabels[card.archetype] || card.archetype || '';
   
-  // SEO Data (basic for now, can be enhanced)
-  const seoData = {
-    overview: `${card.name} is a ${categoryLabel.toLowerCase()} crypto card offering ${card.cashback} cashback in ${card.cashbackToken || 'crypto'}. ${card.custody === 'Non-Custodial' ? 'Self-custody' : 'Custodial'} solution on ${card.chain} with ${card.fxFee} FX fees.`,
-    pros: [
-      card.cashback !== '0%' ? `${card.cashback} cashback rewards` : null,
-      card.fxFee === '0%' ? 'No foreign exchange fees' : null,
-      card.custody === 'Non-Custodial' ? 'Self-custody (you own your keys)' : null,
-      card.annualFee === '$0' ? 'No annual fee' : null,
-      card.features ? card.features[0] : null
-    ].filter(Boolean),
-    cons: [
-      card.fxFee !== '0%' ? `${card.fxFee} FX fees` : null,
-      card.annualFee !== '$0' ? `${card.annualFee} annual fee` : null,
-      card.regions?.length === 1 ? `Limited to ${card.regions[0]} region` : null,
-      !card.website ? 'Website not available' : null
-    ].filter(Boolean),
-    faqs: [
-      {
-        question: `What is ${card.name}?`,
-        answer: `${card.name} is a ${categoryLabel.toLowerCase()} crypto debit card that allows you to spend your cryptocurrency at merchants worldwide. It operates on the ${card.network} network and supports ${card.chain} blockchain.`
-      },
-      {
-        question: `How much cashback does ${card.name} offer?`,
-        answer: `${card.name} offers ${card.cashback} cashback rewards ${card.cashbackToken ? `in ${card.cashbackToken}` : 'in cryptocurrency'}.`
-      },
-      {
-        question: `Is ${card.name} self-custody?`,
-        answer: `${card.name} is ${card.custody.toLowerCase()}, meaning ${card.custody === 'Non-Custodial' ? 'you maintain control of your private keys and funds' : 'the platform holds and manages your cryptocurrency'}.`
-      },
-      {
-        question: `Where can I use ${card.name}?`,
-        answer: `${card.name} is available in ${card.regions ? card.regions.join(', ') : 'select regions'} and can be used anywhere ${card.network} is accepted.`
-      }
-    ]
-  };
+  const xHandle = card.xHandle || card.tg || '';
+  const xAvatarUrl = xHandle ? `https://unavatar.io/x/${xHandle}` : card.logo;
+  const xBanner = card.xBanner || '';
+  
+  // Background gradient
+  let bgStyle = '';
+  if (card.bg === 'holographic') {
+    bgStyle = 'background: linear-gradient(135deg, #a8edea 0%, #fed6e3 25%, #d299c2 50%, #a8c0ff 75%, #c2ffd8 100%);';
+  } else if (card.bg?.includes('from-')) {
+    // Convert Tailwind gradient to CSS
+    const fromMatch = card.bg.match(/from-\[([^\]]+)\]/);
+    const toMatch = card.bg.match(/to-\[([^\]]+)\]/);
+    if (fromMatch && toMatch) {
+      bgStyle = `background: linear-gradient(135deg, ${fromMatch[1]} 0%, ${toMatch[1]} 100%);`;
+    } else {
+      bgStyle = 'background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);';
+    }
+  } else {
+    bgStyle = 'background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);';
+  }
 
-  // JSON-LD Structured Data
+  // Structured data
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": `${card.name} Crypto Card`,
-    "description": seoData.overview,
-    "image": card.logo,
-    "brand": {
-      "@type": "Brand",
-      "name": card.name
-    },
-    "category": "Cryptocurrency Debit Card",
-    "offers": {
-      "@type": "Offer",
-      "price": card.annualFee === '$0' ? 0 : card.annualFee,
-      "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": rating,
-      "reviewCount": ratingsData.reviews || 100,
-      "bestRating": 5,
-      "worstRating": 1
-    },
-    "additionalProperty": [
-      { "@type": "PropertyValue", "name": "Network", "value": card.network },
-      { "@type": "PropertyValue", "name": "Cashback", "value": card.cashback },
-      { "@type": "PropertyValue", "name": "FX Fee", "value": card.fxFee },
-      { "@type": "PropertyValue", "name": "Custody", "value": card.custody }
-    ]
+    "description": `${card.name} is a ${card.custody?.toLowerCase() || ''} crypto card on ${card.chain || 'multi-chain'} offering ${card.cashback || 'TBD'} cashback.`,
+    "image": card.cardImage || card.logo,
+    "brand": { "@type": "Brand", "name": card.brand || card.name },
+    "offers": { "@type": "Offer", "price": 0, "priceCurrency": "USD" },
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": rating, "reviewCount": 100 }
   };
 
-  // Breadcrumb structured data
-  const breadcrumbData = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://spendbase.cards"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Cards",
-        "item": "https://spendbase.cards/"
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": card.name,
-        "item": `https://spendbase.cards/card/${slug}/`
-      }
-    ]
-  };
-
-  // FAQ structured data
-  const faqData = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": seoData.faqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
-  };
-
-  const html = `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- SEO Meta Tags -->
-  <title>${card.name} Crypto Card Review 2026 | ${card.cashback} Cashback | Spendbase</title>
-  <meta name="description" content="${seoData.overview} Read our comprehensive review of ${card.name}.">
-  <meta name="keywords" content="${card.name.toLowerCase()}, crypto card, ${card.cashbackToken ? card.cashbackToken.toLowerCase() : 'cryptocurrency'} card, ${card.network.toLowerCase()} card, ${card.custody.toLowerCase()} crypto card">
-  <meta name="author" content="Spendbase">
-  <meta name="robots" content="index, follow">
+  <title>${card.name} Crypto Card Review 2026 | ${card.cashback || 'TBD'} Cashback | Spendbase</title>
+  <meta name="description" content="${card.name} offers ${card.cashback || 'TBD'} cashback. ${card.custody || 'Self-custody'} card on ${card.chain || 'multi-chain'} with ${card.fxFee || '0%'} FX fees.">
   <link rel="canonical" href="https://spendbase.cards/card/${slug}/">
-  
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
+  <meta property="og:title" content="${card.name} Crypto Card Review">
+  <meta property="og:description" content="${card.cashback || 'TBD'} cashback on ${card.chain || 'multi-chain'}. ${card.custody || ''}.">
+  <meta property="og:image" content="${card.cardImage || card.logo}">
   <meta property="og:url" content="https://spendbase.cards/card/${slug}/">
-  <meta property="og:title" content="${card.name} Crypto Card Review | ${card.cashback} Cashback">
-  <meta property="og:description" content="${seoData.overview}">
-  <meta property="og:image" content="${card.logo}">
-  <meta property="og:site_name" content="Spendbase">
-  
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@spendbasecards">
-  <meta name="twitter:url" content="https://spendbase.cards/card/${slug}/">
-  <meta name="twitter:title" content="${card.name} Crypto Card Review | ${card.cashback} Cashback">
-  <meta name="twitter:description" content="${seoData.overview}">
-  <meta name="twitter:image" content="${card.logo}">
-  
-  <link rel="icon" type="image/png" href="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/cc680d90-ee94-499a-2074-50ec819a2000/public">
-  
-  <!-- Structured Data - Product -->
-  <script type="application/ld+json">
-  ${JSON.stringify(structuredData, null, 2)}
-  </script>
-  
-  <!-- Structured Data - Breadcrumbs -->
-  <script type="application/ld+json">
-  ${JSON.stringify(breadcrumbData, null, 2)}
-  </script>
-  
-  <!-- Structured Data - FAQ -->
-  <script type="application/ld+json">
-  ${JSON.stringify(faqData, null, 2)}
-  </script>
-  
-  <!-- Tailwind CSS -->
+  <link rel="icon" href="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/cc680d90-ee94-499a-2074-50ec819a2000/public">
+  <script type="application/ld+json">${JSON.stringify(structuredData)}</script>
   <script src="https://cdn.tailwindcss.com"></script>
-  
   <style>
-    .kosh-gradient { background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 25%, #45B7D1 50%, #96CEB4 75%, #FFEAA7 100%); }
-    .bleap-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-    .redotpay-gradient { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); }
-    .holographic { background: linear-gradient(45deg, #ff0080, #ff8c00, #40e0d0, #ee82ee, #98fb98, #ff69b4); }
+    .card-gradient { ${bgStyle} }
   </style>
 </head>
-
 <body class="bg-gray-950 text-white min-h-screen">
   <!-- Header -->
-  <header class="border-b border-gray-800">
-    <div class="container mx-auto px-4 py-4">
-      <nav class="flex items-center justify-between">
-        <a href="/" class="flex items-center space-x-2">
-          <img src="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/cc680d90-ee94-499a-2074-50ec819a2000/public" alt="Spendbase" class="h-8 w-8">
-          <span class="text-xl font-bold">Spendbase</span>
-        </a>
-        <a href="/" class="text-blue-400 hover:text-blue-300">← Back to all cards</a>
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-gray-950/80 border-b border-gray-800">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <img src="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/spendbase-icon-v2/public" alt="Spendbase" class="h-8 w-8 rounded-lg">
+        <span class="font-bold text-lg hidden sm:inline">Spendbase</span>
+      </a>
+      <nav class="flex items-center gap-4 text-sm">
+        <a href="/#tools" class="text-gray-400 hover:text-white">Tools</a>
+        <a href="/#research" class="text-gray-400 hover:text-white">Research</a>
+        <a href="/#video-rewards" class="text-gray-400 hover:text-white">Video Rewards</a>
+        <a href="/" class="bg-pink-500 hover:bg-pink-600 px-4 py-1.5 rounded-full font-medium">Subscribe</a>
       </nav>
     </div>
   </header>
 
-  <!-- Breadcrumbs -->
-  <div class="container mx-auto px-4 py-3">
-    <nav class="text-sm text-gray-400">
-      <a href="/" class="hover:text-white">Home</a> > 
-      ${card.brand === 'KAST' ? '<a href="/card/kast/" class="hover:text-white ml-1">KAST Cards</a> > ' : '<a href="/" class="hover:text-white ml-1">Cards</a> > '}
-      <span class="text-white ml-1">${card.name}</span>
-    </nav>
-  </div>
+  <main class="max-w-4xl mx-auto px-4 py-6">
+    <!-- Back Button -->
+    <a href="/" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white mb-6">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      Back to Cards
+    </a>
 
-  ${generateKastBanner(card)}
-
-  ${card.xBanner ? `
-  <!-- X/Twitter Banner -->
-  <div class="w-full h-32 md:h-48 overflow-hidden">
-    <img src="${card.xBanner}" alt="${card.name} banner" class="w-full h-full object-cover">
-  </div>
-  ` : ''}
-
-  <main class="container mx-auto px-4 py-8">
-    <article>
-      <!-- Hero Section - Mobile Vertical Stack -->
-      <header class="mb-8">
-        <!-- Card Image - Show first on mobile -->
-        ${card.cardImage ? `
-        <div class="mb-6 md:hidden">
-          <img src="${card.cardImage}" alt="${card.name} card" class="w-full max-w-xs mx-auto rounded-2xl shadow-xl">
-        </div>
-        ` : ''}
+    <!-- Hero Card Section -->
+    <div class="rounded-2xl overflow-hidden bg-gray-900 border border-gray-800 mb-6">
+      <!-- Banner/Gradient Area -->
+      <div class="relative h-48 sm:h-64">
+        ${xBanner ? `<img src="${xBanner}" alt="" class="w-full h-full object-cover">` : `<div class="w-full h-full card-gradient"></div>`}
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
         
-        <!-- Logo, Title & Rating Row -->
-        <div class="flex flex-col gap-4 mb-6">
-          <!-- Logo + Name -->
-          <div class="flex items-center space-x-4">
-            <img src="${card.logo}" alt="${card.name}" class="w-16 h-16 md:w-20 md:h-20 rounded-lg object-contain">
-            <div>
-              <h1 class="text-2xl md:text-4xl font-bold">${card.name}</h1>
-              <div class="flex flex-wrap items-center gap-2 mt-2">
-                <span class="px-2 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs md:text-sm">${categoryLabel}</span>
-                <span class="px-2 py-1 bg-green-500/20 text-green-300 rounded-full text-xs md:text-sm">${archetypeLabel}</span>
-                ${card.comingSoon ? '<span class="px-2 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-xs md:text-sm">Coming Soon</span>' : ''}
+        <!-- X Follow Button -->
+        ${xHandle ? `
+        <a href="https://x.com/${xHandle}" target="_blank" rel="noopener" class="absolute top-4 right-4 flex items-center gap-1.5 px-3 py-1.5 bg-black/50 hover:bg-black/70 backdrop-blur rounded-full text-white text-xs font-medium">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Follow
+        </a>` : ''}
+      </div>
+
+      <!-- Card Visual + Info -->
+      <div class="px-6 pb-6 -mt-20 relative">
+        <div class="flex flex-col sm:flex-row gap-6">
+          <!-- Card Visual -->
+          <div class="w-48 h-32 rounded-xl overflow-hidden shadow-2xl border-4 border-gray-900 flex-shrink-0 card-gradient flex items-center justify-center">
+            ${card.cardImage ? `<img src="${card.cardImage}" alt="${card.name}" class="w-full h-full object-cover">` : `
+            <div class="text-center p-4">
+              <img src="${card.logo}" alt="${card.name}" class="w-12 h-12 mx-auto mb-2 rounded-lg">
+              <div class="text-white text-sm font-bold">${card.brand || card.name}</div>
+            </div>`}
+          </div>
+          
+          <!-- Name + Rating -->
+          <div class="flex-1">
+            <div class="flex items-start justify-between">
+              <div>
+                <h1 class="text-2xl font-bold">${card.name}</h1>
+                <div class="flex items-center gap-2 mt-1 flex-wrap">
+                  ${categoryLabel ? `<span class="px-2 py-0.5 bg-lime-500/20 text-lime-400 rounded text-xs font-medium">${categoryLabel}</span>` : ''}
+                  ${archetypeLabel ? `<span class="px-2 py-0.5 bg-purple-500/20 text-purple-400 rounded text-xs font-medium">${archetypeLabel}</span>` : ''}
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="flex items-center gap-1">
+                  ${[1,2,3,4,5].map(i => `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="${i <= Math.round(rating) ? '#FBBF24' : '#374151'}"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`).join('')}
+                </div>
+                <div class="text-xs text-gray-400 mt-0.5">${rating.toFixed(1)} Score</div>
               </div>
             </div>
           </div>
-          
-          <!-- Rating -->
-          <div class="flex items-center space-x-2">
-            <div class="flex">
-              ${Array.from({length: 5}, (_, i) => 
-                `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="${i <= Math.round(rating) ? '#FBBF24' : '#374151'}">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>`
-              ).join('')}
-            </div>
-            <span class="text-white/80">${rating.toFixed(1)} Score</span>
+        </div>
+
+        <!-- Quick Stats Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
+          <div class="bg-gray-800/50 rounded-lg p-3 text-center">
+            <div class="text-xs text-gray-400 mb-1">Cashback</div>
+            <div class="font-bold text-lg">${card.cashback || 'TBD'}</div>
+          </div>
+          <div class="bg-gray-800/50 rounded-lg p-3 text-center">
+            <div class="text-xs text-gray-400 mb-1">FX Fee</div>
+            <div class="font-bold text-lg">${card.fxFee || '0%'}</div>
+          </div>
+          <div class="bg-gray-800/50 rounded-lg p-3 text-center">
+            <div class="text-xs text-gray-400 mb-1">Annual Fee</div>
+            <div class="font-bold text-lg">${card.annualFee || 'TBD'}</div>
+          </div>
+          <div class="bg-gray-800/50 rounded-lg p-3 text-center">
+            <div class="text-xs text-gray-400 mb-1">Custody</div>
+            <div class="font-bold text-lg ${card.custody === 'Non-Custodial' ? 'text-lime-400' : ''}">${card.custody === 'Non-Custodial' ? 'Self' : 'Custodial'}</div>
           </div>
         </div>
-        
-        <!-- Card Image - Desktop only (side placement) -->
-        ${card.cardImage ? `
-        <div class="my-6 hidden md:block">
-          <img src="${card.cardImage}" alt="${card.name} card" class="max-w-sm w-full rounded-2xl shadow-xl">
-        </div>
-        ` : ''}
-        
-        <!-- Quick Actions -->
-        <div class="flex flex-col sm:flex-row gap-3">
-          ${card.website ? `<a href="${card.website}" target="_blank" rel="nofollow" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold text-center">Visit Website</a>` : ''}
-          <a href="/?compare=${card.id}" class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold text-center">View Interactive Comparison →</a>
-        </div>
-      </header>
 
-      ${generateKastTierNav(card)}
-
-      <!-- Key Specs Table -->
-      <section class="mb-8">
-        <h2 class="text-2xl font-bold mb-4">Key Specifications</h2>
-        <div class="bg-gray-900/50 rounded-lg overflow-hidden">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-            <div class="p-4 border-r border-b border-gray-700">
-              <div class="text-gray-400 text-sm">Network</div>
-              <div class="font-semibold">${card.network}</div>
-            </div>
-            <div class="p-4 border-r border-b border-gray-700">
-              <div class="text-gray-400 text-sm">Category</div>
-              <div class="font-semibold">${categoryLabel}</div>
-            </div>
-            <div class="p-4 border-r border-b border-gray-700">
-              <div class="text-gray-400 text-sm">Custody</div>
-              <div class="font-semibold">${card.custody}</div>
-            </div>
-            <div class="p-4 border-b border-gray-700">
-              <div class="text-gray-400 text-sm">Chain</div>
-              <div class="font-semibold">${card.chain}</div>
-            </div>
-            <div class="p-4 border-r border-b border-gray-700">
-              <div class="text-gray-400 text-sm">Regions</div>
-              <div class="font-semibold">${card.regions ? card.regions.join(', ') : 'Not specified'}</div>
-            </div>
-            <div class="p-4 border-r border-b border-gray-700">
-              <div class="text-gray-400 text-sm">Cashback</div>
-              <div class="font-semibold">${card.cashback}${card.cashbackToken ? ` in ${card.cashbackToken}` : ''}</div>
-            </div>
-            <div class="p-4 border-r border-b border-gray-700">
-              <div class="text-gray-400 text-sm">FX Fee</div>
-              <div class="font-semibold">${card.fxFee}</div>
-            </div>
-            <div class="p-4 border-b border-gray-700">
-              <div class="text-gray-400 text-sm">Annual Fee</div>
-              <div class="font-semibold">${card.annualFee}</div>
-            </div>
-          </div>
+        <!-- CTA Buttons -->
+        <div class="flex gap-3 mt-6">
+          ${card.website ? `<a href="${card.website}" target="_blank" rel="noopener" class="flex-1 bg-lime-400 hover:bg-lime-300 text-gray-900 font-semibold py-3 px-6 rounded-lg text-center flex items-center justify-center gap-2">
+            Get Card <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          </a>` : ''}
+          ${xHandle ? `<a href="https://x.com/${xHandle}" target="_blank" rel="noopener" class="bg-gray-800 hover:bg-gray-700 px-4 py-3 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>` : ''}
         </div>
-      </section>
+      </div>
+    </div>
 
-      <!-- Overview -->
-      <section class="mb-8">
-        <h2 class="text-2xl font-bold mb-4">Overview</h2>
-        <div class="prose prose-invert max-w-none">
-          <p class="text-gray-300 text-lg leading-relaxed">${seoData.overview}</p>
+    <!-- Tabs (Static) -->
+    <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+      <span class="px-4 py-2 bg-gray-800 text-white rounded-lg font-medium text-sm">Overview</span>
+      <span class="px-4 py-2 text-gray-400 hover:text-white rounded-lg text-sm cursor-pointer">Ratings</span>
+      <span class="px-4 py-2 text-gray-400 hover:text-white rounded-lg text-sm cursor-pointer">Reviews</span>
+      <span class="px-4 py-2 text-gray-400 hover:text-white rounded-lg text-sm cursor-pointer">Where</span>
+    </div>
+
+    <!-- Best For Section -->
+    ${card.perks && card.perks.length > 0 ? `
+    <section class="mb-8">
+      <h2 class="text-xl font-bold mb-4">Best For</h2>
+      <div class="flex flex-wrap gap-2">
+        ${card.perks.map(perk => `<span class="px-3 py-1.5 bg-gray-800 rounded-full text-sm">${perk}</span>`).join('')}
+      </div>
+    </section>` : ''}
+
+    <!-- Features Section -->
+    ${card.features && card.features.length > 0 ? `
+    <section class="mb-8">
+      <h2 class="text-xl font-bold mb-4">Key Features</h2>
+      <div class="grid sm:grid-cols-2 gap-3">
+        ${card.features.map(feature => `
+        <div class="flex items-start gap-3 bg-gray-900/50 p-4 rounded-lg">
+          <svg class="w-5 h-5 text-lime-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <span>${feature}</span>
+        </div>`).join('')}
+      </div>
+    </section>` : ''}
+
+    <!-- Specs Table -->
+    <section class="mb-8">
+      <h2 class="text-xl font-bold mb-4">Specifications</h2>
+      <div class="bg-gray-900/50 rounded-lg overflow-hidden">
+        <div class="grid grid-cols-2 sm:grid-cols-4 text-sm">
+          <div class="p-4 border-b border-r border-gray-800"><div class="text-gray-400 text-xs mb-1">Network</div><div class="font-medium">${card.network || 'TBD'}</div></div>
+          <div class="p-4 border-b border-r border-gray-800"><div class="text-gray-400 text-xs mb-1">Chain</div><div class="font-medium">${card.chain || 'Multi-chain'}</div></div>
+          <div class="p-4 border-b border-r border-gray-800"><div class="text-gray-400 text-xs mb-1">Regions</div><div class="font-medium">${(card.regions || ['Global']).join(', ')}</div></div>
+          <div class="p-4 border-b border-gray-800"><div class="text-gray-400 text-xs mb-1">Cashback Token</div><div class="font-medium">${card.cashbackToken || 'TBD'}</div></div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Pros & Cons -->
-      <section class="mb-8">
-        <h2 class="text-2xl font-bold mb-6">Pros & Cons</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="bg-green-500/10 border border-green-500/20 rounded-lg p-6">
-            <h3 class="text-xl font-semibold text-green-400 mb-4">✓ Pros</h3>
-            <ul class="space-y-2">
-              ${seoData.pros.map(pro => `<li class="text-green-300">• ${pro}</li>`).join('')}
-            </ul>
-          </div>
-          <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-6">
-            <h3 class="text-xl font-semibold text-red-400 mb-4">✗ Cons</h3>
-            <ul class="space-y-2">
-              ${seoData.cons.map(con => `<li class="text-red-300">• ${con}</li>`).join('')}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Features & Perks -->
-      ${card.features ? `
-      <section class="mb-8">
-        <h2 class="text-2xl font-bold mb-4">Features</h2>
-        <div class="grid md:grid-cols-2 gap-4">
-          ${card.features.map(feature => 
-            `<div class="bg-gray-800/50 p-4 rounded-lg">
-              <span class="text-blue-400">✓</span> ${feature}
-            </div>`
-          ).join('')}
-        </div>
-      </section>
-      ` : ''}
-
-      ${card.perks ? `
-      <section class="mb-8">
-        <h2 class="text-2xl font-bold mb-4">Key Benefits</h2>
-        <div class="grid md:grid-cols-2 gap-4">
-          ${card.perks.map(perk => 
-            `<div class="bg-gray-800/50 p-4 rounded-lg">
-              <span class="text-green-400">★</span> ${perk}
-            </div>`
-          ).join('')}
-        </div>
-      </section>
-      ` : ''}
-
-      <!-- Token Info -->
-      ${card.token ? `
-      <section class="mb-8">
-        <h2 class="text-2xl font-bold mb-4">Token Information</h2>
-        <div class="bg-gray-900/50 p-6 rounded-lg">
-          <div class="flex items-center justify-between">
-            <div>
-              <h3 class="text-xl font-semibold">${card.token.ticker}</h3>
-              <p class="text-gray-400">${card.name} Token</p>
-            </div>
-            ${card.token.live && card.token.cmc ? 
-              `<a href="https://coinmarketcap.com/currencies/${card.token.cmc}/" target="_blank" rel="nofollow" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm">
-                View on CoinMarketCap →
-              </a>` : 
-              card.token.live ? 
-                '<span class="px-4 py-2 bg-green-500/20 text-green-300 rounded text-sm">Live Token</span>' : 
-                '<span class="px-4 py-2 bg-yellow-500/20 text-yellow-300 rounded text-sm">Token Coming Soon</span>'
-            }
-          </div>
-        </div>
-      </section>
-      ` : ''}
-
-      <!-- Ratings -->
-      ${Object.keys(ratingsData).length > 0 ? `
-      <section class="mb-8">
-        <h2 class="text-2xl font-bold mb-4">User Ratings</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-          ${ratingsData.ios ? `
-          <div class="bg-gray-800/50 p-4 rounded-lg text-center">
-            <div class="text-2xl font-bold text-blue-400">${ratingsData.ios.toFixed(1)}</div>
-            <div class="text-sm text-gray-400">iOS App Store</div>
-          </div>
-          ` : ''}
-          ${ratingsData.android ? `
-          <div class="bg-gray-800/50 p-4 rounded-lg text-center">
-            <div class="text-2xl font-bold text-green-400">${ratingsData.android.toFixed(1)}</div>
-            <div class="text-sm text-gray-400">Google Play</div>
-          </div>
-          ` : ''}
-          ${ratingsData.trustpilot ? `
-          <div class="bg-gray-800/50 p-4 rounded-lg text-center">
-            <div class="text-2xl font-bold ${ratingsData.trustpilot >= 4 ? 'text-green-400' : ratingsData.trustpilot >= 3 ? 'text-yellow-400' : 'text-red-400'}">${ratingsData.trustpilot.toFixed(1)}</div>
-            <div class="text-sm text-gray-400">Trustpilot</div>
-          </div>
-          ` : ''}
-          <div class="bg-gray-800/50 p-4 rounded-lg text-center">
-            <div class="text-2xl font-bold text-purple-400">${rating.toFixed(1)}</div>
-            <div class="text-sm text-gray-400">Spendbase Score</div>
-          </div>
-        </div>
-      </section>
-      ` : ''}
-
-      ${generateRealReturnCalc(card)}
-
-      <!-- FAQ -->
-      <section class="mb-8">
-        <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
-        <div class="space-y-4">
-          ${seoData.faqs.map(faq => `
-          <details class="bg-gray-800/50 rounded-lg overflow-hidden">
-            <summary class="p-4 cursor-pointer hover:bg-gray-700/50 font-semibold">${faq.question}</summary>
-            <div class="p-4 pt-0 text-gray-300 border-t border-gray-700">${faq.answer}</div>
-          </details>
-          `).join('')}
-        </div>
-      </section>
-
-      <!-- Call to Action -->
-      <section class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 text-center">
-        <h2 class="text-2xl font-bold mb-4">Ready to Get Started?</h2>
-        <p class="text-lg mb-6">Compare ${card.name} with other crypto cards to find your perfect match.</p>
-        <div class="space-x-4">
-          <a href="/" class="bg-white text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 inline-block">Compare All Cards</a>
-          ${card.website ? `<a href="${card.website}" target="_blank" rel="nofollow" class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 inline-block">Visit ${card.name} →</a>` : ''}
-        </div>
-      </section>
-    </article>
+    <!-- CTA Banner -->
+    <section class="bg-gradient-to-r from-lime-500/20 to-green-500/20 border border-lime-500/30 rounded-2xl p-6 text-center">
+      <h3 class="text-xl font-bold mb-2">Ready to get started?</h3>
+      <p class="text-gray-400 mb-4">Compare ${card.name} with other cards or apply directly.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        ${card.website ? `<a href="${card.website}" target="_blank" class="bg-lime-400 hover:bg-lime-300 text-gray-900 font-semibold py-3 px-8 rounded-lg">Get ${card.name}</a>` : ''}
+        <a href="/" class="bg-gray-800 hover:bg-gray-700 py-3 px-8 rounded-lg font-medium">Compare Cards</a>
+      </div>
+    </section>
   </main>
 
   <!-- Footer -->
-  <footer class="border-t border-gray-800 mt-16">
-    <div class="container mx-auto px-4 py-8">
-      <div class="grid md:grid-cols-4 gap-8">
-        <div>
-          <div class="flex items-center space-x-2 mb-4">
-            <img src="https://imagedelivery.net/uYHlHjMhbvNHB1x4JZscLw/cc680d90-ee94-499a-2074-50ec819a2000/public" alt="Spendbase" class="h-6 w-6">
-            <span class="font-bold">Spendbase</span>
-          </div>
-          <p class="text-gray-400 text-sm">The leading crypto card comparison platform.</p>
-        </div>
-        <div>
-          <h4 class="font-semibold mb-3">Compare</h4>
-          <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="/" class="hover:text-white">All Cards</a></li>
-            <li><a href="/?category=cryptoNative" class="hover:text-white">Crypto-Native Cards</a></li>
-            <li><a href="/?category=onchain" class="hover:text-white">Self-Custody Cards</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-semibold mb-3">Learn</h4>
-          <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="/learn" class="hover:text-white">Crypto Card Guide</a></li>
-            <li><a href="/ratings" class="hover:text-white">Card Ratings</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-semibold mb-3">Community</h4>
-          <ul class="space-y-2 text-sm text-gray-400">
-            <li><a href="https://x.com/spendbasecards" target="_blank" class="hover:text-white">Twitter</a></li>
-            <li><a href="https://t.me/SpendbaseCards" target="_blank" class="hover:text-white">Telegram</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
-        <p>&copy; 2026 Spendbase. Compare crypto cards responsibly.</p>
-      </div>
+  <footer class="border-t border-gray-800 mt-12 py-8">
+    <div class="max-w-4xl mx-auto px-4 text-center text-sm text-gray-500">
+      <p>© 2026 Spendbase. Crypto card comparison platform.</p>
+      <p class="mt-2">Not financial advice. DYOR.</p>
     </div>
   </footer>
 </body>
 </html>`;
-
-  return html;
 }
 
-// Create card directories and generate HTML files
-let generatedCount = 0;
-let errors = [];
+// Generate all card pages
+let successCount = 0;
+let errorCount = 0;
 
 for (const card of allCards) {
+  const slug = getCardSlug(card);
+  const dir = `./card/${slug}`;
+  
   try {
-    const slug = getCardSlug(card);
-    const dirPath = path.join('./card', slug);
-    
-    // Create directory if it doesn't exist
-    if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath, { recursive: true });
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
     }
     
-    // Generate and write HTML file
     const html = generateCardHTML(card);
-    const filePath = path.join(dirPath, 'index.html');
-    fs.writeFileSync(filePath, html);
-    
-    generatedCount++;
+    fs.writeFileSync(`${dir}/index.html`, html);
     console.log(`✓ Generated: /card/${slug}/index.html`);
-    
-    // Show sample for first card
-    if (generatedCount === 1) {
-      console.log(`\n📄 Sample page structure for ${card.name}:`);
-      console.log(`   URL: https://spendbase.cards/card/${slug}/`);
-      console.log(`   Size: ${(html.length / 1024).toFixed(1)}KB`);
-      console.log(`   Features: SEO meta tags, structured data, responsive design\n`);
-    }
-    
+    successCount++;
   } catch (error) {
-    errors.push({ card: card.name, error: error.message });
     console.error(`✗ Error generating ${card.name}: ${error.message}`);
+    errorCount++;
   }
 }
 
 console.log(`\n🎉 Generation complete!`);
-console.log(`   ✅ Successfully generated: ${generatedCount} cards`);
-console.log(`   ❌ Errors: ${errors.length}`);
-
-if (errors.length > 0) {
-  console.log('\nErrors encountered:');
-  errors.forEach(err => console.log(`   - ${err.card}: ${err.error}`));
-}
-
-console.log(`\nNext steps:`);
-console.log(`   1. Review sample pages in /card/{slug}/index.html`);
-console.log(`   2. Test a few pages locally`);
-console.log(`   3. Deploy to GitHub using the API`);
-console.log(`   4. Update sitemap.xml to include all card URLs`);
+console.log(`   ✅ Successfully generated: ${successCount} cards`);
+console.log(`   ❌ Errors: ${errorCount}`);
