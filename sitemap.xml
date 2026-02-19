@@ -306,4 +306,65 @@
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+
+  <!-- Compare Pages -->
+  <url><loc>https://spendbase.cards/compare/</loc><lastmod>2026-02-19</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://spendbase.cards/compare/best-usdc-card/</loc><lastmod>2026-02-19</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://spendbase.cards/compare/best-self-custody-card/</loc><lastmod>2026-02-19</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://spendbase.cards/compare/best-cashback-crypto-card/</loc><lastmod>2026-02-19</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://spendbase.cards/compare/best-no-fee-crypto-card/</loc><lastmod>2026-02-19</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://spendbase.cards/compare/usdc-spending-card/</loc><lastmod>2026-02-19</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://spendbase.cards/compare/best-bitcoin-debit-card/</loc><lastmod>2026-02-19</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://spendbase.cards/compare/best-solana-crypto-card/</loc><lastmod>2026-02-19</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://spendbase.cards/compare/best-defi-crypto-card/</loc><lastmod>2026-02-19</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-luxe-vs-solflare/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/coinbase-vs-kast-luxe/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/holyheld-vs-kast-luxe/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-luxe-vs-solayer-emerald/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-luxe-vs-ledger/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-luxe-vs-xportal-card/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/imtoken-vs-kast-luxe/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-luxe-vs-verse-v-card/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-luxe-vs-kolo/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-luxe-vs-tokenpocket/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/bybit-vs-kast-luxe/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-luxe-vs-nubank/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/gnosis-pay-vs-kast-luxe/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/cash-app-vs-revolut/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/nubank-vs-revolut/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/cash-app-vs-nubank/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-limited-vs-solflare/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-premium-vs-solflare/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/holyheld-vs-solflare/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/solayer-emerald-vs-solflare/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-standard-vs-solflare/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/ledger-vs-solflare/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/solflare-vs-xportal-card/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/imtoken-vs-solflare/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/solflare-vs-verse-v-card/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kolo-vs-solflare/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/solflare-vs-tokenpocket/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/gnosis-pay-vs-solflare/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/coinbase-vs-nexo/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/nexo-vs-solayer-emerald/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/jupiter-card-vs-nexo/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/bybit-vs-nexo/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/nexo-vs-veil/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/gnosis-pay-vs-nexo/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/coinbase-vs-kast-limited/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/holyheld-vs-kast-limited/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-limited-vs-solayer-emerald/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-limited-vs-ledger/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-limited-vs-xportal-card/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/imtoken-vs-kast-limited/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-limited-vs-verse-v-card/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-limited-vs-kolo/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-limited-vs-tokenpocket/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/bybit-vs-kast-limited/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/kast-limited-vs-nubank/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/gnosis-pay-vs-kast-limited/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/coinbase-vs-kast-premium/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/coinbase-vs-solayer-emerald/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/coinbase-vs-xportal-card/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://spendbase.cards/compare/coinbase-vs-jupiter-card/</loc><lastmod>2026-02-19</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>
