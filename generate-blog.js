@@ -24,6 +24,19 @@ function getCardSlug(card) {
 
 const today = new Date().toISOString().split('T')[0];
 
+// A YYYY-MM-DD day, rendered as the day it actually is.
+//
+// new Date('2026-02-07') is midnight UTC, and formatting that in any negative-offset locale
+// gives 6 February — so every post displayed a date one day earlier than its own datetime
+// attribute. Pinned to midday and formatted in UTC so the visible date and the machine
+// readable one cannot disagree, wherever the build runs.
+//
+// `opts` lets the index use a short month while the post keeps the long one.
+function formatDay(day, opts = { year: 'numeric', month: 'long', day: 'numeric' }) {
+  if (!day) return '';
+  return new Date(`${day}T12:00:00Z`).toLocaleDateString('en-US', { ...opts, timeZone: 'UTC' });
+}
+
 // Blog post template
 function generateBlogPost({ slug, title, description, content, publishDate, category, tags }) {
   const canonical = `https://spendbase.cards/blog/${slug}/`;
@@ -121,7 +134,7 @@ function generateBlogPost({ slug, title, description, content, publishDate, cate
       <div class="flex items-center space-x-2 text-sm text-gray-500 mb-4">
         <span>${category}</span>
         <span>•</span>
-        <time datetime="${publishDate}">${new Date(publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+        <time datetime="${publishDate}">${formatDay(publishDate)}</time>
       </div>
       <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">${title}</h1>
       <p class="text-xl text-gray-400">${description}</p>
@@ -439,6 +452,23 @@ for (const post of useCasePosts) {
   });
 }
 
+// FIRST PUBLISH WINS, AND THIS IS NOT COSMETIC.
+//
+// Every post definition above sets `publishDate: today`, so each run restamped
+// datePublished on articles that went out months ago. Measured on the real repo: eleven
+// pages moved from February to today, in the JSON-LD, in `article:published_time` and in
+// the visible <time> element. That throws away nine months of article age and re-announces
+// eleven unchanged pages to Google as new.
+//
+// The template already got the hard part right — `dateModified` is separate and tracks
+// today. Only the input was wrong. A regeneration is not a publication.
+function firstPublished(slug, fallback) {
+  const f = `./blog/${slug}/index.html`;
+  if (!fs.existsSync(f)) return fallback;
+  const m = fs.readFileSync(f, 'utf8').match(/"datePublished"\s*:\s*"?(\d{4}-\d{2}-\d{2})/);
+  return (m && m[1]) || fallback;
+}
+
 // Generate all posts
 console.log(`📄 Generating ${posts.length} blog posts...\n`);
 
@@ -447,11 +477,63 @@ for (const post of posts) {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
-  
+  // Set before the template runs, and on the object the index below also reads, so the page
+  // and its listing cannot disagree about when it went out.
+  post.publishDate = firstPublished(post.slug, post.publishDate);
+
   const html = generateBlogPost(post);
   fs.writeFileSync(`${dir}/index.html`, html);
   console.log(`  ✓ ${post.slug}`);
 }
+
+// EVERY POST ON DISK, NOT JUST THE ONES THIS SCRIPT GENERATES.
+//
+// The blog index below is rewritten wholesale from `posts`, so any article added by hand —
+// or by anything other than this file — was silently dropped from it on the next run. Five
+// of sixteen were in that state: crypto-card-resources, crypto-cashback-token-trap and
+// usdc-spending-resources were linked from nowhere, and best-crypto-cards-for-traders,
+// best-no-kyc-crypto-cards, crypto-card-resources and usdc-spending-resources were missing
+// from the sitemap. All five were live and serving the whole time, which is why nothing
+// looked broken: a page Google cannot discover and no link points at still returns 200.
+//
+// Reading the directory instead of trusting the list means a post only has to EXIST to be
+// listed. That also makes this safe to run after an external publisher has added a page.
+function discoverPosts(generated) {
+  const known = new Set(generated.map(p => p.slug));
+  return fs.readdirSync('./blog', { withFileTypes: true })
+    .filter(d => d.isDirectory() && !known.has(d.name))
+    .filter(d => fs.existsSync(`./blog/${d.name}/index.html`))
+    .map(d => {
+      const html = fs.readFileSync(`./blog/${d.name}/index.html`, 'utf8');
+      const pick = (re) => { const m = html.match(re); return m ? m[1].trim() : ''; };
+      // The page's own <head> is the source. A title or description invented here would
+      // disagree with what the page actually serves and with its canonical.
+      const title = pick(/<title>([^<]*)<\/title>/i).replace(/\s*\|\s*Spendbase\s*$/i, '');
+      return {
+        slug: d.name,
+        title: title || d.name,
+        description: pick(/<meta\s+name="description"\s+content="([^"]*)"/i),
+        // NULL, NOT TODAY, when the page does not say. Two of these posts carry no
+        // datePublished at all, and defaulting to today would print a date they never had
+        // and sort them above everything on the strength of it. The index omits the date
+        // instead — an unknown date is not a recent one.
+        publishDate: pick(/"datePublished"\s*:\s*"?(\d{4}-\d{2}-\d{2})/) || null,
+        category: pick(/<meta\s+property="article:section"\s+content="([^"]*)"/i) || 'Guides',
+      };
+    });
+}
+
+const discovered = discoverPosts(posts);
+if (discovered.length) {
+  console.log(`\n🔎 Found ${discovered.length} post(s) on disk this script did not generate:`);
+  discovered.forEach(p => console.log(`  + ${p.slug}`));
+}
+
+// Newest first. The index shows a date against every entry, so generation order — which is
+// what it used before — read as arbitrary next to the dates beside it. Posts with no known
+// date sort last rather than first: absent is not recent.
+const listing = [...posts, ...discovered]
+  .sort((a, b) => String(b.publishDate || '').localeCompare(String(a.publishDate || '')));
 
 // Update blog index
 const blogIndexContent = `<!DOCTYPE html>
@@ -493,12 +575,12 @@ const blogIndexContent = `<!DOCTYPE html>
     <p class="text-gray-400 mb-8">Crypto card comparisons, guides, and honest analysis.</p>
     
     <div class="space-y-6">
-      ${posts.map(post => `
+      ${listing.map(post => `
       <a href="/blog/${post.slug}/" class="block p-6 bg-gray-900 rounded-xl border border-gray-800 hover:border-gray-700 transition-colors">
         <div class="flex items-center space-x-2 text-sm text-gray-500 mb-2">
           <span>${post.category}</span>
-          <span>•</span>
-          <time>${new Date(post.publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+          ${post.publishDate ? `<span>•</span>
+          <time datetime="${post.publishDate}">${formatDay(post.publishDate, { year: 'numeric', month: 'short', day: 'numeric' })}</time>` : ''}
         </div>
         <h2 class="text-xl font-semibold text-white mb-2">${post.title}</h2>
         <p class="text-gray-400">${post.description}</p>
@@ -516,14 +598,15 @@ const blogIndexContent = `<!DOCTYPE html>
 </html>`;
 
 fs.writeFileSync('./blog/index.html', blogIndexContent);
-console.log(`\n✅ Updated blog index with ${posts.length} posts`);
+console.log(`\n✅ Updated blog index with ${listing.length} posts`);
 
 // Update sitemap
 const sitemapPath = './sitemap.xml';
 let sitemap = fs.readFileSync(sitemapPath, 'utf8');
 
-// Add new blog URLs if not present
-for (const post of posts) {
+// Add new blog URLs if not present. Additive — it has never removed a URL, which is why the
+// four missing entries were absent rather than deleted: nothing had ever offered them.
+for (const post of listing) {
   const url = `https://spendbase.cards/blog/${post.slug}/`;
   if (!sitemap.includes(url)) {
     const entry = `  <url>
@@ -540,5 +623,5 @@ for (const post of posts) {
 fs.writeFileSync(sitemapPath, sitemap);
 console.log(`✅ Updated sitemap\n`);
 
-console.log('🎉 Done! Generated blog posts:');
-posts.forEach(p => console.log(`   /blog/${p.slug}/`));
+console.log('🎉 Done! Blog posts now listed and in the sitemap:');
+listing.forEach(p => console.log(`   /blog/${p.slug}/`));
