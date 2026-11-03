@@ -37,7 +37,16 @@ function formatDay(day, opts = { year: 'numeric', month: 'long', day: 'numeric' 
   return new Date(`${day}T12:00:00Z`).toLocaleDateString('en-US', { ...opts, timeZone: 'UTC' });
 }
 
-// Blog post template
+// Blog post template.
+//
+// `tags` is optional and the block that renders it is guarded. It used to call tags.map()
+// unguarded, so a post without the key threw and took the whole run down with it — and the
+// posts arriving from blog/_posts/ do not carry tags. An empty list draws no bordered box
+// rather than an empty one.
+//
+// NOTE FOR ANYONE EDITING THE TEMPLATE BELOW: it is one big template literal, so a backtick
+// anywhere inside it — including inside an HTML comment — ends the string and breaks the
+// file. Explanations go here, in JS comments, not in the markup.
 function generateBlogPost({ slug, title, description, content, publishDate, category, tags }) {
   const canonical = `https://spendbase.cards/blog/${slug}/`;
   const ogImage = 'https://spendbase.cards/og-image.png';
@@ -144,12 +153,11 @@ function generateBlogPost({ slug, title, description, content, publishDate, cate
       ${content}
     </div>
     
-    <!-- Tags -->
-    <div class="mt-12 pt-8 border-t border-gray-800">
+    ${(tags && tags.length) ? `<div class="mt-12 pt-8 border-t border-gray-800">
       <div class="flex flex-wrap gap-2">
         ${tags.map(tag => `<span class="px-3 py-1 bg-gray-800 rounded-full text-sm text-gray-400">${tag}</span>`).join('')}
       </div>
-    </div>
+    </div>` : ''}
     
     <!-- Why Free Content -->
     <div class="mt-12 p-6 bg-gray-900/50 rounded-xl border border-gray-800">
@@ -469,6 +477,95 @@ function firstPublished(slug, fallback) {
   return (m && m[1]) || fallback;
 }
 
+// ── POSTS WRITTEN BY SOMETHING OTHER THAN THIS FILE ────────────────────────────────────
+//
+// blog/_posts/*.md is the drop folder for an external publisher (GetFound). Each file is
+// rendered through the same template as everything above, so a post we did not write still
+// comes out with this site's head, chrome, schema and canonical.
+//
+// WHY .md FILES THAT CONTAIN HTML, which looks wrong and is deliberate. GetFound's GitHub
+// publisher only recognises .md/.mdx/.markdown — its layout detector ignores every other
+// extension, so a folder of index.html files is invisible to it and it will not publish
+// there at all. The body it writes is ALREADY HTML: it emits YAML frontmatter and then the
+// article's html straight after it. So this reads the frontmatter for metadata and treats
+// the body as HTML. There is deliberately no markdown-to-HTML step — nothing in this
+// pipeline emits markdown syntax, and a half-working parser would quietly mangle real
+// articles rather than fail.
+//
+// The folder is named `_posts` because that is one of the names GetFound's detector already
+// looks for, which makes the connection self-describing instead of a setting to remember.
+const POSTS_DIR = './blog/_posts';
+
+// A deliberately small YAML subset: `key: value`, quoted or bare, plus `- item` lists.
+// Enough for the frontmatter this pipeline writes and reads, and it fails loudly on a file
+// it cannot parse rather than publishing a page with an empty title.
+function parseFrontmatter(src) {
+  const m = src.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+  if (!m) return { ok: false, error: 'no --- frontmatter block' };
+  const data = {};
+  let key = null;
+  for (const line of m[1].split(/\r?\n/)) {
+    if (!line.trim()) continue;
+    const item = line.match(/^\s*-\s+(.*)$/);
+    if (item && key) {
+      if (!Array.isArray(data[key])) data[key] = [];
+      data[key].push(unquote(item[1]));
+      continue;
+    }
+    const kv = line.match(/^([A-Za-z0-9_-]+)\s*:\s*(.*)$/);
+    if (!kv) continue;
+    key = kv[1];
+    data[key] = kv[2].trim() === '' ? [] : unquote(kv[2]);
+  }
+  return { ok: true, data, body: m[2] };
+}
+
+function unquote(v) {
+  const s = String(v).trim();
+  const q = s.match(/^(['"])([\s\S]*)\1$/);
+  return q ? q[2].replace(/\\"/g, '"') : s;
+}
+
+function renderMarkdownPosts() {
+  if (!fs.existsSync(POSTS_DIR)) return [];
+  const files = fs.readdirSync(POSTS_DIR).filter(f => /\.(md|mdx|markdown)$/i.test(f)).sort();
+  if (!files.length) return [];
+
+  console.log(`\n📥 Rendering ${files.length} post(s) from ${POSTS_DIR}/`);
+  const out = [];
+  for (const file of files) {
+    const parsed = parseFrontmatter(fs.readFileSync(`${POSTS_DIR}/${file}`, 'utf8'));
+    // REFUSE, DO NOT GUESS. A page written from a file we could not read would go live with
+    // an empty title and description, which is worse than this post not appearing yet.
+    if (!parsed.ok) { console.log(`  ✗ ${file} — ${parsed.error}, skipped`); continue; }
+    const fm = parsed.data;
+
+    // The filename owns the slug, so a URL cannot disagree with the file it came from.
+    // GetFound writes YYYY-MM-DD-slug.md, which is the convention its detector reported.
+    const slug = file.replace(/\.(md|mdx|markdown)$/i, '').replace(/^\d{4}-\d{2}-\d{2}[-_]/, '');
+    const title = fm.title || slug;
+    if (!fm.title) console.log(`  ! ${file} — no title in frontmatter, using the slug`);
+
+    const post = {
+      slug,
+      title,
+      description: fm.description || '',
+      content: parsed.body.trim(),
+      // First publish wins here too: a re-render must not restamp a page already out.
+      publishDate: firstPublished(slug, String(fm.date || today).slice(0, 10)),
+      category: fm.category || 'Guide',
+      tags: Array.isArray(fm.tags) ? fm.tags : (fm.tags ? [fm.tags] : []),
+    };
+
+    const dir = `./blog/${slug}`;
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(`${dir}/index.html`, generateBlogPost(post));
+    console.log(`  ✓ ${slug}`);
+    out.push(post);
+  }
+  return out;
+}
+
 // Generate all posts
 console.log(`📄 Generating ${posts.length} blog posts...\n`);
 
@@ -523,7 +620,13 @@ function discoverPosts(generated) {
     });
 }
 
-const discovered = discoverPosts(posts);
+// Rendered BEFORE discovery, so a post dropped in blog/_posts/ is a real page by the time
+// the index and sitemap are built — otherwise its first run would publish the file and list
+// it nowhere, which is the state the five strays above were in.
+const fromMarkdown = renderMarkdownPosts();
+const generated = [...posts, ...fromMarkdown];
+
+const discovered = discoverPosts(generated);
 if (discovered.length) {
   console.log(`\n🔎 Found ${discovered.length} post(s) on disk this script did not generate:`);
   discovered.forEach(p => console.log(`  + ${p.slug}`));
@@ -532,7 +635,7 @@ if (discovered.length) {
 // Newest first. The index shows a date against every entry, so generation order — which is
 // what it used before — read as arbitrary next to the dates beside it. Posts with no known
 // date sort last rather than first: absent is not recent.
-const listing = [...posts, ...discovered]
+const listing = [...generated, ...discovered]
   .sort((a, b) => String(b.publishDate || '').localeCompare(String(a.publishDate || '')));
 
 // Update blog index
