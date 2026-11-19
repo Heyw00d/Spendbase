@@ -1,7 +1,7 @@
 ---
 title: "Crypto Debit Cards in Hong Kong: What to Check First"
 description: "Explains what Hong Kong residents should evaluate (custody model, fees, token-based rewards) before choosing a stablecoin or crypto debit card, positioning SpendBase's tracking and calculator tools."
-date: 2026-11-16
+date: 2026-11-19
 category: Guide
 ---
 <p>A handful of international crypto debit and credit cards will issue to Hong Kong residents, but which ones depends on the card issuer's current regional rules, not on anything crypto-specific. Before you apply, the more useful question isn't "is there a card for Hong Kong" — it's "does this specific card's custody model, fee structure and supported network suit how I actually hold and spend stablecoins."</p>
@@ -72,3 +72,12 @@ category: Guide
 }
 </script>
 <!-- /getfound:faq -->
+
+<!-- getfound:related -->
+<section class="related">
+<h2>Related</h2>
+<ul>
+<li><a href="/stablecoin-debit-cards/">Stablecoin Debit Cards: What They Are and How to Compare</a></li>
+</ul>
+</section>
+<!-- /getfound:related -->
