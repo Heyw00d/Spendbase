@@ -1,7 +1,7 @@
 ---
 title: "Choosing a Crypto Card for Everyday Spending"
 description: "An educational page explaining what to look for in a crypto card for everyday spending — custody models, stablecoin use, FX fees, and staking-linked rewards — positioning Spendbase's card tracking and calculator as the way to compare options."
-date: 2026-11-17
+date: 2026-11-20
 category: Guide
 ---
 <p>A crypto card for lifestyle spending is a debit or credit-style card that lets you pay with crypto balances — usually a stablecoin like USDC — at regular merchants, the same way you'd use a bank card. The best ones for everyday use convert your balance to local currency automatically at checkout, so the person at the coffee shop never knows the difference.</p>
@@ -89,6 +89,7 @@ category: Guide
 <ul>
 <li><a href="/crypto-card-hong-kong/">Crypto Debit Cards in Hong Kong: What to Check First</a></li>
 <li><a href="/spend-usdc-crypto-card-guide/">How Crypto Cards Let You Spend USDC Day to Day</a></li>
+<li><a href="/crypto-card-rewards-and-staking-opportunities/">Crypto Card Rewards &amp; Staking: What to Know</a></li>
 </ul>
 </section>
 <!-- /getfound:related -->
